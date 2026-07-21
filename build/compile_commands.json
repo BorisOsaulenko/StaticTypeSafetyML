@@ -1,0 +1,68 @@
+[
+{
+  "directory": "/Users/borisosaulenko/CLionProjects/ML/build",
+  "command": "/opt/homebrew/Cellar/gcc/16.1.0/bin/g++-16  -I/Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include -isystem /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest/include -isystem /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest -g -std=gnu++26 -arch arm64 -fdiagnostics-color=always -Wall -Wextra -Werror -fno-elide-type -fno-omit-frame-pointer -fopenmp -o CMakeFiles/hello_test.dir/tests/layers/linear_regression_test.cpp.o -c /Users/borisosaulenko/CLionProjects/ML/tests/layers/linear_regression_test.cpp",
+  "file": "/Users/borisosaulenko/CLionProjects/ML/tests/layers/linear_regression_test.cpp",
+  "output": "CMakeFiles/hello_test.dir/tests/layers/linear_regression_test.cpp.o"
+},
+{
+  "directory": "/Users/borisosaulenko/CLionProjects/ML/build",
+  "command": "/opt/homebrew/Cellar/gcc/16.1.0/bin/g++-16  -I/Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include -isystem /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest/include -isystem /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest -g -std=gnu++26 -arch arm64 -fdiagnostics-color=always -Wall -Wextra -Werror -fno-elide-type -fno-omit-frame-pointer -fopenmp -o CMakeFiles/hello_test.dir/tests/layers/convolutional_layer_test.cpp.o -c /Users/borisosaulenko/CLionProjects/ML/tests/layers/convolutional_layer_test.cpp",
+  "file": "/Users/borisosaulenko/CLionProjects/ML/tests/layers/convolutional_layer_test.cpp",
+  "output": "CMakeFiles/hello_test.dir/tests/layers/convolutional_layer_test.cpp.o"
+},
+{
+  "directory": "/Users/borisosaulenko/CLionProjects/ML/build",
+  "command": "/opt/homebrew/Cellar/gcc/16.1.0/bin/g++-16  -I/Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include -isystem /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest/include -isystem /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest -g -std=gnu++26 -arch arm64 -fdiagnostics-color=always -Wall -Wextra -Werror -fno-elide-type -fno-omit-frame-pointer -fopenmp -o CMakeFiles/hello_test.dir/tests/layers/max_pool_2x2_test.cpp.o -c /Users/borisosaulenko/CLionProjects/ML/tests/layers/max_pool_2x2_test.cpp",
+  "file": "/Users/borisosaulenko/CLionProjects/ML/tests/layers/max_pool_2x2_test.cpp",
+  "output": "CMakeFiles/hello_test.dir/tests/layers/max_pool_2x2_test.cpp.o"
+},
+{
+  "directory": "/Users/borisosaulenko/CLionProjects/ML/build",
+  "command": "/opt/homebrew/Cellar/gcc/16.1.0/bin/g++-16  -I/Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include -isystem /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest/include -isystem /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest -g -std=gnu++26 -arch arm64 -fdiagnostics-color=always -Wall -Wextra -Werror -fno-elide-type -fno-omit-frame-pointer -fopenmp -o CMakeFiles/hello_test.dir/tests/layers/flatten_test.cpp.o -c /Users/borisosaulenko/CLionProjects/ML/tests/layers/flatten_test.cpp",
+  "file": "/Users/borisosaulenko/CLionProjects/ML/tests/layers/flatten_test.cpp",
+  "output": "CMakeFiles/hello_test.dir/tests/layers/flatten_test.cpp.o"
+},
+{
+  "directory": "/Users/borisosaulenko/CLionProjects/ML/build",
+  "command": "/opt/homebrew/Cellar/gcc/16.1.0/bin/g++-16  -I/Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include -isystem /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest/include -isystem /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest -g -std=gnu++26 -arch arm64 -fdiagnostics-color=always -Wall -Wextra -Werror -fno-elide-type -fno-omit-frame-pointer -fopenmp -o CMakeFiles/hello_test.dir/tests/lr_optimizer/AdamTest.cpp.o -c /Users/borisosaulenko/CLionProjects/ML/tests/lr_optimizer/AdamTest.cpp",
+  "file": "/Users/borisosaulenko/CLionProjects/ML/tests/lr_optimizer/AdamTest.cpp",
+  "output": "CMakeFiles/hello_test.dir/tests/lr_optimizer/AdamTest.cpp.o"
+},
+{
+  "directory": "/Users/borisosaulenko/CLionProjects/ML/build",
+  "command": "/opt/homebrew/Cellar/gcc/16.1.0/bin/g++-16  -I/Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include -isystem /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest/include -isystem /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest -g -std=gnu++26 -arch arm64 -fdiagnostics-color=always -Wall -Wextra -Werror -fno-elide-type -fno-omit-frame-pointer -fopenmp -o CMakeFiles/hello_test.dir/tests/layers/matrix_test.cpp.o -c /Users/borisosaulenko/CLionProjects/ML/tests/layers/matrix_test.cpp",
+  "file": "/Users/borisosaulenko/CLionProjects/ML/tests/layers/matrix_test.cpp",
+  "output": "CMakeFiles/hello_test.dir/tests/layers/matrix_test.cpp.o"
+},
+{
+  "directory": "/Users/borisosaulenko/CLionProjects/ML/build",
+  "command": "/opt/homebrew/Cellar/gcc/16.1.0/bin/g++-16  -I/Users/borisosaulenko/CLionProjects/ML/include -I/Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include -isystem /opt/homebrew/Cellar/opencv/5.0.0/include/opencv5 -g -std=gnu++26 -arch arm64 -fdiagnostics-color=always -Wall -Wextra -Werror -fno-elide-type -fno-omit-frame-pointer -fopenmp -o CMakeFiles/ML.dir/main.cpp.o -c /Users/borisosaulenko/CLionProjects/ML/main.cpp",
+  "file": "/Users/borisosaulenko/CLionProjects/ML/main.cpp",
+  "output": "CMakeFiles/ML.dir/main.cpp.o"
+},
+{
+  "directory": "/Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-build/googlemock",
+  "command": "/opt/homebrew/Cellar/gcc/16.1.0/bin/g++-16  -I/Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googlemock/include -I/Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googlemock -isystem /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest/include -isystem /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest -g -std=c++26 -arch arm64 -fdiagnostics-color=always -Wall -Wshadow -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -Wall -Wextra -Werror -fno-elide-type -fno-omit-frame-pointer -o CMakeFiles/gmock.dir/src/gmock-all.cc.o -c /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googlemock/src/gmock-all.cc",
+  "file": "/Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googlemock/src/gmock-all.cc",
+  "output": "_deps/googletest-build/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.o"
+},
+{
+  "directory": "/Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-build/googlemock",
+  "command": "/opt/homebrew/Cellar/gcc/16.1.0/bin/g++-16  -isystem /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googlemock/include -isystem /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googlemock -isystem /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest/include -isystem /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest -g -std=c++26 -arch arm64 -fdiagnostics-color=always -Wall -Wshadow -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -Wall -Wextra -Werror -fno-elide-type -fno-omit-frame-pointer -o CMakeFiles/gmock_main.dir/src/gmock_main.cc.o -c /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googlemock/src/gmock_main.cc",
+  "file": "/Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googlemock/src/gmock_main.cc",
+  "output": "_deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.o"
+},
+{
+  "directory": "/Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-build/googletest",
+  "command": "/opt/homebrew/Cellar/gcc/16.1.0/bin/g++-16  -I/Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest/include -I/Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest -g -std=c++26 -arch arm64 -fdiagnostics-color=always -Wall -Wshadow -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -Wall -Wextra -Werror -fno-elide-type -fno-omit-frame-pointer -o CMakeFiles/gtest.dir/src/gtest-all.cc.o -c /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest/src/gtest-all.cc",
+  "file": "/Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest/src/gtest-all.cc",
+  "output": "_deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.o"
+},
+{
+  "directory": "/Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-build/googletest",
+  "command": "/opt/homebrew/Cellar/gcc/16.1.0/bin/g++-16  -isystem /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest/include -isystem /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest -g -std=c++26 -arch arm64 -fdiagnostics-color=always -Wall -Wshadow -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -Wall -Wextra -Werror -fno-elide-type -fno-omit-frame-pointer -o CMakeFiles/gtest_main.dir/src/gtest_main.cc.o -c /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest/src/gtest_main.cc",
+  "file": "/Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest/src/gtest_main.cc",
+  "output": "_deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o"
+}
+]

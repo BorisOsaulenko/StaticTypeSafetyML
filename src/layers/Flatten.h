@@ -9,16 +9,16 @@
 
 #include <nlohmann/json.hpp>
 
-template <int Ch_in, int R_in, int C_in, std::size_t batch_size>
+template <int Ch_in, int R_in, int C_in>
 class Flatten : public NoParamsLayer<Tensor3D<Ch_in, R_in, C_in>,
-                                     Vector<Ch_in * R_in * C_in>, batch_size> {
+                                     Vector<Ch_in * R_in * C_in>> {
   using json = nlohmann::json;
 
 public:
   using Input = Tensor3D<Ch_in, R_in, C_in>;
   using Output = Vector<Ch_in * R_in * C_in>;
 
-  Flatten() : NoParamsLayer<Input, Output, batch_size>() {}
+  Flatten() : NoParamsLayer<Input, Output>() {}
 
 protected:
   Output compute_z(const Input &inp) const override {
@@ -34,7 +34,8 @@ protected:
   }
 
   Input compute_delta(const Output &delta,
-                      [[maybe_unused]] const Input &a_previous) const override {
+                      [[maybe_unused]] const Input &a_previous,
+                      [[maybe_unused]] const Output &z_cache) const override {
     Input new_delta;
     for (std::size_t ch = 0; ch < Ch_in; ++ch) {
       for (std::size_t r = 0; r < R_in; ++r) {

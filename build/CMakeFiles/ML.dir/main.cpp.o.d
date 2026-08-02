@@ -426,21 +426,21 @@ CMakeFiles/ML.dir/main.cpp.o: \
  /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/any \
  /Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include/nlohmann/detail/macro_unscope.hpp \
  /Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include/nlohmann/thirdparty/hedley/hedley_undef.hpp \
+ /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/../activation/../matrix/AlgebraicArray.h \
+ /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/../activation/../matrix/Algebraic.h \
+ /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/../activation/../matrix/Matrix.h \
+ /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/random \
+ /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/random.h \
+ /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/opt_random.h \
+ /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/random.tcc \
  /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/../lr_optimizer/Adam.h \
  /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/../lr_optimizer/Optimizer.h \
  /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/../lr_optimizer/../matrix/Algebraic.h \
  /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/../matrix/AlgebraicTuple.h \
  /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/../matrix/Algebraic.h \
  /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/../matrix/Matrix.h \
- /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/random \
- /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/random.h \
- /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/opt_random.h \
- /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/random.tcc \
  /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/NoParamsLayer.h \
  /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/../matrix/Algebraic.h \
- /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/../matrix/AlgebraicArray.h \
- /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/../matrix/Matrix.h \
- /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/../matrix/AlgebraicSpan.h \
  /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/../matrix/AlgebraicArray.h \
  /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/ParamsLayer.h \
  /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/../activation/ActivationFactory.h \
@@ -455,16 +455,13 @@ CMakeFiles/ML.dir/main.cpp.o: \
  /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/basic_file.h \
  /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/c++io.h \
  /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/fstream.tcc \
- /Users/borisosaulenko/CLionProjects/ML/include/mnist/VectorMnistReader.hpp \
  /Users/borisosaulenko/CLionProjects/ML/src/Network.h \
  /Users/borisosaulenko/CLionProjects/ML/src/loss/Loss.h \
- /Users/borisosaulenko/CLionProjects/ML/src/loss/../matrix/AlgebraicSpan.h \
  /Users/borisosaulenko/CLionProjects/ML/src/loss/LossFactory.h \
  /Users/borisosaulenko/CLionProjects/ML/src/loss/../matrix/Algebraic.h \
  /Users/borisosaulenko/CLionProjects/ML/src/loss/CrossEntropy.h \
  /Users/borisosaulenko/CLionProjects/ML/src/loss/Loss.h \
  /Users/borisosaulenko/CLionProjects/ML/src/loss/MSE.h \
- /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicSpan.h \
  /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/iostream \
  /Users/borisosaulenko/CLionProjects/ML/src/layers/Convolutional.h \
  /Users/borisosaulenko/CLionProjects/ML/src/layers/../lr_optimizer/Adam.h \
@@ -473,5 +470,4 @@ CMakeFiles/ML.dir/main.cpp.o: \
  /Users/borisosaulenko/CLionProjects/ML/src/layers/ParamsLayer.h \
  /Users/borisosaulenko/CLionProjects/ML/src/layers/Flatten.h \
  /Users/borisosaulenko/CLionProjects/ML/src/layers/NoParamsLayer.h \
- /Users/borisosaulenko/CLionProjects/ML/src/layers/MaxPool2x2.h \
- /Users/borisosaulenko/CLionProjects/ML/src/lr_optimizer/Adam.h
+ /Users/borisosaulenko/CLionProjects/ML/src/layers/MaxPool2x2.h

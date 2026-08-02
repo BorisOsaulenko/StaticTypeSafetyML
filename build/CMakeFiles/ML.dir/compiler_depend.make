@@ -176,6 +176,8 @@ CMakeFiles/ML.dir/main.cpp.o: /Users/borisosaulenko/CLionProjects/ML/main.cpp \
   _deps/nlohmann_json-src/include/nlohmann/thirdparty/hedley/hedley.hpp \
   _deps/nlohmann_json-src/include/nlohmann/thirdparty/hedley/hedley_undef.hpp \
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/Algebraic.h \
+  /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicArray.h \
+  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h \
   /Users/borisosaulenko/CLionProjects/ML/src/activation/ActivationFactory.h \
   /Users/borisosaulenko/CLionProjects/ML/src/activation/ActivationFunction.h \
   /Users/borisosaulenko/CLionProjects/ML/src/activation/Identity.h \
@@ -186,7 +188,6 @@ CMakeFiles/ML.dir/main.cpp.o: /Users/borisosaulenko/CLionProjects/ML/main.cpp \
   /Users/borisosaulenko/CLionProjects/ML/src/lr_optimizer/Optimizer.h \
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/Algebraic.h \
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicArray.h \
-  /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicSpan.h \
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicTuple.h \
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h \
   /Users/borisosaulenko/CLionProjects/ML/src/layers/Dense.h \
@@ -197,7 +198,6 @@ CMakeFiles/ML.dir/main.cpp.o: /Users/borisosaulenko/CLionProjects/ML/main.cpp \
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h \
   /Users/borisosaulenko/CLionProjects/ML/include/mnist/MnistReaderBase.hpp \
   /Users/borisosaulenko/CLionProjects/ML/include/mnist/TensorMnistReader.hpp \
-  /Users/borisosaulenko/CLionProjects/ML/include/mnist/VectorMnistReader.hpp \
   /Users/borisosaulenko/CLionProjects/ML/src/Network.h \
   /Users/borisosaulenko/CLionProjects/ML/src/lr_optimizer/Adam.h \
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/3DTensor.h \
@@ -208,13 +208,10 @@ CMakeFiles/ML.dir/main.cpp.o: /Users/borisosaulenko/CLionProjects/ML/main.cpp \
   /Users/borisosaulenko/CLionProjects/ML/src/layers/NoParamsLayer.h \
   /Users/borisosaulenko/CLionProjects/ML/src/layers/ParamsLayer.h \
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/Algebraic.h \
-  /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicSpan.h \
   /Users/borisosaulenko/CLionProjects/ML/src/loss/CrossEntropy.h \
   /Users/borisosaulenko/CLionProjects/ML/src/loss/Loss.h \
   /Users/borisosaulenko/CLionProjects/ML/src/loss/LossFactory.h \
   /Users/borisosaulenko/CLionProjects/ML/src/loss/MSE.h \
-  /Users/borisosaulenko/CLionProjects/ML/src/lr_optimizer/Adam.h \
-  /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicSpan.h \
   /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/atomic_word.h \
   /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/basic_file.h \
   /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/c++allocator.h \
@@ -778,9 +775,9 @@ _deps/nlohmann_json-src/include/nlohmann/detail/meta/cpp_future.hpp:
 
 /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/formatfwd.h:
 
-/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_types/_wchar_t.h:
-
 /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_types/_id_t.h:
+
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_types/_wchar_t.h:
 
 /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/exception_ptr.h:
 
@@ -884,6 +881,14 @@ _deps/nlohmann_json-src/include/nlohmann/detail/macro_scope.hpp:
 
 /Users/borisosaulenko/CLionProjects/ML/src/loss/Loss.h:
 
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_pthread/_pthread_once_t.h:
+
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_types/_int64_t.h:
+
+_deps/nlohmann_json-src/include/nlohmann/detail/meta/identity_tag.hpp:
+
+/Users/borisosaulenko/CLionProjects/ML/src/loss/CrossEntropy.h:
+
 /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_endian.h:
 
 /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/localefwd.h:
@@ -900,10 +905,6 @@ _deps/nlohmann_json-src/include/nlohmann/detail/meta/call_std/end.hpp:
 
 /Users/borisosaulenko/CLionProjects/ML/src/Network.h:
 
-/opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/unique_ptr.h:
-
-/Users/borisosaulenko/CLionProjects/ML/include/mnist/VectorMnistReader.hpp:
-
 /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/_ctermid.h:
 
 _deps/nlohmann_json-src/include/nlohmann/detail/output/serializer.hpp:
@@ -912,17 +913,11 @@ _deps/nlohmann_json-src/include/nlohmann/detail/output/serializer.hpp:
 
 /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/hashtable_policy.h:
 
+/Users/borisosaulenko/CLionProjects/ML/src/lr_optimizer/Optimizer.h:
+
 /Users/borisosaulenko/CLionProjects/ML/src/activation/Identity.h:
 
 /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h:
-
-/Users/borisosaulenko/CLionProjects/ML/src/activation/Sigmoid.h:
-
-/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/malloc/_malloc_type.h:
-
-/Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicSpan.h:
-
-/Users/borisosaulenko/CLionProjects/ML/src/lr_optimizer/Optimizer.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_symbol_aliasing.h:
 
@@ -975,10 +970,6 @@ _deps/nlohmann_json-src/include/nlohmann/detail/input/lexer.hpp:
 /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/hash_bytes.h:
 
 _deps/nlohmann_json-src/include/nlohmann/detail/input/json_sax.hpp:
-
-/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_types/_int64_t.h:
-
-/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_pthread/_pthread_once_t.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/_ctype.h:
 
@@ -1118,6 +1109,8 @@ _deps/nlohmann_json-src/include/nlohmann/json.hpp:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_types/_pid_t.h:
 
+/opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/unique_ptr.h:
+
 /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_types/_null.h:
 
 /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/ranges_util.h:
@@ -1127,6 +1120,10 @@ _deps/nlohmann_json-src/include/nlohmann/detail/input/parser.hpp:
 /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/time_members.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/mach/arm/_structs.h:
+
+/Users/borisosaulenko/CLionProjects/ML/src/activation/Sigmoid.h:
+
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/malloc/_malloc_type.h:
 
 _deps/nlohmann_json-src/include/nlohmann/detail/macro_unscope.hpp:
 
@@ -1295,10 +1292,6 @@ _deps/nlohmann_json-src/include/nlohmann/detail/iterators/primitive_iterator.hpp
 /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/mach/machine/_structs.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_pthread/_pthread_rwlockattr_t.h:
-
-/Users/borisosaulenko/CLionProjects/ML/src/loss/CrossEntropy.h:
-
-_deps/nlohmann_json-src/include/nlohmann/detail/meta/identity_tag.hpp:
 
 /Users/borisosaulenko/CLionProjects/ML/src/loss/MSE.h:
 

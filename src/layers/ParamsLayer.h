@@ -9,9 +9,7 @@
 #include "../lr_optimizer/Adam.h"
 #include "../matrix/Algebraic.h"
 
-template <Algebraic Input, Algebraic Output, Algebraic Grad,
-          std::size_t batch_size>
-class ParamsLayer {
+template <Algebraic Input, Algebraic Output, Algebraic Grad> class ParamsLayer {
   using json = nlohmann::json;
 
 public:
@@ -20,19 +18,17 @@ public:
 
   explicit ParamsLayer(const ActivationFunctionEnum activation_function_type,
                        const AdamFactory &optimizer_factory)
-      : params(Grad::random()), gradient(Grad::zeros()),
-        activation_function(
+      : activation_function(
             ActivationFactory::create(activation_function_type)),
-        a_previous_cache(), z_cache(),
+        params(Grad::random()), gradient(Grad::zeros()),
         optimizer(optimizer_factory.build(params)) {}
 
   explicit ParamsLayer(Grad &params,
                        const ActivationFunctionEnum activation_function_type,
                        const AdamFactory &optimizer_factory)
-      : params(params), gradient(Grad::zeros()),
-        activation_function(
+      : activation_function(
             ActivationFactory::create(activation_function_type)),
-        a_previous_cache({}), z_cache({}),
+        params(params), gradient(Grad::zeros()),
         optimizer(optimizer_factory.build(params)) {}
 
   virtual ~ParamsLayer() = default;
@@ -42,15 +38,16 @@ public:
     Grad gradient;
   };
 
-  AlgebraicArray<batch_size, Output>
-  forward_vectorized(const AlgebraicSpan<batch_size, const Input> &inp) {
-    this->a_previous_cache = inp;
-    AlgebraicArray<batch_size, Output> result;
+  template <std::size_t SIZE>
+  AlgebraicArray<SIZE, Output>
+  forward_vectorized(const AlgebraicSpan<SIZE, const Input> &inp,
+                     AlgebraicArray<SIZE, Output> &z_cache) const {
+    AlgebraicArray<SIZE, Output> result;
 
 #pragma omp parallel for
     for (std::size_t i = 0; i < inp.size(); ++i) {
       Output z = compute_z(inp[i]);
-      this->z_cache[i] = z;
+      z_cache[i] = z;
       result[i] = activation_function->activate(z);
     }
 
@@ -63,8 +60,8 @@ public:
   }
 
   template <std::size_t SIZE>
-  AlgebraicArray<SIZE, Output>
-  forward_no_cache_vectorized(const AlgebraicSpan<SIZE, Input> &inp) const {
+  AlgebraicArray<SIZE, Output> forward_no_cache_vectorized(
+      const AlgebraicSpan<SIZE, const Input> &inp) const {
     AlgebraicArray<SIZE, Output> result;
 
 #pragma omp parallel for
@@ -75,20 +72,21 @@ public:
     return result;
   }
 
-  AlgebraicArray<batch_size, Input>
-  backward_vectorized(const AlgebraicSpan<batch_size, const Output> &delta) {
-    AlgebraicArray<batch_size, Input> result;
+  template <std::size_t SIZE>
+  AlgebraicArray<SIZE, Input>
+  backward_vectorized(const AlgebraicSpan<SIZE, const Output> &delta,
+                      const AlgebraicSpan<SIZE, const Input> &a_previous,
+                      const AlgebraicSpan<SIZE, const Output> &z_cache) {
+    AlgebraicArray<SIZE, Input> result;
 
 #pragma omp parallel
     {
       Grad local_grad = Grad::zeros();
 
 #pragma omp for
-      for (std::size_t idx = 0; idx < batch_size; ++idx) {
-        Output dz =
-            delta[idx].hadamard(activation_function->derivative(z_cache[idx]));
-
-        auto [new_delta, grad] = compute_delta(dz, a_previous_cache[idx]);
+      for (std::size_t idx = 0; idx < SIZE; ++idx) {
+        auto [new_delta, grad] =
+            compute_delta(delta[idx], a_previous[idx], z_cache[idx]);
 
         result[idx] = new_delta;
         local_grad += grad;
@@ -120,20 +118,17 @@ public:
   }
 
 protected:
+  std::unique_ptr<ActivationFunction> activation_function;
   Grad params;
   Grad gradient;
 
   using value_type = double;
   virtual Output compute_z(const Input &inp) const = 0;
-  virtual BackwardResult compute_delta(const Output &dz,
-                                       const Input &a_previous) const = 0;
+  virtual BackwardResult compute_delta(const Output &delta,
+                                       const Input &a_previous,
+                                       const Output &z_cache) const = 0;
 
 private:
-  std::unique_ptr<ActivationFunction> activation_function;
-
-  AlgebraicSpan<batch_size, const Input> a_previous_cache;
-  AlgebraicArray<batch_size, Output> z_cache;
-
   Adam<Grad> optimizer;
 };
 

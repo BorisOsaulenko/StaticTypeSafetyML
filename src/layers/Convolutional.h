@@ -16,14 +16,12 @@ using ConvGradType =
     AlgebraicTuple<AlgebraicArray<num_ker, Tensor3D<Ch_in, R_k, C_k>>,
                    Vector<num_ker>>;
 
-template <int Ch_in, int R_in, int C_in, int R_k, int C_k, int num_ker,
-          std::size_t batch_size>
+template <int Ch_in, int R_in, int C_in, int R_k, int C_k, int num_ker>
   requires(R_in >= R_k && C_in >= C_k)
 class Convolutional
     : public ParamsLayer<Tensor3D<Ch_in, R_in, C_in>,
                          Tensor3D<num_ker, R_in - R_k + 1, C_in - C_k + 1>,
-                         ConvGradType<Ch_in, R_in, C_in, R_k, C_k, num_ker>,
-                         batch_size> {
+                         ConvGradType<Ch_in, R_in, C_in, R_k, C_k, num_ker>> {
 
 public:
   using Input = Tensor3D<Ch_in, R_in, C_in>;
@@ -36,20 +34,19 @@ private:
   using value_type = double;
   using json = nlohmann::json;
   using Gradient = ConvGradType<Ch_in, R_in, C_in, R_k, C_k, num_ker>;
-  using BackwardResult =
-      ParamsLayer<Input, Output, Gradient, batch_size>::BackwardResult;
+  using BackwardResult = ParamsLayer<Input, Output, Gradient>::BackwardResult;
 
 public:
   Convolutional(ActivationFunctionEnum activation_function_type,
                 AdamFactory &optimizer_factory)
-      : ParamsLayer<Input, Output, Gradient, batch_size>(
-            activation_function_type, optimizer_factory) {}
+      : ParamsLayer<Input, Output, Gradient>(activation_function_type,
+                                             optimizer_factory) {}
 
   Convolutional(Gradient params,
                 ActivationFunctionEnum activation_function_type,
                 AdamFactory &optimizer_factory)
-      : ParamsLayer<Input, Output, Gradient, batch_size>(
-            params, activation_function_type, optimizer_factory) {}
+      : ParamsLayer<Input, Output, Gradient>(params, activation_function_type,
+                                             optimizer_factory) {}
 
   AlgebraicArray<num_ker, Kernel> get_kernels() const {
     return this->params.template get<0>();
@@ -76,8 +73,10 @@ protected:
     return result;
   }
 
-  BackwardResult compute_delta(const Output &dz,
-                               const Input &a_previous) const override {
+  BackwardResult compute_delta(const Output &delta, const Input &a_previous,
+                               const Output &z_cache) const override {
+    const Output dz =
+        delta.hadamard(this->activation_function->derivative(z_cache));
     AlgebraicArray<num_ker, Kernel> kernels = get_kernels();
 
     auto kernelGradients = AlgebraicArray<num_ker, Kernel>();

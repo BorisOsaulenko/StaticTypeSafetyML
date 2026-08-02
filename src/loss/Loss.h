@@ -4,12 +4,10 @@
 
 #ifndef ML_LOSS_H
 #define ML_LOSS_H
-#include "../matrix/AlgebraicSpan.h"
 
 enum class LossEnum { MSE, CrossEntropy };
 
 template <Algebraic T> class Loss {
-private:
   LossEnum type;
 
 public:
@@ -37,6 +35,15 @@ public:
     for (std::size_t i = 0; i < SIZE; ++i)
       deltas[i] = derivative(y_pred[i], y_true[i]);
     return deltas;
+  }
+
+  template <std::size_t SIZE>
+  Vector<SIZE> compute(const AlgebraicArray<SIZE, T> &y_pred,
+                       const AlgebraicSpan<SIZE, const T> &y_true) {
+    Vector<SIZE> losses;
+    for (std::size_t i = 0; i < SIZE; ++i)
+      losses[i] = compute(y_pred[i], y_true[i]);
+    return losses;
   }
 };
 

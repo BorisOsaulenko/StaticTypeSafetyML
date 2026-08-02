@@ -1,0 +1,258 @@
+{
+	"abstract" : true,
+	"artifacts" : 
+	[
+		{
+			"path" : "/opt/homebrew/lib/libs2n.1.0.0.dylib"
+		}
+	],
+	"backtrace" : 30,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"include",
+			"find_package",
+			"__find_dependency_common",
+			"find_dependency",
+			"arrow_find_dependencies",
+			"set_target_properties"
+		],
+		"files" : 
+		[
+			"/opt/homebrew/lib/s2n/cmake/shared/s2n-targets.cmake",
+			"/opt/homebrew/lib/s2n/cmake/s2n-config.cmake",
+			"/opt/homebrew/Cellar/cmake/4.3.4/share/cmake/Modules/CMakeFindDependencyMacro.cmake",
+			"/opt/homebrew/lib/cmake/aws-c-io/aws-c-io-config.cmake",
+			"/opt/homebrew/lib/cmake/aws-c-http/aws-c-http-config.cmake",
+			"/opt/homebrew/lib/cmake/aws-crt-cpp/aws-crt-cpp-config.cmake",
+			"/opt/homebrew/lib/cmake/aws-cpp-sdk-core/aws-cpp-sdk-core-config.cmake",
+			"/opt/homebrew/lib/cmake/AWSSDK/AWSSDKConfig.cmake",
+			"/opt/homebrew/lib/cmake/Arrow/FindAWSSDKAlt.cmake",
+			"/opt/homebrew/lib/cmake/Arrow/ArrowConfig.cmake",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 10
+			},
+			{
+				"command" : 2,
+				"file" : 10,
+				"line" : 50,
+				"parent" : 0
+			},
+			{
+				"file" : 9,
+				"parent" : 1
+			},
+			{
+				"command" : 5,
+				"file" : 9,
+				"line" : 124,
+				"parent" : 2
+			},
+			{
+				"command" : 4,
+				"file" : 9,
+				"line" : 101,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
+				"file" : 2,
+				"line" : 125,
+				"parent" : 4
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 93,
+				"parent" : 5
+			},
+			{
+				"file" : 8,
+				"parent" : 6
+			},
+			{
+				"command" : 2,
+				"file" : 8,
+				"line" : 36,
+				"parent" : 7
+			},
+			{
+				"file" : 7,
+				"parent" : 8
+			},
+			{
+				"command" : 2,
+				"file" : 7,
+				"line" : 310,
+				"parent" : 9
+			},
+			{
+				"file" : 6,
+				"parent" : 10
+			},
+			{
+				"command" : 4,
+				"file" : 6,
+				"line" : 13,
+				"parent" : 11
+			},
+			{
+				"command" : 3,
+				"file" : 2,
+				"line" : 125,
+				"parent" : 12
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 93,
+				"parent" : 13
+			},
+			{
+				"file" : 5,
+				"parent" : 14
+			},
+			{
+				"command" : 4,
+				"file" : 5,
+				"line" : 3,
+				"parent" : 15
+			},
+			{
+				"command" : 3,
+				"file" : 2,
+				"line" : 125,
+				"parent" : 16
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 93,
+				"parent" : 17
+			},
+			{
+				"file" : 4,
+				"parent" : 18
+			},
+			{
+				"command" : 4,
+				"file" : 4,
+				"line" : 3,
+				"parent" : 19
+			},
+			{
+				"command" : 3,
+				"file" : 2,
+				"line" : 125,
+				"parent" : 20
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 93,
+				"parent" : 21
+			},
+			{
+				"file" : 3,
+				"parent" : 22
+			},
+			{
+				"command" : 4,
+				"file" : 3,
+				"line" : 6,
+				"parent" : 23
+			},
+			{
+				"command" : 3,
+				"file" : 2,
+				"line" : 125,
+				"parent" : 24
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 93,
+				"parent" : 25
+			},
+			{
+				"file" : 1,
+				"parent" : 26
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 15,
+				"parent" : 27
+			},
+			{
+				"file" : 0,
+				"parent" : 28
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 60,
+				"parent" : 29
+			},
+			{
+				"command" : 6,
+				"file" : 0,
+				"line" : 62,
+				"parent" : 29
+			}
+		]
+	},
+	"codemodelVersion" : 
+	{
+		"major" : 2,
+		"minor" : 10
+	},
+	"id" : "AWS::s2n::@6890427a1f51a3e7e1df",
+	"imported" : true,
+	"interfaceCompileDependencies" : 
+	[
+		{
+			"backtrace" : 31,
+			"id" : "AWS::crypto::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 31,
+			"id" : "Threads::Threads::@6890427a1f51a3e7e1df"
+		}
+	],
+	"interfaceLinkLibraries" : 
+	[
+		{
+			"backtrace" : 31,
+			"id" : "AWS::crypto::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 31,
+			"fragment" : "c"
+		},
+		{
+			"backtrace" : 31,
+			"id" : "Threads::Threads::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 31,
+			"fragment" : "m"
+		}
+	],
+	"local" : true,
+	"name" : "AWS::s2n",
+	"nameOnDisk" : "libs2n.1.0.0.dylib",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sources" : [],
+	"type" : "SHARED_LIBRARY"
+}

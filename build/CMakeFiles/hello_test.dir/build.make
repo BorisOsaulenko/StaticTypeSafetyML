@@ -156,6 +156,20 @@ CMakeFiles/hello_test.dir/tests/layers/matrix_test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/hello_test.dir/tests/layers/matrix_test.cpp.s"
 	/opt/homebrew/Cellar/gcc/16.1.0/bin/g++-16 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/borisosaulenko/CLionProjects/ML/tests/layers/matrix_test.cpp -o CMakeFiles/hello_test.dir/tests/layers/matrix_test.cpp.s
 
+CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.o: CMakeFiles/hello_test.dir/flags.make
+CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.o: /Users/borisosaulenko/CLionProjects/ML/tests/layers/dense_test.cpp
+CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.o: CMakeFiles/hello_test.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/borisosaulenko/CLionProjects/ML/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.o"
+	/opt/homebrew/Cellar/gcc/16.1.0/bin/g++-16 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.o -MF CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.o.d -o CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.o -c /Users/borisosaulenko/CLionProjects/ML/tests/layers/dense_test.cpp
+
+CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.i"
+	/opt/homebrew/Cellar/gcc/16.1.0/bin/g++-16 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/borisosaulenko/CLionProjects/ML/tests/layers/dense_test.cpp > CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.i
+
+CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.s"
+	/opt/homebrew/Cellar/gcc/16.1.0/bin/g++-16 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/borisosaulenko/CLionProjects/ML/tests/layers/dense_test.cpp -o CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.s
+
 # Object files for target hello_test
 hello_test_OBJECTS = \
 "CMakeFiles/hello_test.dir/tests/layers/linear_regression_test.cpp.o" \
@@ -163,7 +177,8 @@ hello_test_OBJECTS = \
 "CMakeFiles/hello_test.dir/tests/layers/max_pool_2x2_test.cpp.o" \
 "CMakeFiles/hello_test.dir/tests/layers/flatten_test.cpp.o" \
 "CMakeFiles/hello_test.dir/tests/lr_optimizer/AdamTest.cpp.o" \
-"CMakeFiles/hello_test.dir/tests/layers/matrix_test.cpp.o"
+"CMakeFiles/hello_test.dir/tests/layers/matrix_test.cpp.o" \
+"CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.o"
 
 # External object files for target hello_test
 hello_test_EXTERNAL_OBJECTS =
@@ -174,12 +189,13 @@ hello_test: CMakeFiles/hello_test.dir/tests/layers/max_pool_2x2_test.cpp.o
 hello_test: CMakeFiles/hello_test.dir/tests/layers/flatten_test.cpp.o
 hello_test: CMakeFiles/hello_test.dir/tests/lr_optimizer/AdamTest.cpp.o
 hello_test: CMakeFiles/hello_test.dir/tests/layers/matrix_test.cpp.o
+hello_test: CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.o
 hello_test: CMakeFiles/hello_test.dir/build.make
 hello_test: lib/libgtest_main.a
 hello_test: lib/libgtest.a
 hello_test: /opt/homebrew/Cellar/gcc/16.1.0/lib/gcc/current/libgomp.dylib
 hello_test: CMakeFiles/hello_test.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/borisosaulenko/CLionProjects/ML/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable hello_test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/borisosaulenko/CLionProjects/ML/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable hello_test"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/hello_test.dir/link.txt --verbose=$(VERBOSE)
 	/opt/homebrew/Cellar/cmake/4.3.4/bin/cmake -D TEST_TARGET=hello_test -D TEST_EXECUTABLE=/Users/borisosaulenko/CLionProjects/ML/build/hello_test -D TEST_EXECUTOR= -D TEST_WORKING_DIR=/Users/borisosaulenko/CLionProjects/ML/build -D TEST_EXTRA_ARGS= -D TEST_PROPERTIES= -D TEST_PREFIX= -D TEST_SUFFIX= -D TEST_FILTER= -D NO_PRETTY_TYPES=FALSE -D NO_PRETTY_VALUES=FALSE -D TEST_LIST=hello_test_TESTS -D CTEST_FILE=/Users/borisosaulenko/CLionProjects/ML/build/hello_test[1]_tests.cmake -D TEST_DISCOVERY_TIMEOUT=5 -D TEST_DISCOVERY_EXTRA_ARGS= -D TEST_XML_OUTPUT_DIR= -P /opt/homebrew/Cellar/cmake/4.3.4/share/cmake/Modules/GoogleTestAddTests.cmake
 

@@ -3,12 +3,12 @@
 #include "layers/Dense.h"
 #include "loss/Loss.h"
 #include "loss/LossFactory.h"
-#include "matrix/AlgebraicSpan.h"
 
 #include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <random>
+#include <tuple>
 
 template <int I, typename L1> consteval bool CheckLayers() { return true; }
 
@@ -30,8 +30,19 @@ template <typename... Layers> class Network {
   static_assert(CheckLayers<0, Layers...>());
 
   using json = nlohmann::json;
+  using LayerTuple = std::tuple<Layers...>;
   using Input = Layers...[0] ::Input;
   using Output = Layers...[sizeof...(Layers) - 1] ::Output;
+  template <std::size_t SIZE, typename T>
+  using LayerCacheArray = AlgebraicArray<SIZE, T>;
+
+  template <std::size_t SIZE>
+  using LayerInputCaches =
+      std::tuple<LayerCacheArray<SIZE, typename Layers::Input>...>;
+
+  template <std::size_t SIZE>
+  using LayerOutputCaches =
+      std::tuple<LayerCacheArray<SIZE, typename Layers::Output>...>;
 
 public:
   explicit Network(const LossEnum loss_type, Layers &...layers)
@@ -46,7 +57,7 @@ public:
 
   template <std::size_t SIZE>
   [[nodiscard]] AlgebraicArray<SIZE, Output>
-  predict_vectorized(const AlgebraicSpan<SIZE, Input> inputs) const {
+  predict_vectorized(const AlgebraicSpan<SIZE, const Input> inputs) const {
     return forward_no_cache_vectorized<0>(inputs);
   }
 
@@ -97,19 +108,11 @@ public:
   template <std::size_t SIZE>
   [[nodiscard]] double
   mean_loss(const AlgebraicSpan<SIZE, const Input> &inputs,
-            const AlgebraicSpan<SIZE, const Output> &expected,
-            const int batch_size = 1000) {
-    double total_loss = 0.0;
-    const std::size_t sample_count = std::min<std::size_t>(SIZE, batch_size);
-    const int n = static_cast<int>(sample_count);
+            const AlgebraicSpan<SIZE, const Output> &expected) {
+    const AlgebraicArray<SIZE, Output> predictions = predict_vectorized(inputs);
+    const Vector<SIZE> losses = loss->compute(predictions, expected);
 
-#pragma omp parallel for reduction(+ : total_loss) schedule(static)
-    for (int i = 0; i < n; ++i) {
-      const Output predicted = forward_no_cache<0>(inputs[i]);
-      total_loss += loss->compute(predicted, expected[i]);
-    }
-
-    return total_loss / static_cast<double>(sample_count);
+    return losses.sum() / SIZE;
   }
 
   [[nodiscard]] LossEnum get_loss_type() const { return loss_type; }
@@ -123,7 +126,7 @@ public:
   friend void from_json(const json &j, Network &network) {
     const auto &layers_json = j.at("layers");
 
-    if (!layers_json.is_array() || layers_json.size() != sizeof...(Layers))
+    if (!layers_json.is_array())
       throw std::invalid_argument("Invalid layer data in network JSON.");
 
     from_json_recursive<0>(layers_json, network.layers);
@@ -146,14 +149,15 @@ public:
     }
   }
 
-  template <std::size_t I>
+  template <std::size_t I, std::size_t A = 0>
   static void from_json_recursive(const json &layers_json,
                                   std::tuple<Layers &...> &layers) {
     if constexpr (I < sizeof...(Layers)) {
-      if (auto &layer = std::get<I>(layers); layer.has_params) {
-        layers_json.at(I).get_to(layer);
+      if constexpr (auto &layer = std::get<I>(layers); layer.has_params) {
+        layers_json.at(A).get_to(layer);
+        return from_json_recursive<I + 1, A + 1>(layers_json, layers);
       }
-      from_json_recursive<I + 1>(layers_json, layers);
+      from_json_recursive<I + 1, A>(layers_json, layers);
     }
   }
 
@@ -176,11 +180,15 @@ private:
         train_expected
             .template subspan<batch * batch_size, (batch + 1) * batch_size>();
 
+    LayerInputCaches<batch_size> a_previous_cache;
+    LayerOutputCaches<batch_size> z_cache;
+
     const AlgebraicArray<batch_size, Output> predicted =
-        forward_vectorized<0, Input>(batch_inputs);
+        forward_vectorized<0, Input>(a_previous_cache, z_cache, batch_inputs);
     const AlgebraicArray<batch_size, Output> delta =
         loss->derivative((predicted), batch_expected);
-    backward_vectorized<sizeof...(Layers) - 1, Output>(delta);
+    backward_vectorized<sizeof...(Layers) - 1, Output>(delta, a_previous_cache,
+                                                       z_cache);
 
     update_layers<0>(batch_size);
     if (log_stream)
@@ -197,47 +205,75 @@ private:
     }
   }
 
-  template <std::size_t I, typename Tuple, typename T, std::size_t SIZE>
+  template <std::size_t I, typename T, std::size_t SIZE>
   auto
-  forward_no_cache_vectorized(Tuple &tpl,
-                              const AlgebraicSpan<SIZE, const T> inputs) const {
-    if constexpr (I == std::tuple_size_v<Tuple> - 1) {
-      return std::get<I>(tpl).forward_no_cache_vectorized(inputs);
+  forward_no_cache_vectorized(const AlgebraicSpan<SIZE, const T> inputs) const {
+    auto &layer = std::get<I>(layers);
+    const auto out = layer.forward_no_cache_vectorized(inputs);
+
+    if constexpr (I == sizeof...(Layers) - 1)
+      return out;
+    else
+      return forward_no_cache_vectorized<I + 1>(AlgebraicSpan(out));
+  }
+
+  template <std::size_t I, typename Inp, std::size_t SIZE>
+  auto forward_vectorized(LayerInputCaches<SIZE> &a_previous_cache,
+                          LayerOutputCaches<SIZE> &z_cache,
+                          const AlgebraicArray<SIZE, Inp> inputs) {
+    auto &layer = std::get<I>(layers);
+    std::get<I>(a_previous_cache) = inputs;
+    const auto out = layer.forward_vectorized(
+        AlgebraicSpan<SIZE, const Inp>(inputs), std::get<I>(z_cache));
+
+    if constexpr (I == sizeof...(Layers) - 1) {
+      return out;
     } else {
-      using LayerOut =
-          std::remove_reference_t<std::tuple_element_t<I, Tuple>>::Output;
-      auto &layer = std::get<I>(tpl);
-      const auto out = layer.forward_no_cache_vectorized(inputs);
-      return forward_no_cache_vectorized<I + 1>(
-          tpl, AlgebraicSpan<SIZE, const LayerOut>(out));
+      return forward_vectorized<I + 1>(a_previous_cache, z_cache, out);
     }
   }
 
   template <std::size_t I, typename Inp, std::size_t SIZE>
-  auto forward_vectorized(const AlgebraicSpan<SIZE, const Inp> inputs) {
-    using LayerOut = std::remove_reference_t<Layers...[I]>::Output;
+  auto forward_vectorized(LayerInputCaches<SIZE> &a_previous_cache,
+                          LayerOutputCaches<SIZE> &z_cache,
+                          const AlgebraicSpan<SIZE, const Inp> inputs) {
     auto &layer = std::get<I>(layers);
+    std::get<I>(a_previous_cache) = copy_span(inputs);
+    const auto out = layer.forward_vectorized(inputs, std::get<I>(z_cache));
 
     if constexpr (I == sizeof...(Layers) - 1) {
-      return layer.forward_vectorized(inputs);
+      return out;
     } else {
-      const auto out = layer.forward_vectorized(inputs);
-      return forward_vectorized<I + 1>(
-          AlgebraicSpan<SIZE, const LayerOut>(out));
+      return forward_vectorized<I + 1>(a_previous_cache, z_cache, out);
     }
   }
 
+  template <std::size_t SIZE, typename T>
+  AlgebraicArray<SIZE, T> copy_span(const AlgebraicSpan<SIZE, const T> &span) {
+    AlgebraicArray<SIZE, T> result;
+    for (std::size_t i = 0; i < SIZE; ++i) {
+      result[i] = span[i];
+    }
+    return result;
+  }
+
   template <std::size_t I, typename DeltaType, std::size_t SIZE>
-  void backward_vectorized(const AlgebraicArray<SIZE, DeltaType> &delta) {
+  void backward_vectorized(const AlgebraicArray<SIZE, DeltaType> &delta,
+                           const LayerInputCaches<SIZE> &a_previous_cache,
+                           const LayerOutputCaches<SIZE> &z_cache) {
     using Layer = Layers...[I];
     auto &layer = std::get<I>(layers);
+    using LayerInput = Layer::Input;
+    using LayerOutput = Layer::Output;
 
-    if constexpr (I == 0) {
-      layer.backward_vectorized(delta);
-    } else {
-      auto new_delta = layer.backward_vectorized(delta);
-      backward_vectorized<I - 1, typename Layer::Input, SIZE>(new_delta);
-    }
+    [[maybe_unused]] const auto new_delta = layer.backward_vectorized(
+        AlgebraicSpan<SIZE, const LayerOutput>(delta),
+        AlgebraicSpan<SIZE, const LayerInput>(std::get<I>(a_previous_cache)),
+        AlgebraicSpan<SIZE, const LayerOutput>(std::get<I>(z_cache)));
+
+    if constexpr (I != 0)
+      backward_vectorized<I - 1, LayerInput, SIZE>(new_delta, a_previous_cache,
+                                                   z_cache);
   }
 
   template <std::size_t I> auto update_layers(std::size_t batch_remainder) {

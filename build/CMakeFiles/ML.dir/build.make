@@ -128,6 +128,7 @@ ML: /opt/homebrew/lib/libopencv_xfeatures2d.5.0.0.dylib
 ML: /opt/homebrew/lib/libopencv_xobjdetect.5.0.0.dylib
 ML: /opt/homebrew/lib/libopencv_xphoto.5.0.0.dylib
 ML: /opt/homebrew/lib/libopencv_xstereo.5.0.0.dylib
+ML: /opt/homebrew/lib/libparquet.2500.0.0.dylib
 ML: /opt/homebrew/lib/libopencv_ptcloud.5.0.0.dylib
 ML: /opt/homebrew/lib/libopencv_shape.5.0.0.dylib
 ML: /opt/homebrew/lib/libopencv_calib.5.0.0.dylib
@@ -153,6 +154,7 @@ ML: /opt/homebrew/lib/libopencv_geometry.5.0.0.dylib
 ML: /opt/homebrew/lib/libopencv_flann.5.0.0.dylib
 ML: /opt/homebrew/lib/libopencv_core.5.0.0.dylib
 ML: /opt/homebrew/Cellar/gcc/16.1.0/lib/gcc/current/libgomp.dylib
+ML: /opt/homebrew/lib/libarrow.2500.0.0.dylib
 ML: CMakeFiles/ML.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/borisosaulenko/CLionProjects/ML/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable ML"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/ML.dir/link.txt --verbose=$(VERBOSE)

@@ -14,13 +14,13 @@
 #include <vector>
 
 // Thin wrapper: Tensor3D is an AlgebraicArray of matrices.
-template <int Ch, int R, int C>
+template <std::size_t Ch, std::size_t R, std::size_t C>
 using Tensor3D = AlgebraicArray<Ch, Matrix<R, C>>;
 
 // Stream operator for Tensor3D (prints each channel using Matrix's stream)
-template <int Ch, int R, int C>
+template <std::size_t Ch, std::size_t R, std::size_t C>
 std::ostream &operator<<(std::ostream &os, const Tensor3D<Ch, R, C> &t) {
-  for (std::size_t ch = 0; ch < static_cast<std::size_t>(Ch); ++ch) {
+  for (std::size_t ch = 0; ch < Ch; ++ch) {
     os << "Channel " << ch << ":\n";
     os << t[ch];
   }

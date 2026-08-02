@@ -1,0 +1,24 @@
+LinearRegression.LearnsExpectedWeightsAndBias 5 0.0492919
+ConvolutionalTest.ForwardPass 5 0.00653205
+ConvolutionalTest.BackwardPassCalculatesKernelGradients 5 0.00643138
+ConvolutionalTest.BackwardPassCalculatesBiasGradients 5 0.00635989
+ConvolutionalTest.BackwardPassReturnsNewDelta 5 0.00644042
+MaxPool2x2Test.ForwardPass 5 0.00632729
+MaxPool2x2Test.BackwardPass 2 0.0155897
+MatrixTest.BasicIndexingAndArithmetic 5 0.00658072
+MatrixTest.ScalarAndElementwiseOperations 5 0.00655003
+MatrixTest.MatrixSpecificOperations 5 0.00622991
+VectorTest.BasicOperations 5 0.00625708
+TensorAndArrayTest.BasicArrayOperations 5 0.00622631
+TensorAndArrayTest.ReductionsAndTransformations 5 0.00627631
+TensorAndArrayTest.JsonRoundTrip 0 0
+TupleTest.ConstructionAndAccess 5 0.00715302
+TupleTest.ArithmeticAndReductions 5 0.00628355
+TupleTest.JsonRoundTrip 5 0.0096358
+SpanTest.ConstructionAndIndexing 5 0.00789232
+SpanTest.SubspanAndPointerConstruction 5 0.00631778
+DenseLayerTest.ForwardPassWithSigmoidActivation 5 0.00725255
+DenseLayerTest.BackwardPassCalculatesGradient 5 0.00627988
+DenseLayerTest.BackwardPassReturnsNewDelta 1 0.0314266
+---
+TensorAndArrayTest.JsonRoundTrip

@@ -6,6 +6,7 @@
 #ifndef ML_ACTIVATIONFUNCTION_H
 #define ML_ACTIVATIONFUNCTION_H
 #include "../matrix/Algebraic.h"
+#include "../matrix/AlgebraicArray.h"
 
 enum class ActivationFunctionEnum {
   Identity,
@@ -35,6 +36,26 @@ public:
   template <Algebraic Shape> [[nodiscard]] Shape derivative(const Shape &x) {
     return x.elementwise(
         [this](const value_type val) { return derivative(val); });
+  }
+
+  template <typename Shape, std::size_t SIZE>
+    requires Algebraic<std::remove_const_t<Shape>>
+  [[nodiscard]] AlgebraicArray<SIZE, std::remove_const_t<Shape>>
+  activate(const AlgebraicSpan<SIZE, const Shape> &x) {
+    AlgebraicArray<SIZE, std::remove_const_t<Shape>> result;
+    for (std::size_t i = 0; i < SIZE; ++i)
+      result[i] = activate(x[i]);
+    return result;
+  }
+
+  template <typename Shape, std::size_t SIZE>
+    requires Algebraic<std::remove_const_t<Shape>>
+  [[nodiscard]] AlgebraicArray<SIZE, std::remove_const_t<Shape>>
+  derivative(const AlgebraicSpan<SIZE, const Shape> &x) {
+    AlgebraicArray<SIZE, std::remove_const_t<Shape>> result;
+    for (std::size_t i = 0; i < SIZE; ++i)
+      result[i] = derivative(x[i]);
+    return result;
   }
 
   virtual ~ActivationFunction() = default;

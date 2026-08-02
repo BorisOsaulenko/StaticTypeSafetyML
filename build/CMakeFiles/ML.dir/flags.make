@@ -4,7 +4,7 @@
 # compile CXX with /opt/homebrew/Cellar/gcc/16.1.0/bin/g++-16
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/Users/borisosaulenko/CLionProjects/ML/include -I/Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include -isystem /opt/homebrew/Cellar/opencv/5.0.0/include/opencv5
+CXX_INCLUDES = -I/Users/borisosaulenko/CLionProjects/ML/include -I/Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include -isystem /opt/homebrew/Cellar/opencv/5.0.0/include/opencv5 -isystem /opt/homebrew/include
 
 CXX_FLAGSarm64 = -g -std=gnu++26 -arch arm64 -fdiagnostics-color=always -Wall -Wextra -Werror -fno-elide-type -fno-omit-frame-pointer -fopenmp
 

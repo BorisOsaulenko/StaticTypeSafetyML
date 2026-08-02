@@ -46,12 +46,9 @@ FetchContent_MakeAvailable(nlohmann_json)
 # ----------------------------
 
 find_package(OpenCV REQUIRED)
-
-# ----------------------------
-# OpenMP (FindOpenMP)
-# ----------------------------
-
 find_package(OpenMP REQUIRED)
+find_package(Arrow REQUIRED)
+find_package(Parquet REQUIRED)
 
 # ----------------------------
 # Test target
@@ -76,7 +73,8 @@ add_executable(hello_test
         tests/layers/matrix_test.cpp
         src/matrix/AlgebraicArray.h
         src/layers/ParamsLayer.h
-        src/matrix/AlgebraicSpan.h
+        tests/layers/dense_test.cpp
+        src/preprocessing/tokenizer.h
 )
 
 target_link_libraries(hello_test
@@ -129,6 +127,8 @@ target_link_libraries(ML PRIVATE
         nlohmann_json::nlohmann_json
         ${OpenCV_LIBS}
         OpenMP::OpenMP_CXX
+        Arrow::arrow_shared
+        Parquet::parquet_shared
 )
 
 target_include_directories(ML PRIVATE ${OpenCV_INCLUDE_DIRS})

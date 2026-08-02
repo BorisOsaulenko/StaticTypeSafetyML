@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/hello_test.dir/tests/layers/convolutional_layer_test.cpp.o"
   "CMakeFiles/hello_test.dir/tests/layers/convolutional_layer_test.cpp.o.d"
+  "CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.o"
+  "CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.o.d"
   "CMakeFiles/hello_test.dir/tests/layers/flatten_test.cpp.o"
   "CMakeFiles/hello_test.dir/tests/layers/flatten_test.cpp.o.d"
   "CMakeFiles/hello_test.dir/tests/layers/linear_regression_test.cpp.o"

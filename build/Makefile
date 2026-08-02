@@ -297,6 +297,30 @@ tests/layers/convolutional_layer_test.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_test.dir/build.make CMakeFiles/hello_test.dir/tests/layers/convolutional_layer_test.cpp.s
 .PHONY : tests/layers/convolutional_layer_test.cpp.s
 
+tests/layers/dense_test.o: tests/layers/dense_test.cpp.o
+.PHONY : tests/layers/dense_test.o
+
+# target to build an object file
+tests/layers/dense_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_test.dir/build.make CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.o
+.PHONY : tests/layers/dense_test.cpp.o
+
+tests/layers/dense_test.i: tests/layers/dense_test.cpp.i
+.PHONY : tests/layers/dense_test.i
+
+# target to preprocess a source file
+tests/layers/dense_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_test.dir/build.make CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.i
+.PHONY : tests/layers/dense_test.cpp.i
+
+tests/layers/dense_test.s: tests/layers/dense_test.cpp.s
+.PHONY : tests/layers/dense_test.s
+
+# target to generate assembly for a file
+tests/layers/dense_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/hello_test.dir/build.make CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.s
+.PHONY : tests/layers/dense_test.cpp.s
+
 tests/layers/flatten_test.o: tests/layers/flatten_test.cpp.o
 .PHONY : tests/layers/flatten_test.o
 
@@ -442,6 +466,9 @@ help:
 	@echo "... tests/layers/convolutional_layer_test.o"
 	@echo "... tests/layers/convolutional_layer_test.i"
 	@echo "... tests/layers/convolutional_layer_test.s"
+	@echo "... tests/layers/dense_test.o"
+	@echo "... tests/layers/dense_test.i"
+	@echo "... tests/layers/dense_test.s"
 	@echo "... tests/layers/flatten_test.o"
 	@echo "... tests/layers/flatten_test.i"
 	@echo "... tests/layers/flatten_test.s"

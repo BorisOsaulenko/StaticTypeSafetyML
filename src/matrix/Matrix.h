@@ -5,6 +5,7 @@
 #include <cassert>
 #include <cstddef>
 #include <nlohmann/json.hpp>
+#include <ostream>
 #include <random>
 
 template <class Derived, int R, int C> class MatrixBase {
@@ -12,9 +13,9 @@ public:
   using value_type = double;
   using storage_type = std::vector<value_type>;
   using json = nlohmann::json;
-
   static constexpr std::size_t SIZE = R * C;
-  constexpr MatrixBase() : data_(R * C, 0) {}
+
+  constexpr MatrixBase() : data_(SIZE, 0) {}
   constexpr explicit MatrixBase(const value_type fill) : data_(R * C, fill) {}
   static constexpr MatrixBase zeros() { return MatrixBase(0); }
   static constexpr MatrixBase random() {
@@ -159,6 +160,13 @@ public:
     return derived();
   }
 
+  MatrixBase &operator=(const Derived &rhs) {
+    data_.resize(SIZE);
+    for (std::size_t i = 0; i < data_.size(); ++i)
+      data_[i] = rhs.storage()[i];
+    return *this;
+  }
+
   [[nodiscard]] Derived hadamard(const Derived &rhs) const {
     Derived result;
     for (std::size_t i = 0; i < data_.size(); ++i)
@@ -180,6 +188,16 @@ public:
     return result;
   }
 
+  [[nodiscard]] double max() const {
+    double result = 0;
+    for (const double i : data_)
+      result = std::max(result, i);
+    return result;
+  }
+
+  [[nodiscard]] value_type *data() { return data_.data(); }
+  [[nodiscard]] const value_type *data() const { return data_.data(); }
+
   template <typename F> Derived elementwise(F &&f) const {
     Derived result;
     for (std::size_t i = 0; i < SIZE; ++i) {
@@ -200,8 +218,8 @@ protected:
   storage_type data_;
 
 private:
-  static inline std::mt19937 rng;
-  static inline std::uniform_real_distribution<> dist;
+  static inline std::mt19937 rng{std::random_device{}()};
+  static inline std::uniform_real_distribution<> dist{-0.5, 0.5};
 };
 
 template <int R> class Vector;
@@ -307,6 +325,16 @@ public:
     }
 
     return result;
+  }
+
+  friend std::ostream &operator<<(std::ostream &os, const Matrix<R, C> &obj) {
+    for (std::size_t row = 0; row < R; ++row) {
+      for (std::size_t col = 0; col < C; ++col) {
+        os << obj[row, col] << " ";
+      }
+      os << std::endl;
+    }
+    return os;
   }
 };
 

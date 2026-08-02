@@ -9,7 +9,7 @@
 
 #include "gtest/gtest.h"
 
-template <int R, int C>
+template <std::size_t R, std::size_t C>
 void expect_matrix_close(const Matrix<R, C> &actual,
                          const Matrix<R, C> &expected, const double tolerance) {
   for (std::size_t row = 0; row < R; ++row) {
@@ -20,16 +20,16 @@ void expect_matrix_close(const Matrix<R, C> &actual,
   }
 }
 
-template <int Ch, int R, int C>
+template <std::size_t Ch, std::size_t R, std::size_t C>
 void expect_tensor_close(const Tensor3D<Ch, R, C> &actual,
                          const Tensor3D<Ch, R, C> &expected,
                          const double tolerance) {
   for (std::size_t ch = 0; ch < Ch; ++ch) {
-    expect_matrix_close(actual[ch], expected[ch], tolerance);
+    expect_matrix_close<R, C>(actual[ch], expected[ch], tolerance);
   }
 }
 
-template <int R>
+template <std::size_t R>
 void expect_vector_close(const Vector<R> &actual, const Vector<R> &expected,
                          const double tolerance) {
   for (std::size_t i = 0; i < actual.size(); ++i) {

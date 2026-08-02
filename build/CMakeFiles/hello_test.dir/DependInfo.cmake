@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/borisosaulenko/CLionProjects/ML/tests/layers/convolutional_layer_test.cpp" "CMakeFiles/hello_test.dir/tests/layers/convolutional_layer_test.cpp.o" "gcc" "CMakeFiles/hello_test.dir/tests/layers/convolutional_layer_test.cpp.o.d"
+  "/Users/borisosaulenko/CLionProjects/ML/tests/layers/dense_test.cpp" "CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.o" "gcc" "CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.o.d"
   "/Users/borisosaulenko/CLionProjects/ML/tests/layers/flatten_test.cpp" "CMakeFiles/hello_test.dir/tests/layers/flatten_test.cpp.o" "gcc" "CMakeFiles/hello_test.dir/tests/layers/flatten_test.cpp.o.d"
   "/Users/borisosaulenko/CLionProjects/ML/tests/layers/linear_regression_test.cpp" "CMakeFiles/hello_test.dir/tests/layers/linear_regression_test.cpp.o" "gcc" "CMakeFiles/hello_test.dir/tests/layers/linear_regression_test.cpp.o.d"
   "/Users/borisosaulenko/CLionProjects/ML/tests/layers/matrix_test.cpp" "CMakeFiles/hello_test.dir/tests/layers/matrix_test.cpp.o" "gcc" "CMakeFiles/hello_test.dir/tests/layers/matrix_test.cpp.o.d"

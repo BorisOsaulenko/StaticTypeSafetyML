@@ -9,7 +9,7 @@
 #include "../lr_optimizer/Adam.h"
 #include "../matrix/Algebraic.h"
 
-template <Algebraic Input, Algebraic Output, Algebraic Grad> class ParamsLayer {
+template <typename Input, Algebraic Output, Algebraic Grad> class ParamsLayer {
   using json = nlohmann::json;
 
 public:
@@ -39,10 +39,10 @@ public:
   };
 
   template <std::size_t SIZE>
-  AlgebraicArray<SIZE, Output>
-  forward_vectorized(const AlgebraicSpan<SIZE, const Input> &inp,
-                     AlgebraicArray<SIZE, Output> &z_cache) const {
-    AlgebraicArray<SIZE, Output> result;
+  StaticArray<SIZE, Output>
+  forward_vectorized(const StaticSpan<SIZE, const Input> &inp,
+                     StaticArray<SIZE, Output> &z_cache) const {
+    StaticArray<SIZE, Output> result;
 
 #pragma omp parallel for
     for (std::size_t i = 0; i < inp.size(); ++i) {
@@ -60,9 +60,9 @@ public:
   }
 
   template <std::size_t SIZE>
-  AlgebraicArray<SIZE, Output> forward_no_cache_vectorized(
-      const AlgebraicSpan<SIZE, const Input> &inp) const {
-    AlgebraicArray<SIZE, Output> result;
+  StaticArray<SIZE, Output>
+  forward_no_cache_vectorized(const StaticSpan<SIZE, const Input> &inp) const {
+    StaticArray<SIZE, Output> result;
 
 #pragma omp parallel for
     for (std::size_t i = 0; i < inp.size(); ++i) {
@@ -73,11 +73,11 @@ public:
   }
 
   template <std::size_t SIZE>
-  AlgebraicArray<SIZE, Input>
-  backward_vectorized(const AlgebraicSpan<SIZE, const Output> &delta,
-                      const AlgebraicSpan<SIZE, const Input> &a_previous,
-                      const AlgebraicSpan<SIZE, const Output> &z_cache) {
-    AlgebraicArray<SIZE, Input> result;
+  StaticArray<SIZE, Input>
+  backward_vectorized(const StaticSpan<SIZE, const Output> &delta,
+                      const StaticSpan<SIZE, const Input> &a_previous,
+                      const StaticSpan<SIZE, const Output> &z_cache) {
+    StaticArray<SIZE, Input> result;
 
 #pragma omp parallel
     {

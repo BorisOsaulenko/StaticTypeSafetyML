@@ -35,10 +35,10 @@ int main() {
   using Input = Tensor3D<1, 28, 28>;
   using Output = Vector<10>;
 
-  const AlgebraicSpan<train, const Input> train_input(train_set.first);
-  const AlgebraicSpan<train, const Output> train_expected(train_set.second);
-  const AlgebraicSpan<test, const Input> validation_input(validation_set.first);
-  const AlgebraicSpan<test, const Output> validation_expected(
+  const StaticSpan<train, const Input> train_input(train_set.first);
+  const StaticSpan<train, const Output> train_expected(train_set.second);
+  const StaticSpan<test, const Input> validation_input(validation_set.first);
+  const StaticSpan<test, const Output> validation_expected(
       validation_set.second);
 
   auto conv1 =

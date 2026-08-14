@@ -429,27 +429,27 @@ CMakeFiles/hello_test.dir/tests/layers/convolutional_layer_test.cpp.o: \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/Dense.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../activation/ActivationFunction.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../activation/../matrix/Algebraic.h \
- /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../activation/../matrix/AlgebraicArray.h \
+ /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../activation/../matrix/StaticArray.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../activation/../matrix/Algebraic.h \
- /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../activation/../matrix/Matrix.h \
- /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/random \
- /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/random.h \
- /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/opt_random.h \
- /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/random.tcc \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../lr_optimizer/Adam.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../matrix/AlgebraicTuple.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../matrix/Algebraic.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../matrix/Matrix.h \
+ /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../matrix/StaticArray.h \
+ /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/random \
+ /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/random.h \
+ /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/opt_random.h \
+ /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/random.tcc \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/NoParamsLayer.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../matrix/Algebraic.h \
- /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../matrix/AlgebraicArray.h \
+ /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../matrix/StaticArray.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/ParamsLayer.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../activation/ActivationFactory.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../activation/Identity.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../activation/ReLu.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../activation/Sigmoid.h \
- /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/AlgebraicArray.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/Matrix.h \
+ /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/StaticArray.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/AlgebraicTuple.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/ParamsLayer.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/utils.h \

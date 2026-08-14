@@ -5,11 +5,11 @@
 #ifndef ML_LAYER_H
 #define ML_LAYER_H
 #include "../matrix/Algebraic.h"
-#include "../matrix/AlgebraicArray.h"
+#include "../matrix/StaticArray.h"
 
 #include <nlohmann/json.hpp>
 
-template <Algebraic Input, Algebraic Output> class NoParamsLayer {
+template <typename Input, Algebraic Output> class NoParamsLayer {
   using json = nlohmann::json;
 
 public:
@@ -19,10 +19,10 @@ public:
   virtual ~NoParamsLayer() = default;
 
   template <std::size_t SIZE>
-  AlgebraicArray<SIZE, Output>
-  forward_vectorized(const AlgebraicSpan<SIZE, const Input> &inp,
-                     AlgebraicArray<SIZE, Output> &z_cache) const {
-    AlgebraicArray<SIZE, Output> z;
+  StaticArray<SIZE, Output>
+  forward_vectorized(const StaticSpan<SIZE, const Input> &inp,
+                     StaticArray<SIZE, Output> &z_cache) const {
+    StaticArray<SIZE, Output> z;
 
 #pragma omp parallel for
     for (std::size_t i = 0; i < inp.size(); ++i) {
@@ -36,9 +36,9 @@ public:
   Output forward_no_cache(const Input &inp) const { return compute_z(inp); }
 
   template <std::size_t SIZE>
-  AlgebraicArray<SIZE, Output> forward_no_cache_vectorized(
-      const AlgebraicSpan<SIZE, const Input> &inp) const {
-    AlgebraicArray<SIZE, Output> result;
+  StaticArray<SIZE, Output>
+  forward_no_cache_vectorized(const StaticSpan<SIZE, const Input> &inp) const {
+    StaticArray<SIZE, Output> result;
 
 #pragma omp parallel for
     for (std::size_t i = 0; i < inp.size(); ++i) {
@@ -49,11 +49,11 @@ public:
   }
 
   template <std::size_t SIZE>
-  AlgebraicArray<SIZE, Input>
-  backward_vectorized(const AlgebraicSpan<SIZE, const Output> &delta,
-                      const AlgebraicSpan<SIZE, const Input> &a_previous,
-                      const AlgebraicSpan<SIZE, const Output> &z_cache) const {
-    AlgebraicArray<SIZE, Input> new_delta;
+  StaticArray<SIZE, Input>
+  backward_vectorized(const StaticSpan<SIZE, const Output> &delta,
+                      const StaticSpan<SIZE, const Input> &a_previous,
+                      const StaticSpan<SIZE, const Output> &z_cache) const {
+    StaticArray<SIZE, Input> new_delta;
 
 #pragma omp parallel for
     for (std::size_t i = 0; i < delta.size(); ++i) {

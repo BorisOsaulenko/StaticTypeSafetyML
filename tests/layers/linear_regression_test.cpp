@@ -16,22 +16,22 @@ TEST(LinearRegression, LearnsExpectedWeightsAndBias) {
   auto layer =
       DenseLayer<3, 1>(ActivationFunctionEnum::Identity, optimizer_factory);
 
-  const AlgebraicArray<4, Vector<3>> inputs = {
+  const StaticArray<4, Vector<3>> inputs = {
       Vector<3>({1.0, 0.0, 0.0}),
       Vector<3>({0.0, 1.0, 0.0}),
       Vector<3>({0.0, 0.0, 1.0}),
       Vector<3>({1.0, 1.0, 1.0}),
   };
 
-  const AlgebraicArray<4, Vector<1>> targets = {
+  const StaticArray<4, Vector<1>> targets = {
       Vector<1>({7.0}),
       Vector<1>({6.0}),
       Vector<1>({5.5}),
       Vector<1>({8.5}),
   };
 
-  const AlgebraicSpan<4, const Vector<3>> inputs_span(inputs);
-  const AlgebraicSpan<4, const Vector<1>> targets_span(targets);
+  const StaticSpan<4, const Vector<3>> inputs_span(inputs);
+  const StaticSpan<4, const Vector<1>> targets_span(targets);
 
   Network network(LossEnum::MSE, layer);
 

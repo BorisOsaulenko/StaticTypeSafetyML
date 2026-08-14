@@ -242,8 +242,7 @@ CMakeFiles/hello_test.dir/tests/layers/convolutional_layer_test.cpp.o
  /Users/borisosaulenko/CLionProjects/ML/src/lr_optimizer/Adam.h
  /Users/borisosaulenko/CLionProjects/ML/src/lr_optimizer/Optimizer.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Algebraic.h
- /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicArray.h
- /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h
+ /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/activation/ActivationFactory.h
  /Users/borisosaulenko/CLionProjects/ML/src/activation/ActivationFunction.h
  /Users/borisosaulenko/CLionProjects/ML/src/activation/Identity.h
@@ -251,16 +250,16 @@ CMakeFiles/hello_test.dir/tests/layers/convolutional_layer_test.cpp.o
  /Users/borisosaulenko/CLionProjects/ML/src/activation/Sigmoid.h
  /Users/borisosaulenko/CLionProjects/ML/src/lr_optimizer/Adam.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Algebraic.h
- /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicTuple.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h
+ /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/Dense.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/NoParamsLayer.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/ParamsLayer.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/3DTensor.h
- /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicTuple.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h
+ /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/Convolutional.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/ParamsLayer.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/3DTensor.h
@@ -776,8 +775,7 @@ CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.o
  /Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include/nlohmann/thirdparty/hedley/hedley.hpp
  /Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include/nlohmann/thirdparty/hedley/hedley_undef.hpp
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Algebraic.h
- /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicArray.h
- /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h
+ /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/activation/ActivationFactory.h
  /Users/borisosaulenko/CLionProjects/ML/src/activation/ActivationFunction.h
  /Users/borisosaulenko/CLionProjects/ML/src/activation/Identity.h
@@ -787,15 +785,15 @@ CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.o
  /Users/borisosaulenko/CLionProjects/ML/src/lr_optimizer/Adam.h
  /Users/borisosaulenko/CLionProjects/ML/src/lr_optimizer/Optimizer.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Algebraic.h
- /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicTuple.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h
+ /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/Dense.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/NoParamsLayer.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/ParamsLayer.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/3DTensor.h
- /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h
+ /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/utils.h
  /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/atomic_word.h
  /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/c++allocator.h
@@ -1311,8 +1309,7 @@ CMakeFiles/hello_test.dir/tests/layers/linear_regression_test.cpp.o
  /Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include/nlohmann/thirdparty/hedley/hedley_undef.hpp
  /Users/borisosaulenko/CLionProjects/ML/src/Network.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Algebraic.h
- /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicArray.h
- /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h
+ /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/activation/ActivationFactory.h
  /Users/borisosaulenko/CLionProjects/ML/src/activation/ActivationFunction.h
  /Users/borisosaulenko/CLionProjects/ML/src/activation/Identity.h
@@ -1322,9 +1319,9 @@ CMakeFiles/hello_test.dir/tests/layers/linear_regression_test.cpp.o
  /Users/borisosaulenko/CLionProjects/ML/src/lr_optimizer/Adam.h
  /Users/borisosaulenko/CLionProjects/ML/src/lr_optimizer/Optimizer.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Algebraic.h
- /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicTuple.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h
+ /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/Dense.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/NoParamsLayer.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/ParamsLayer.h
@@ -1335,8 +1332,8 @@ CMakeFiles/hello_test.dir/tests/layers/linear_regression_test.cpp.o
  /Users/borisosaulenko/CLionProjects/ML/src/loss/MSE.h
  /Users/borisosaulenko/CLionProjects/ML/src/lr_optimizer/Adam.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/3DTensor.h
- /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h
+ /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/utils.h
  /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/atomic_word.h
  /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/basic_file.h
@@ -1852,8 +1849,7 @@ CMakeFiles/hello_test.dir/tests/layers/matrix_test.cpp.o
  /Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include/nlohmann/thirdparty/hedley/hedley.hpp
  /Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include/nlohmann/thirdparty/hedley/hedley_undef.hpp
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Algebraic.h
- /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicArray.h
- /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h
+ /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/activation/ActivationFactory.h
  /Users/borisosaulenko/CLionProjects/ML/src/activation/ActivationFunction.h
  /Users/borisosaulenko/CLionProjects/ML/src/activation/Identity.h
@@ -1863,17 +1859,17 @@ CMakeFiles/hello_test.dir/tests/layers/matrix_test.cpp.o
  /Users/borisosaulenko/CLionProjects/ML/src/lr_optimizer/Adam.h
  /Users/borisosaulenko/CLionProjects/ML/src/lr_optimizer/Optimizer.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Algebraic.h
- /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicTuple.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h
+ /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/Dense.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/NoParamsLayer.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/ParamsLayer.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/3DTensor.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Algebraic.h
- /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicTuple.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h
+ /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/utils.h
  /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/atomic_word.h
  /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/c++allocator.h
@@ -2385,8 +2381,7 @@ CMakeFiles/hello_test.dir/tests/layers/max_pool_2x2_test.cpp.o
  /Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include/nlohmann/thirdparty/hedley/hedley.hpp
  /Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include/nlohmann/thirdparty/hedley/hedley_undef.hpp
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Algebraic.h
- /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicArray.h
- /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h
+ /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/activation/ActivationFactory.h
  /Users/borisosaulenko/CLionProjects/ML/src/activation/ActivationFunction.h
  /Users/borisosaulenko/CLionProjects/ML/src/activation/Identity.h
@@ -2396,15 +2391,15 @@ CMakeFiles/hello_test.dir/tests/layers/max_pool_2x2_test.cpp.o
  /Users/borisosaulenko/CLionProjects/ML/src/lr_optimizer/Adam.h
  /Users/borisosaulenko/CLionProjects/ML/src/lr_optimizer/Optimizer.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Algebraic.h
- /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicTuple.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h
+ /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/Dense.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/NoParamsLayer.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/ParamsLayer.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/3DTensor.h
- /Users/borisosaulenko/CLionProjects/ML/src/matrix/AlgebraicArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h
+ /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/MaxPool2x2.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/NoParamsLayer.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/3DTensor.h

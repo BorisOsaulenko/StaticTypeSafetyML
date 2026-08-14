@@ -277,7 +277,7 @@ public:
 };
 
 TEST_F(SpanTest, ConstructionAndIndexing) {
-  AlgebraicSpan<2, Matrix2x2> span(tensor);
+  StaticSpan<2, Matrix2x2> span(tensor);
 
   EXPECT_EQ(span.size(), 2U);
   expect_matrix_close<2, 2>(span[0], Matrix2x2{1, 2, 3, 4}, kTolerance);
@@ -290,9 +290,9 @@ TEST_F(SpanTest, ConstructionAndIndexing) {
 }
 
 TEST_F(SpanTest, SubspanAndPointerConstruction) {
-  AlgebraicSpan<2, Matrix2x2> span(tensor);
+  StaticSpan<2, Matrix2x2> span(tensor);
   const auto subspan = span.template subspan<1, 2>();
-  AlgebraicSpan<1, Matrix2x2> pointer_span(tensor.get_data() + 1);
+  StaticSpan<1, Matrix2x2> pointer_span(tensor.get_data() + 1);
 
   EXPECT_EQ(subspan.size(), 1U);
   expect_matrix_close<2, 2>(subspan[0], Matrix2x2{5, 6, 7, 8}, kTolerance);

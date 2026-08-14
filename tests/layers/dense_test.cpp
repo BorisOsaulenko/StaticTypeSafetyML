@@ -18,12 +18,12 @@ using Output = Vector<2>;
 using Layer = DenseLayer<3, 2>;
 using Gradient = GradientType<3, 2>;
 
-const AlgebraicArray<2, Input> inputs = {
+const StaticArray<2, Input> inputs = {
     Input{1.0, 2.0, -1.0},
     Input{-2.0, 0.5, 3.0},
 };
 
-const AlgebraicArray<2, Output> delta = {
+const StaticArray<2, Output> delta = {
     Output{2.0, -1.0},
     Output{-0.5, 3.0},
 };
@@ -41,12 +41,12 @@ Layer make_layer() {
 
 TEST(DenseLayerTest, ForwardPassWithSigmoidActivation) {
   auto layer = make_layer();
-  AlgebraicArray<2, Output> z_cache;
+  StaticArray<2, Output> z_cache;
 
   const auto output = layer.forward_vectorized<2>(
-      AlgebraicSpan<2, const Input>(inputs), z_cache);
+      StaticSpan<2, const Input>(inputs), z_cache);
 
-  const AlgebraicArray<2, Output> expected = {
+  const StaticArray<2, Output> expected = {
       Output{0.1978161114, 0.9918374288},
       Output{0.2890504974, 0.1544652651},
   };
@@ -57,11 +57,11 @@ TEST(DenseLayerTest, ForwardPassWithSigmoidActivation) {
 
 TEST(DenseLayerTest, BackwardPassCalculatesGradient) {
   auto layer = make_layer();
-  AlgebraicArray<2, Output> z_cache;
-  layer.forward_vectorized<2>(AlgebraicSpan<2, const Input>(inputs), z_cache);
+  StaticArray<2, Output> z_cache;
+  layer.forward_vectorized<2>(StaticSpan<2, const Input>(inputs), z_cache);
 
-  layer.backward_vectorized<2>(AlgebraicSpan<2, const Output>(delta),
-                               AlgebraicSpan<2, const Input>(inputs), z_cache);
+  layer.backward_vectorized<2>(StaticSpan<2, const Output>(delta),
+                               StaticSpan<2, const Input>(inputs), z_cache);
 
   const auto &weights = layer.get_weights_gradients();
   const Matrix<2, 3> expected_weights_gradient{
@@ -81,14 +81,14 @@ TEST(DenseLayerTest, BackwardPassCalculatesGradient) {
 
 TEST(DenseLayerTest, BackwardPassReturnsNewDelta) {
   auto layer = make_layer();
-  AlgebraicArray<2, Output> z_cache;
-  layer.forward_vectorized<2>(AlgebraicSpan<2, const Input>(inputs), z_cache);
+  StaticArray<2, Output> z_cache;
+  layer.forward_vectorized<2>(StaticSpan<2, const Input>(inputs), z_cache);
 
   const auto new_delta = layer.backward_vectorized<2>(
-      AlgebraicSpan<2, const Output>(delta),
-      AlgebraicSpan<2, const Input>(inputs), z_cache);
+      StaticSpan<2, const Output>(delta),
+      StaticSpan<2, const Input>(inputs), z_cache);
 
-  const AlgebraicArray<2, Input> expected_previous_delta{
+  const StaticArray<2, Input> expected_previous_delta{
       Input{0.3133218302, -0.3335616749, 0.1627328685},
       Input{0.0931584701, 0.8863846318, -0.2472836956},
   };

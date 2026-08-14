@@ -101,8 +101,8 @@ protected:
   }
 
   template <std::size_t SIZE, typename T>
-  static void shuffle_data(AlgebraicArray<SIZE, T> &X,
-                           AlgebraicArray<SIZE, Vector<10>> &y) {
+  static void shuffle_data(StaticArray<SIZE, T> &X,
+                           StaticArray<SIZE, Vector<10>> &y) {
     std::vector<int> indices(static_cast<int>(X.size()));
     for (size_t i = 0; i < indices.size(); ++i)
       indices[i] = static_cast<int>(i);
@@ -111,8 +111,8 @@ protected:
     std::mt19937 g(rd());
     std::ranges::shuffle(indices, g);
 
-    AlgebraicArray<SIZE, T> X_shuffled;
-    AlgebraicArray<SIZE, Vector<10>> y_shuffled;
+    StaticArray<SIZE, T> X_shuffled;
+    StaticArray<SIZE, Vector<10>> y_shuffled;
 
     std::size_t i = 0;
     for (int idx : indices) {

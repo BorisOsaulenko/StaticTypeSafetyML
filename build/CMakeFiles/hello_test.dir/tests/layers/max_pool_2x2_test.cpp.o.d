@@ -426,29 +426,29 @@ CMakeFiles/hello_test.dir/tests/layers/max_pool_2x2_test.cpp.o: \
  /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/any \
  /Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include/nlohmann/detail/macro_unscope.hpp \
  /Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include/nlohmann/thirdparty/hedley/hedley_undef.hpp \
- /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../activation/../matrix/AlgebraicArray.h \
+ /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../activation/../matrix/StaticArray.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../activation/../matrix/Algebraic.h \
- /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../activation/../matrix/Matrix.h \
- /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/random \
- /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/random.h \
- /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/opt_random.h \
- /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/random.tcc \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../lr_optimizer/Adam.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../lr_optimizer/Optimizer.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../lr_optimizer/../matrix/Algebraic.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../matrix/AlgebraicTuple.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../matrix/Algebraic.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../matrix/Matrix.h \
+ /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../matrix/StaticArray.h \
+ /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/random \
+ /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/random.h \
+ /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/opt_random.h \
+ /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/random.tcc \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/NoParamsLayer.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../matrix/Algebraic.h \
- /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../matrix/AlgebraicArray.h \
+ /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../matrix/StaticArray.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/ParamsLayer.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../activation/ActivationFactory.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../activation/Identity.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../activation/ReLu.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../activation/Sigmoid.h \
- /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/AlgebraicArray.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/Matrix.h \
+ /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/StaticArray.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/NoParamsLayer.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/matrix/3DTensor.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/matrix/Matrix.h \

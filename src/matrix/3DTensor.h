@@ -6,8 +6,8 @@
 #define ML_3DTENSOR_H
 
 #include "../layers/Dense.h"
-#include "AlgebraicArray.h"
 #include "Matrix.h"
+#include "StaticArray.h"
 
 #include <nlohmann/json.hpp>
 #include <ostream>
@@ -15,7 +15,7 @@
 
 // Thin wrapper: Tensor3D is an AlgebraicArray of matrices.
 template <std::size_t Ch, std::size_t R, std::size_t C>
-using Tensor3D = AlgebraicArray<Ch, Matrix<R, C>>;
+using Tensor3D = StaticArray<Ch, Matrix<R, C>>;
 
 // Stream operator for Tensor3D (prints each channel using Matrix's stream)
 template <std::size_t Ch, std::size_t R, std::size_t C>

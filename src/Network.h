@@ -34,7 +34,7 @@ template <typename... Layers> class Network {
   using Input = Layers...[0] ::Input;
   using Output = Layers...[sizeof...(Layers) - 1] ::Output;
   template <std::size_t SIZE, typename T>
-  using LayerCacheArray = AlgebraicArray<SIZE, T>;
+  using LayerCacheArray = StaticArray<SIZE, T>;
 
   template <std::size_t SIZE>
   using LayerInputCaches =
@@ -56,18 +56,18 @@ public:
   }
 
   template <std::size_t SIZE>
-  [[nodiscard]] AlgebraicArray<SIZE, Output>
-  predict_vectorized(const AlgebraicSpan<SIZE, const Input> inputs) const {
+  [[nodiscard]] StaticArray<SIZE, Output>
+  predict_vectorized(const StaticSpan<SIZE, const Input> inputs) const {
     return forward_no_cache_vectorized<0>(inputs);
   }
 
   template <std::size_t batch_size, std::size_t train_size,
             std::size_t validation_size>
   void
-  train(const AlgebraicSpan<train_size, const Input> train_inputs,
-        const AlgebraicSpan<train_size, const Output> train_expected,
-        const AlgebraicSpan<validation_size, const Input> validation_inputs,
-        const AlgebraicSpan<validation_size, const Output> validation_expected,
+  train(const StaticSpan<train_size, const Input> train_inputs,
+        const StaticSpan<train_size, const Output> train_expected,
+        const StaticSpan<validation_size, const Input> validation_inputs,
+        const StaticSpan<validation_size, const Output> validation_expected,
         const int &epochs = 10, std::ostream *log_stream = nullptr)
     requires(train_size % batch_size == 0)
   {
@@ -107,9 +107,9 @@ public:
 
   template <std::size_t SIZE>
   [[nodiscard]] double
-  mean_loss(const AlgebraicSpan<SIZE, const Input> &inputs,
-            const AlgebraicSpan<SIZE, const Output> &expected) {
-    const AlgebraicArray<SIZE, Output> predictions = predict_vectorized(inputs);
+  mean_loss(const StaticSpan<SIZE, const Input> &inputs,
+            const StaticSpan<SIZE, const Output> &expected) {
+    const StaticArray<SIZE, Output> predictions = predict_vectorized(inputs);
     const Vector<SIZE> losses = loss->compute(predictions, expected);
 
     return losses.sum() / SIZE;
@@ -170,22 +170,22 @@ private:
   std::uniform_real_distribution<> dist;
 
   template <std::size_t batch, std::size_t train_size, std::size_t batch_size>
-  void train_batch(const AlgebraicSpan<train_size, const Input> train_inputs,
-                   const AlgebraicSpan<train_size, const Output> train_expected,
+  void train_batch(const StaticSpan<train_size, const Input> train_inputs,
+                   const StaticSpan<train_size, const Output> train_expected,
                    std::ostream *log_stream = nullptr) {
-    const AlgebraicSpan<batch_size, const Input> batch_inputs =
+    const StaticSpan<batch_size, const Input> batch_inputs =
         train_inputs
             .template subspan<batch * batch_size, (batch + 1) * batch_size>();
-    const AlgebraicSpan<batch_size, const Output> batch_expected =
+    const StaticSpan<batch_size, const Output> batch_expected =
         train_expected
             .template subspan<batch * batch_size, (batch + 1) * batch_size>();
 
     LayerInputCaches<batch_size> a_previous_cache;
     LayerOutputCaches<batch_size> z_cache;
 
-    const AlgebraicArray<batch_size, Output> predicted =
+    const StaticArray<batch_size, Output> predicted =
         forward_vectorized<0, Input>(a_previous_cache, z_cache, batch_inputs);
-    const AlgebraicArray<batch_size, Output> delta =
+    const StaticArray<batch_size, Output> delta =
         loss->derivative((predicted), batch_expected);
     backward_vectorized<sizeof...(Layers) - 1, Output>(delta, a_previous_cache,
                                                        z_cache);
@@ -207,24 +207,24 @@ private:
 
   template <std::size_t I, typename T, std::size_t SIZE>
   auto
-  forward_no_cache_vectorized(const AlgebraicSpan<SIZE, const T> inputs) const {
+  forward_no_cache_vectorized(const StaticSpan<SIZE, const T> inputs) const {
     auto &layer = std::get<I>(layers);
     const auto out = layer.forward_no_cache_vectorized(inputs);
 
     if constexpr (I == sizeof...(Layers) - 1)
       return out;
     else
-      return forward_no_cache_vectorized<I + 1>(AlgebraicSpan(out));
+      return forward_no_cache_vectorized<I + 1>(StaticSpan(out));
   }
 
   template <std::size_t I, typename Inp, std::size_t SIZE>
   auto forward_vectorized(LayerInputCaches<SIZE> &a_previous_cache,
                           LayerOutputCaches<SIZE> &z_cache,
-                          const AlgebraicArray<SIZE, Inp> inputs) {
+                          const StaticArray<SIZE, Inp> inputs) {
     auto &layer = std::get<I>(layers);
     std::get<I>(a_previous_cache) = inputs;
     const auto out = layer.forward_vectorized(
-        AlgebraicSpan<SIZE, const Inp>(inputs), std::get<I>(z_cache));
+        StaticSpan<SIZE, const Inp>(inputs), std::get<I>(z_cache));
 
     if constexpr (I == sizeof...(Layers) - 1) {
       return out;
@@ -236,7 +236,7 @@ private:
   template <std::size_t I, typename Inp, std::size_t SIZE>
   auto forward_vectorized(LayerInputCaches<SIZE> &a_previous_cache,
                           LayerOutputCaches<SIZE> &z_cache,
-                          const AlgebraicSpan<SIZE, const Inp> inputs) {
+                          const StaticSpan<SIZE, const Inp> inputs) {
     auto &layer = std::get<I>(layers);
     std::get<I>(a_previous_cache) = copy_span(inputs);
     const auto out = layer.forward_vectorized(inputs, std::get<I>(z_cache));
@@ -249,8 +249,8 @@ private:
   }
 
   template <std::size_t SIZE, typename T>
-  AlgebraicArray<SIZE, T> copy_span(const AlgebraicSpan<SIZE, const T> &span) {
-    AlgebraicArray<SIZE, T> result;
+  StaticArray<SIZE, T> copy_span(const StaticSpan<SIZE, const T> &span) {
+    StaticArray<SIZE, T> result;
     for (std::size_t i = 0; i < SIZE; ++i) {
       result[i] = span[i];
     }
@@ -258,7 +258,7 @@ private:
   }
 
   template <std::size_t I, typename DeltaType, std::size_t SIZE>
-  void backward_vectorized(const AlgebraicArray<SIZE, DeltaType> &delta,
+  void backward_vectorized(const StaticArray<SIZE, DeltaType> &delta,
                            const LayerInputCaches<SIZE> &a_previous_cache,
                            const LayerOutputCaches<SIZE> &z_cache) {
     using Layer = Layers...[I];
@@ -267,9 +267,9 @@ private:
     using LayerOutput = Layer::Output;
 
     [[maybe_unused]] const auto new_delta = layer.backward_vectorized(
-        AlgebraicSpan<SIZE, const LayerOutput>(delta),
-        AlgebraicSpan<SIZE, const LayerInput>(std::get<I>(a_previous_cache)),
-        AlgebraicSpan<SIZE, const LayerOutput>(std::get<I>(z_cache)));
+        StaticSpan<SIZE, const LayerOutput>(delta),
+        StaticSpan<SIZE, const LayerInput>(std::get<I>(a_previous_cache)),
+        StaticSpan<SIZE, const LayerOutput>(std::get<I>(z_cache)));
 
     if constexpr (I != 0)
       backward_vectorized<I - 1, LayerInput, SIZE>(new_delta, a_previous_cache,
@@ -288,10 +288,10 @@ private:
   template <std::size_t train_size, std::size_t validation_size>
   void log_epoch(
       std::ostream *log_stream, const int epoch,
-      const AlgebraicSpan<train_size, const Input> train_inputs,
-      const AlgebraicSpan<train_size, const Output> train_expected,
-      const AlgebraicSpan<validation_size, const Input> validation_inputs,
-      const AlgebraicSpan<validation_size, const Output> validation_expected) {
+      const StaticSpan<train_size, const Input> train_inputs,
+      const StaticSpan<train_size, const Output> train_expected,
+      const StaticSpan<validation_size, const Input> validation_inputs,
+      const StaticSpan<validation_size, const Output> validation_expected) {
     if (log_stream) {
       *log_stream << "Epoch: " << epoch << std::endl;
       *log_stream << "-------------------" << std::endl;

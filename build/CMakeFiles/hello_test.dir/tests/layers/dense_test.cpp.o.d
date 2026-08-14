@@ -424,22 +424,22 @@ CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.o: \
  /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/any \
  /Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include/nlohmann/detail/macro_unscope.hpp \
  /Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include/nlohmann/thirdparty/hedley/hedley_undef.hpp \
- /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../activation/../matrix/AlgebraicArray.h \
+ /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../activation/../matrix/StaticArray.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../activation/../matrix/Algebraic.h \
- /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../activation/../matrix/Matrix.h \
- /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/random \
- /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/random.h \
- /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/opt_random.h \
- /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/random.tcc \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../lr_optimizer/Adam.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../lr_optimizer/Optimizer.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../lr_optimizer/../matrix/Algebraic.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/AlgebraicTuple.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/Algebraic.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/Matrix.h \
+ /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/StaticArray.h \
+ /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/random \
+ /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/random.h \
+ /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/opt_random.h \
+ /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/random.tcc \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/NoParamsLayer.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/Algebraic.h \
- /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/AlgebraicArray.h \
+ /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/StaticArray.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/ParamsLayer.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../activation/ActivationFactory.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../activation/Identity.h \
@@ -447,8 +447,8 @@ CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.o: \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../activation/Sigmoid.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/utils.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/matrix/3DTensor.h \
- /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/matrix/AlgebraicArray.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/matrix/Matrix.h \
+ /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/matrix/StaticArray.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/matrix/Matrix.h \
  /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest/include/gtest/gtest.h \
  /Users/borisosaulenko/CLionProjects/ML/build/_deps/googletest-src/googletest/include/gtest/gtest-assertion-result.h \

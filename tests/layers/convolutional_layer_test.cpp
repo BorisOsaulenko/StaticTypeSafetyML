@@ -13,7 +13,7 @@ public:
   using Input = Tensor3D<2, 3, 3>;
   using Output = Tensor3D<2, 2, 2>;
   using Kernel = Tensor3D<2, 2, 2>;
-  using KernelArray = AlgebraicArray<2, Kernel>;
+  using KernelArray = StaticArray<2, Kernel>;
   using Conv = Convolutional<2, 3, 3, 2, 2, 2>;
 
   static const inline Input input = {Matrix<3, 3>{1, 2, 3, 4, 5, 6, 7, 8, 9},
@@ -38,11 +38,11 @@ protected:
 };
 
 TEST_F(ConvolutionalTest, ForwardPass) {
-  const AlgebraicArray<1, Input> inputs{input};
-  AlgebraicArray<1, Output> z_cache;
+  const StaticArray<1, Input> inputs{input};
+  StaticArray<1, Output> z_cache;
 
   const auto output = convolutional_layer.forward_vectorized<1>(
-      AlgebraicSpan<1, const Input>(inputs), z_cache);
+      StaticSpan<1, const Input>(inputs), z_cache);
 
   const Output expected = {Matrix<2, 2>{21, 21, 21, 21},
                            Matrix<2, 2>{-17, -9, 7, 15}};
@@ -52,15 +52,15 @@ TEST_F(ConvolutionalTest, ForwardPass) {
 }
 
 TEST_F(ConvolutionalTest, BackwardPassCalculatesKernelGradients) {
-  const AlgebraicArray<1, Input> inputs{input};
-  const AlgebraicArray<1, Output> deltas{delta};
-  AlgebraicArray<1, Output> z_cache;
+  const StaticArray<1, Input> inputs{input};
+  const StaticArray<1, Output> deltas{delta};
+  StaticArray<1, Output> z_cache;
 
   convolutional_layer.forward_vectorized<1>(
-      AlgebraicSpan<1, const Input>(inputs), z_cache);
+      StaticSpan<1, const Input>(inputs), z_cache);
   convolutional_layer.backward_vectorized<1>(
-      AlgebraicSpan<1, const Output>(deltas),
-      AlgebraicSpan<1, const Input>(inputs), z_cache);
+      StaticSpan<1, const Output>(deltas),
+      StaticSpan<1, const Input>(inputs), z_cache);
 
   const Kernel expected_kernel_gradients1 = {Matrix<2, 2>{37, 47, 67, 77},
                                              Matrix<2, 2>{63, 53, 33, 23}};
@@ -79,15 +79,15 @@ TEST_F(ConvolutionalTest, BackwardPassCalculatesKernelGradients) {
 }
 
 TEST_F(ConvolutionalTest, BackwardPassCalculatesBiasGradients) {
-  const AlgebraicArray<1, Input> inputs{input};
-  const AlgebraicArray<1, Output> deltas{delta};
-  AlgebraicArray<1, Output> z_cache;
+  const StaticArray<1, Input> inputs{input};
+  const StaticArray<1, Output> deltas{delta};
+  StaticArray<1, Output> z_cache;
 
   convolutional_layer.forward_vectorized<1>(
-      AlgebraicSpan<1, const Input>(inputs), z_cache);
+      StaticSpan<1, const Input>(inputs), z_cache);
   convolutional_layer.backward_vectorized<1>(
-      AlgebraicSpan<1, const Output>(deltas),
-      AlgebraicSpan<1, const Input>(inputs), z_cache);
+      StaticSpan<1, const Output>(deltas),
+      StaticSpan<1, const Input>(inputs), z_cache);
 
   const Vector<2> expected_bias_gradients = {10, 2};
   expect_vector_close<2>(convolutional_layer.get_bias_gradients(),
@@ -95,15 +95,15 @@ TEST_F(ConvolutionalTest, BackwardPassCalculatesBiasGradients) {
 }
 
 TEST_F(ConvolutionalTest, BackwardPassReturnsNewDelta) {
-  const AlgebraicArray<1, Input> inputs{input};
-  const AlgebraicArray<1, Output> deltas{delta};
-  AlgebraicArray<1, Output> z_cache;
+  const StaticArray<1, Input> inputs{input};
+  const StaticArray<1, Output> deltas{delta};
+  StaticArray<1, Output> z_cache;
 
   convolutional_layer.forward_vectorized<1>(
-      AlgebraicSpan<1, const Input>(inputs), z_cache);
+      StaticSpan<1, const Input>(inputs), z_cache);
   const auto new_delta = convolutional_layer.backward_vectorized<1>(
-      AlgebraicSpan<1, const Output>(deltas),
-      AlgebraicSpan<1, const Input>(inputs), z_cache);
+      StaticSpan<1, const Output>(deltas),
+      StaticSpan<1, const Input>(inputs), z_cache);
 
   const Input expected = {Matrix<3, 3>{0, 1, 0, 4, 7, 3, 2, 6, 5},
                           Matrix<3, 3>{1, 2, 2, 0, 3, 3, 1, 1, -1}};

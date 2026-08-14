@@ -13,7 +13,7 @@
 
 template <int Ch_in, int R_in, int C_in, int R_k, int C_k, int num_ker>
 using ConvGradType =
-    AlgebraicTuple<AlgebraicArray<num_ker, Tensor3D<Ch_in, R_k, C_k>>,
+    AlgebraicTuple<StaticArray<num_ker, Tensor3D<Ch_in, R_k, C_k>>,
                    Vector<num_ker>>;
 
 template <int Ch_in, int R_in, int C_in, int R_k, int C_k, int num_ker>
@@ -48,19 +48,19 @@ public:
       : ParamsLayer<Input, Output, Gradient>(params, activation_function_type,
                                              optimizer_factory) {}
 
-  AlgebraicArray<num_ker, Kernel> get_kernels() const {
+  StaticArray<num_ker, Kernel> get_kernels() const {
     return this->params.template get<0>();
   }
   Bias get_bias() const { return this->params.template get<1>(); }
 
-  AlgebraicArray<num_ker, Kernel> get_kernel_gradients() const {
+  StaticArray<num_ker, Kernel> get_kernel_gradients() const {
     return this->gradient.template get<0>();
   }
   Bias get_bias_gradients() const { return this->gradient.template get<1>(); }
 
 protected:
   Output compute_z(const Input &inp) const override {
-    AlgebraicArray<num_ker, Kernel> kernels = get_kernels();
+    StaticArray<num_ker, Kernel> kernels = get_kernels();
     Bias bias = get_bias();
 
     Output result;
@@ -77,9 +77,9 @@ protected:
                                const Output &z_cache) const override {
     const Output dz =
         delta.hadamard(this->activation_function->derivative(z_cache));
-    AlgebraicArray<num_ker, Kernel> kernels = get_kernels();
+    StaticArray<num_ker, Kernel> kernels = get_kernels();
 
-    auto kernelGradients = AlgebraicArray<num_ker, Kernel>();
+    auto kernelGradients = StaticArray<num_ker, Kernel>();
     Bias biasGradients = Bias::zeros();
 
     for (std::size_t i = 0; i < num_ker; i++) {

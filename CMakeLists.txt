@@ -71,10 +71,12 @@ add_executable(hello_test
         tests/layers/flatten_test.cpp
         tests/lr_optimizer/AdamTest.cpp
         tests/layers/matrix_test.cpp
-        src/matrix/AlgebraicArray.h
+        src/matrix/StaticArray.h
         src/layers/ParamsLayer.h
         tests/layers/dense_test.cpp
         src/preprocessing/tokenizer.h
+        src/layers/Embedding.h
+        src/layers/AttentionHead.h
 )
 
 target_link_libraries(hello_test
@@ -115,6 +117,7 @@ add_executable(ML
         src/matrix/Algebraic.h
         src/activation/ActivationFactory.h
         src/matrix/3DTensor.h
+        src/layers/Embedding.h
 )
 
 # ----------------------------

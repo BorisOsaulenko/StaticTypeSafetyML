@@ -2,6 +2,8 @@
 #define ML_MATRIX_H
 
 #include "Algebraic.h"
+#include "StaticArray.h"
+
 #include <cassert>
 #include <cstddef>
 #include <nlohmann/json.hpp>
@@ -259,6 +261,34 @@ public:
   const value_type &operator[](const std::size_t row,
                                const std::size_t col) const {
     return this->data_[row * C + col];
+  }
+
+  void set_row(std::size_t row, const Vector<C> &vec) {
+    for (std::size_t col = 0; col < C; ++col) {
+      this->data_[row * C + col] = vec[col];
+    }
+  }
+
+  void set_col(std::size_t col, const Vector<R> &vec) {
+    for (std::size_t row = 0; row < R; ++row) {
+      this->data_[row * C + col] = vec[row];
+    }
+  }
+
+  [[nodiscard]] Vector<R> get_col(const std::size_t col) const {
+    Vector<R> vec;
+    for (std::size_t row = 0; row < R; ++row) {
+      vec[row] = this->data_[row * C + col];
+    }
+    return vec;
+  }
+
+  [[nodiscard]] Vector<C> get_row(const std::size_t row) const {
+    Vector<C> vec;
+    for (std::size_t col = 0; col < C; ++col) {
+      vec[col] = this->data_[row * C + col];
+    }
+    return vec;
   }
 
   template <int KR, int KC>

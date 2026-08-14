@@ -6,7 +6,7 @@
 #ifndef ML_ACTIVATIONFUNCTION_H
 #define ML_ACTIVATIONFUNCTION_H
 #include "../matrix/Algebraic.h"
-#include "../matrix/AlgebraicArray.h"
+#include "../matrix/StaticArray.h"
 
 enum class ActivationFunctionEnum {
   Identity,
@@ -40,9 +40,9 @@ public:
 
   template <typename Shape, std::size_t SIZE>
     requires Algebraic<std::remove_const_t<Shape>>
-  [[nodiscard]] AlgebraicArray<SIZE, std::remove_const_t<Shape>>
-  activate(const AlgebraicSpan<SIZE, const Shape> &x) {
-    AlgebraicArray<SIZE, std::remove_const_t<Shape>> result;
+  [[nodiscard]] StaticArray<SIZE, std::remove_const_t<Shape>>
+  activate(const StaticSpan<SIZE, const Shape> &x) {
+    StaticArray<SIZE, std::remove_const_t<Shape>> result;
     for (std::size_t i = 0; i < SIZE; ++i)
       result[i] = activate(x[i]);
     return result;
@@ -50,9 +50,9 @@ public:
 
   template <typename Shape, std::size_t SIZE>
     requires Algebraic<std::remove_const_t<Shape>>
-  [[nodiscard]] AlgebraicArray<SIZE, std::remove_const_t<Shape>>
-  derivative(const AlgebraicSpan<SIZE, const Shape> &x) {
-    AlgebraicArray<SIZE, std::remove_const_t<Shape>> result;
+  [[nodiscard]] StaticArray<SIZE, std::remove_const_t<Shape>>
+  derivative(const StaticSpan<SIZE, const Shape> &x) {
+    StaticArray<SIZE, std::remove_const_t<Shape>> result;
     for (std::size_t i = 0; i < SIZE; ++i)
       result[i] = derivative(x[i]);
     return result;

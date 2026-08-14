@@ -18,15 +18,15 @@ public:
 
   TensorMnistReader() = default;
 
-  std::pair<AlgebraicArray<train_count, Tensor3D<1, 28, 28>>,
-            AlgebraicArray<train_count, Vector<10>>>
+  std::pair<StaticArray<train_count, Tensor3D<1, 28, 28>>,
+            StaticArray<train_count, Vector<10>>>
   read_train_images() {
     return read_images<train_count>(this->train_images_stream,
                                     this->train_labels_stream);
   }
 
-  std::pair<AlgebraicArray<test_count, Tensor3D<1, 28, 28>>,
-            AlgebraicArray<test_count, Vector<10>>>
+  std::pair<StaticArray<test_count, Tensor3D<1, 28, 28>>,
+            StaticArray<test_count, Vector<10>>>
   read_test_images() {
     return read_images<test_count>(this->test_images_stream,
                                    this->test_labels_stream);
@@ -34,11 +34,11 @@ public:
 
 private:
   template <int amount>
-  static std::pair<AlgebraicArray<amount, Tensor3D<1, 28, 28>>,
-                   AlgebraicArray<amount, Vector<10>>>
+  static std::pair<StaticArray<amount, Tensor3D<1, 28, 28>>,
+                   StaticArray<amount, Vector<10>>>
   read_images(std::ifstream &images_stream, std::ifstream &labels_stream) {
-    AlgebraicArray<amount, Tensor3D<1, 28, 28>> X;
-    AlgebraicArray<amount, Vector<10>> y;
+    StaticArray<amount, Tensor3D<1, 28, 28>> X;
+    StaticArray<amount, Vector<10>> y;
 
     uint8_t pixel;
     uint8_t label;

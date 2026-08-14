@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../src/matrix/AlgebraicArray.h"
 #include "../../src/matrix/Matrix.h"
+#include "../../src/matrix/StaticArray.h"
 #include "MnistReaderBase.hpp"
 
 #include <vector>
@@ -23,15 +23,15 @@ public:
 
   VectorMnistReader() = default;
 
-  std::pair<AlgebraicArray<train_count, Image>,
-            AlgebraicArray<train_count, Label>>
+  std::pair<StaticArray<train_count, Image>,
+            StaticArray<train_count, Label>>
   read_train_images() {
     return read_images<train_count>(this->train_images_stream,
                                     this->train_labels_stream);
   }
 
-  std::pair<AlgebraicArray<test_count, Image>,
-            AlgebraicArray<test_count, Label>>
+  std::pair<StaticArray<test_count, Image>,
+            StaticArray<test_count, Label>>
   read_test_images() {
     return read_images<test_count>(this->test_images_stream,
                                    this->test_labels_stream);
@@ -39,10 +39,10 @@ public:
 
 private:
   template <int amount>
-  static std::pair<AlgebraicArray<amount, Image>, AlgebraicArray<amount, Label>>
+  static std::pair<StaticArray<amount, Image>, StaticArray<amount, Label>>
   read_images(std::ifstream &images_stream, std::ifstream &labels_stream) {
-    AlgebraicArray<amount, Image> X;
-    AlgebraicArray<amount, Label> y;
+    StaticArray<amount, Image> X;
+    StaticArray<amount, Label> y;
     uint8_t pixel;
     uint8_t label;
 

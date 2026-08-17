@@ -1,6 +1,7 @@
 #ifndef ML_MODEL_H
 #define ML_MODEL_H
 #include "layers/Dense.h"
+#include "layers/LayerConcepts.h"
 #include "loss/Loss.h"
 #include "loss/LossFactory.h"
 
@@ -10,14 +11,22 @@
 #include <random>
 #include <tuple>
 
-template <int I, typename L1> consteval bool CheckLayers() { return true; }
+template <int I, typename In, typename L1> consteval bool CheckLayers() {
+  static_assert(AcceptsInput<L1, In>,
+                "Layer does not accept the previous layer's output");
+  static_assert(BackwardConsistent<L1, In, ComputeZResult<L1, In>>,
+                "Layer's compute_delta is inconsistent with its compute_z");
+  return true;
+}
 
-template <int I, typename L1, typename L2, typename... Rest>
+template <int I, typename In, typename L1, typename L2, typename... Rest>
 consteval bool CheckLayers() {
-  static_assert(std::is_same_v<typename L1::Output, typename L2::Input>,
-                "Layers are incompatible");
+  static_assert(AcceptsInput<L1, In>,
+                "Layer does not accept the previous layer's output");
+  static_assert(BackwardConsistent<L1, In, ComputeZResult<L1, In>>,
+                "Layer's compute_delta is inconsistent with its compute_z");
 
-  return CheckLayers<I + 1, L2, Rest...>();
+  return CheckLayers<I + 1, ComputeZResult<L1, In>, L2, Rest...>();
 }
 
 template <std::size_t N, typename F> constexpr void constexpr_for(F &&f) {
@@ -27,7 +36,8 @@ template <std::size_t N, typename F> constexpr void constexpr_for(F &&f) {
 }
 
 template <typename... Layers> class Network {
-  static_assert(CheckLayers<0, Layers...>());
+  static_assert(
+      CheckLayers<0, typename Layers...[0]::Input, Layers...>());
 
   using json = nlohmann::json;
   using LayerTuple = std::tuple<Layers...>;

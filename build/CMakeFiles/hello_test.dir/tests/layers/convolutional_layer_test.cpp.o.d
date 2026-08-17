@@ -443,6 +443,7 @@ CMakeFiles/hello_test.dir/tests/layers/convolutional_layer_test.cpp.o: \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/NoParamsLayer.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../matrix/Algebraic.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../matrix/StaticArray.h \
+ /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/LayerConcepts.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/ParamsLayer.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../activation/ActivationFactory.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/../layers/../activation/Identity.h \

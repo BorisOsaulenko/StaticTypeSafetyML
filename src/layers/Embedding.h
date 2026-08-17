@@ -12,27 +12,25 @@
 template <std::size_t TokenAmt, std::size_t EmbeddingDim,
           std::size_t ContextLength>
 class Embedding
-    : public ParamsLayer<StaticSpan<ContextLength, std::size_t>,
-                         StaticArray<ContextLength, Vector<EmbeddingDim>>,
+    : public ParamsLayer<Embedding<TokenAmt, EmbeddingDim, ContextLength>,
                          Matrix<TokenAmt, EmbeddingDim>> {
   using InputArray = StaticSpan<ContextLength, std::size_t>;
   using Input = StaticSpan<ContextLength, std::size_t>;
   using Output = StaticArray<ContextLength, Vector<EmbeddingDim>>;
   using Grad = Matrix<TokenAmt, EmbeddingDim>;
-  using BackwardResult = ParamsLayer<Input, Output, Grad>::BackwardResult;
+  using BackwardResult = LayerBackwardResult<Input, Grad>;
 
 public:
   Embedding(ActivationFunctionEnum activation_function_type,
             const AdamFactory &optimizer_factory)
-      : ParamsLayer<Input, Output, Grad>(activation_function_type,
-                                         optimizer_factory) {}
+      : ParamsLayer<Embedding, Grad>(activation_function_type,
+                                     optimizer_factory) {}
   Embedding(Grad &params, ActivationFunctionEnum activation_function_type,
             const AdamFactory &optimizer_factory)
-      : ParamsLayer<Input, Output, Grad>(params, activation_function_type,
-                                         optimizer_factory) {}
+      : ParamsLayer<Embedding, Grad>(params, activation_function_type,
+                                     optimizer_factory) {}
 
-protected:
-  Output compute_z(const Input &inp) const override {
+  Output compute_z(const Input &inp) const {
     StaticArray<ContextLength, Vector<EmbeddingDim>> result;
     for (std::size_t tokenIdx = 0; tokenIdx < ContextLength; ++tokenIdx) {
       Vector<EmbeddingDim> vec;
@@ -45,7 +43,7 @@ protected:
   }
   BackwardResult
   compute_delta(const Output &delta, const Input &a_previous,
-                [[maybe_unused]] const Output &z_cache) const override {
+                [[maybe_unused]] const Output &z_cache) const {
     Grad grad = Grad::zeros();
     for (std::size_t tokenIdx = 0; tokenIdx < ContextLength; ++tokenIdx) {
       for (std::size_t colIdx = 0; colIdx < EmbeddingDim; ++colIdx) {

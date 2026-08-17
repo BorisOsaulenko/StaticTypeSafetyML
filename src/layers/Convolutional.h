@@ -19,8 +19,7 @@ using ConvGradType =
 template <int Ch_in, int R_in, int C_in, int R_k, int C_k, int num_ker>
   requires(R_in >= R_k && C_in >= C_k)
 class Convolutional
-    : public ParamsLayer<Tensor3D<Ch_in, R_in, C_in>,
-                         Tensor3D<num_ker, R_in - R_k + 1, C_in - C_k + 1>,
+    : public ParamsLayer<Convolutional<Ch_in, R_in, C_in, R_k, C_k, num_ker>,
                          ConvGradType<Ch_in, R_in, C_in, R_k, C_k, num_ker>> {
 
 public:
@@ -34,18 +33,18 @@ private:
   using value_type = double;
   using json = nlohmann::json;
   using Gradient = ConvGradType<Ch_in, R_in, C_in, R_k, C_k, num_ker>;
-  using BackwardResult = ParamsLayer<Input, Output, Gradient>::BackwardResult;
+  using BackwardResult = LayerBackwardResult<Input, Gradient>;
 
 public:
   Convolutional(ActivationFunctionEnum activation_function_type,
                 AdamFactory &optimizer_factory)
-      : ParamsLayer<Input, Output, Gradient>(activation_function_type,
+      : ParamsLayer<Convolutional, Gradient>(activation_function_type,
                                              optimizer_factory) {}
 
   Convolutional(Gradient params,
                 ActivationFunctionEnum activation_function_type,
                 AdamFactory &optimizer_factory)
-      : ParamsLayer<Input, Output, Gradient>(params, activation_function_type,
+      : ParamsLayer<Convolutional, Gradient>(params, activation_function_type,
                                              optimizer_factory) {}
 
   StaticArray<num_ker, Kernel> get_kernels() const {
@@ -58,8 +57,7 @@ public:
   }
   Bias get_bias_gradients() const { return this->gradient.template get<1>(); }
 
-protected:
-  Output compute_z(const Input &inp) const override {
+  Output compute_z(const Input &inp) const {
     StaticArray<num_ker, Kernel> kernels = get_kernels();
     Bias bias = get_bias();
 
@@ -74,7 +72,7 @@ protected:
   }
 
   BackwardResult compute_delta(const Output &delta, const Input &a_previous,
-                               const Output &z_cache) const override {
+                               const Output &z_cache) const {
     const Output dz =
         delta.hadamard(this->activation_function->derivative(z_cache));
     StaticArray<num_ker, Kernel> kernels = get_kernels();

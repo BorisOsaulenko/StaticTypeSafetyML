@@ -10,24 +10,37 @@
 
 #include <cstddef>
 
-template <std::size_t ContextLength, std::size_t EmbeddingDim,
-          std::size_t HeadDim>
+template <std::size_t EmbeddingDim, std::size_t HeadDim>
 class AttentionHead
     : public ParamsLayer<
-          StaticArray<ContextLength, Vector<EmbeddingDim>>,
-          StaticArray<ContextLength, Vector<EmbeddingDim>>,
+          AttentionHead<EmbeddingDim, HeadDim>,
           StaticArray<4, Matrix<HeadDim, EmbeddingDim>>> { // query, key,
                                                            // value_down,
                                                            // value_up
-  using Input = Matrix<EmbeddingDim, ContextLength>;
-  using Output = Matrix<EmbeddingDim, ContextLength>;
   using Grad = StaticArray<4, Matrix<HeadDim, EmbeddingDim>>;
-  using BackwardResult = ParamsLayer<Input, Output, Grad>::BackwardResult;
   using json = nlohmann::json;
+
+  template <std::size_t ContextLength>
+  using Input = Matrix<EmbeddingDim, ContextLength>;
+  template <std::size_t ContextLength>
+  using Output = Matrix<EmbeddingDim, ContextLength>;
+  template <std::size_t ContextLength>
+  using BackwardResult = LayerBackwardResult<Input<ContextLength>, Grad>;
 
   double neg_inf = std::numeric_limits<double>::lowest();
 
 public:
+  explicit AttentionHead(const ActivationFunctionEnum activation_function_type,
+                         const AdamFactory &optimizer_factory)
+      : ParamsLayer<AttentionHead, Grad>(activation_function_type,
+                                         optimizer_factory) {}
+
+  explicit AttentionHead(Grad &params,
+                         const ActivationFunctionEnum activation_function_type,
+                         const AdamFactory &optimizer_factory)
+      : ParamsLayer<AttentionHead, Grad>(params, activation_function_type,
+                                         optimizer_factory) {}
+
   Matrix<HeadDim, EmbeddingDim> get_query_weights() const {
     return this->params.template get<0>();
   }
@@ -41,8 +54,8 @@ public:
     return this->params.template get<3>();
   }
 
-protected:
-  Output compute_z(const Input &inp) const override {
+  template <std::size_t ContextLength>
+  Output<ContextLength> compute_z(const Input<ContextLength> &inp) const {
     const Matrix<HeadDim, EmbeddingDim> query_weights = get_query_weights();
     const Matrix<HeadDim, EmbeddingDim> key_weights = get_key_weights();
     Matrix<HeadDim, ContextLength> queries = query_weights * inp;
@@ -71,7 +84,19 @@ protected:
     return value_matrix * attention_scores;
   }
 
+  template <std::size_t ContextLength>
+  BackwardResult<ContextLength>
+  compute_delta(const Output<ContextLength> &delta,
+                const Input<ContextLength> &a_previous,
+                [[maybe_unused]] const Output<ContextLength> &z_cache) const {
+
+    Grad grad = Grad::zeros();
+    Input<ContextLength> new_delta = Input<ContextLength>::zeros();
+    return BackwardResult<ContextLength>{new_delta, grad};
+  }
+
 private:
+  template <std::size_t ContextLength>
   static Vector<ContextLength> softmax(const Vector<ContextLength> &vec) {
     return vec.exp() / vec.exp().sum();
   }

@@ -41,14 +41,13 @@ TEST_F(MaxPool2x2Test, ForwardPass) {
 }
 
 TEST_F(MaxPool2x2Test, BackwardPass) {
-  max_pool_layer.forward_vectorized(StaticSpan<1, const Input>(input),
-                                    z_cache);
+  max_pool_layer.forward_vectorized(StaticSpan<1, const Input>(input), z_cache);
 
   const Tensor3D<2, 4, 4> expected = {
       Matrix<4, 4>{0, 0, 0, 0, 0, 1, 0, 2, 0, 0, 0, 0, 0, 3, 0, 4},
       Matrix<4, 4>{-1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 0, 0, 0}};
 
-  const auto new_delta =
-      max_pool_layer.backward_vectorized<1>(delta, input, z_cache);
+  const auto new_delta = max_pool_layer.backward_vectorized<1>(
+      StaticSpan(delta), StaticSpan(input), z_cache);
   expect_tensor_close<2, 4, 4>(new_delta[0], expected, kTolerance);
 }

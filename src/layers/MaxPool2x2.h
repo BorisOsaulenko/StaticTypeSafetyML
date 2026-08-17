@@ -9,9 +9,7 @@
 #include <nlohmann/json.hpp>
 
 template <int Ch_in, int R_in, int C_in>
-class MaxPool2x2 final
-    : public NoParamsLayer<Tensor3D<Ch_in, R_in, C_in>,
-                           Tensor3D<Ch_in, R_in / 2, C_in / 2>> {
+class MaxPool2x2 final : public NoParamsLayer<MaxPool2x2<Ch_in, R_in, C_in>> {
   static_assert(R_in % 2 == 0, "Input rows must be even for MaxPool2x2.");
   static_assert(C_in % 2 == 0, "Input columns must be even for MaxPool2x2.");
 
@@ -21,10 +19,9 @@ public:
   using Input = Tensor3D<Ch_in, R_in, C_in>;
   using Output = Tensor3D<Ch_in, R_in / 2, C_in / 2>;
 
-  MaxPool2x2() : NoParamsLayer<Input, Output>() {}
+  MaxPool2x2() : NoParamsLayer<MaxPool2x2>() {}
 
-protected:
-  Output compute_z(const Input &inp) const override {
+  Output compute_z(const Input &inp) const {
     Output result{};
     for (std::size_t ch = 0; ch < Ch_in; ++ch) {
       for (std::size_t r = 0; r < R_in / 2; ++r) {
@@ -44,7 +41,7 @@ protected:
   }
 
   Input compute_delta(const Output &delta, const Input &a_previous,
-                      [[maybe_unused]] const Output &z_cache) const override {
+                      [[maybe_unused]] const Output &z_cache) const {
     Input new_delta;
     for (std::size_t ch = 0; ch < Ch_in; ++ch) {
       for (std::size_t r = 0; r < R_in / 2; ++r) {

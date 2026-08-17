@@ -254,6 +254,7 @@ CMakeFiles/hello_test.dir/tests/layers/convolutional_layer_test.cpp.o
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/Dense.h
+ /Users/borisosaulenko/CLionProjects/ML/src/layers/LayerConcepts.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/NoParamsLayer.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/ParamsLayer.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/3DTensor.h
@@ -789,6 +790,7 @@ CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.o
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/Dense.h
+ /Users/borisosaulenko/CLionProjects/ML/src/layers/LayerConcepts.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/NoParamsLayer.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/ParamsLayer.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/3DTensor.h
@@ -1323,6 +1325,7 @@ CMakeFiles/hello_test.dir/tests/layers/linear_regression_test.cpp.o
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/Dense.h
+ /Users/borisosaulenko/CLionProjects/ML/src/layers/LayerConcepts.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/NoParamsLayer.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/ParamsLayer.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Algebraic.h
@@ -1863,6 +1866,7 @@ CMakeFiles/hello_test.dir/tests/layers/matrix_test.cpp.o
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/Dense.h
+ /Users/borisosaulenko/CLionProjects/ML/src/layers/LayerConcepts.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/NoParamsLayer.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/ParamsLayer.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/3DTensor.h
@@ -2395,6 +2399,7 @@ CMakeFiles/hello_test.dir/tests/layers/max_pool_2x2_test.cpp.o
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/Dense.h
+ /Users/borisosaulenko/CLionProjects/ML/src/layers/LayerConcepts.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/NoParamsLayer.h
  /Users/borisosaulenko/CLionProjects/ML/src/layers/ParamsLayer.h
  /Users/borisosaulenko/CLionProjects/ML/src/matrix/3DTensor.h

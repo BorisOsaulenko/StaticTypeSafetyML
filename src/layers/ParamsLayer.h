@@ -8,9 +8,15 @@
 #include "../activation/ActivationFunction.h"
 #include "../lr_optimizer/Adam.h"
 #include "../matrix/Algebraic.h"
+#include "LayerConcepts.h"
 
-template <typename Input, Algebraic Output, Algebraic Grad> class ParamsLayer {
+#include <concepts>
+#include <type_traits>
+
+template <typename Derived, Algebraic Grad> class ParamsLayer {
   using json = nlohmann::json;
+
+  const Derived &derived() const { return static_cast<const Derived &>(*this); }
 
 public:
   static constexpr bool has_params = true;
@@ -31,22 +37,24 @@ public:
         params(params), gradient(Grad::zeros()),
         optimizer(optimizer_factory.build(params)) {}
 
-  virtual ~ParamsLayer() = default;
+  template <typename Input>
+  auto forward_no_cache(const Input &inp) const
+    requires requires { this->derived().compute_z(inp); }
+  {
+    return activation_function->activate(derived().compute_z(inp));
+  }
 
-  struct BackwardResult {
-    Input new_delta;
-    Grad gradient;
-  };
-
-  template <std::size_t SIZE>
+  template <std::size_t SIZE, typename Input, typename Output>
   StaticArray<SIZE, Output>
   forward_vectorized(const StaticSpan<SIZE, const Input> &inp,
-                     StaticArray<SIZE, Output> &z_cache) const {
+                     StaticArray<SIZE, Output> &z_cache) const
+    requires ComputesZ<Derived, Input, Output>
+  {
     StaticArray<SIZE, Output> result;
 
 #pragma omp parallel for
     for (std::size_t i = 0; i < inp.size(); ++i) {
-      Output z = compute_z(inp[i]);
+      Output z = derived().compute_z(inp[i]);
       z_cache[i] = z;
       result[i] = activation_function->activate(z);
     }
@@ -54,29 +62,29 @@ public:
     return result;
   }
 
-  Output forward_no_cache(const Input &inp) const {
-    Output z = compute_z(inp);
-    return activation_function->activate(z);
-  }
-
-  template <std::size_t SIZE>
-  StaticArray<SIZE, Output>
-  forward_no_cache_vectorized(const StaticSpan<SIZE, const Input> &inp) const {
+  template <std::size_t SIZE, typename Input>
+  auto forward_no_cache_vectorized(const StaticSpan<SIZE, const Input> &inp) const
+    requires requires { this->derived().compute_z(inp[0]); }
+  {
+    using Output = decltype(this->derived().compute_z(inp[0]));
     StaticArray<SIZE, Output> result;
 
 #pragma omp parallel for
     for (std::size_t i = 0; i < inp.size(); ++i) {
-      result[i] = activation_function->activate(compute_z(inp[i]));
+      result[i] = activation_function->activate(derived().compute_z(inp[i]));
     }
 
     return result;
   }
 
-  template <std::size_t SIZE>
+  template <std::size_t SIZE, typename Input, typename Output>
   StaticArray<SIZE, Input>
-  backward_vectorized(const StaticSpan<SIZE, const Output> &delta,
-                      const StaticSpan<SIZE, const Input> &a_previous,
-                      const StaticSpan<SIZE, const Output> &z_cache) {
+  backward_vectorized(
+      const StaticSpan<SIZE, const Output> &delta,
+      const StaticSpan<SIZE, const Input> &a_previous,
+      const StaticSpan<SIZE, const std::type_identity_t<Output>> &z_cache)
+    requires ParamsLayerImpl<Derived, Input, Output, Grad>
+  {
     StaticArray<SIZE, Input> result;
 
 #pragma omp parallel
@@ -85,8 +93,8 @@ public:
 
 #pragma omp for
       for (std::size_t idx = 0; idx < SIZE; ++idx) {
-        auto [new_delta, grad] =
-            compute_delta(delta[idx], a_previous[idx], z_cache[idx]);
+        auto [new_delta, grad] = derived().compute_delta(
+            delta[idx], a_previous[idx], z_cache[idx]);
 
         result[idx] = new_delta;
         local_grad += grad;
@@ -123,10 +131,6 @@ protected:
   Grad gradient;
 
   using value_type = double;
-  virtual Output compute_z(const Input &inp) const = 0;
-  virtual BackwardResult compute_delta(const Output &delta,
-                                       const Input &a_previous,
-                                       const Output &z_cache) const = 0;
 
 private:
   Adam<Grad> optimizer;

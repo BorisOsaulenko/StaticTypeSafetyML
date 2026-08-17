@@ -253,6 +253,7 @@ CMakeFiles/hello_test.dir/tests/layers/convolutional_layer_test.cpp.o: /Users/bo
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h \
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h \
   /Users/borisosaulenko/CLionProjects/ML/src/layers/Dense.h \
+  /Users/borisosaulenko/CLionProjects/ML/src/layers/LayerConcepts.h \
   /Users/borisosaulenko/CLionProjects/ML/src/layers/NoParamsLayer.h \
   /Users/borisosaulenko/CLionProjects/ML/src/layers/ParamsLayer.h \
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/3DTensor.h \
@@ -787,6 +788,7 @@ CMakeFiles/hello_test.dir/tests/layers/dense_test.cpp.o: /Users/borisosaulenko/C
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h \
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h \
   /Users/borisosaulenko/CLionProjects/ML/src/layers/Dense.h \
+  /Users/borisosaulenko/CLionProjects/ML/src/layers/LayerConcepts.h \
   /Users/borisosaulenko/CLionProjects/ML/src/layers/NoParamsLayer.h \
   /Users/borisosaulenko/CLionProjects/ML/src/layers/ParamsLayer.h \
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/3DTensor.h \
@@ -1319,6 +1321,7 @@ CMakeFiles/hello_test.dir/tests/layers/linear_regression_test.cpp.o: /Users/bori
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h \
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h \
   /Users/borisosaulenko/CLionProjects/ML/src/layers/Dense.h \
+  /Users/borisosaulenko/CLionProjects/ML/src/layers/LayerConcepts.h \
   /Users/borisosaulenko/CLionProjects/ML/src/layers/NoParamsLayer.h \
   /Users/borisosaulenko/CLionProjects/ML/src/layers/ParamsLayer.h \
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/Algebraic.h \
@@ -1858,6 +1861,7 @@ CMakeFiles/hello_test.dir/tests/layers/matrix_test.cpp.o: /Users/borisosaulenko/
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h \
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h \
   /Users/borisosaulenko/CLionProjects/ML/src/layers/Dense.h \
+  /Users/borisosaulenko/CLionProjects/ML/src/layers/LayerConcepts.h \
   /Users/borisosaulenko/CLionProjects/ML/src/layers/NoParamsLayer.h \
   /Users/borisosaulenko/CLionProjects/ML/src/layers/ParamsLayer.h \
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/3DTensor.h \
@@ -2389,6 +2393,7 @@ CMakeFiles/hello_test.dir/tests/layers/max_pool_2x2_test.cpp.o: /Users/borisosau
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/Matrix.h \
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/StaticArray.h \
   /Users/borisosaulenko/CLionProjects/ML/src/layers/Dense.h \
+  /Users/borisosaulenko/CLionProjects/ML/src/layers/LayerConcepts.h \
   /Users/borisosaulenko/CLionProjects/ML/src/layers/NoParamsLayer.h \
   /Users/borisosaulenko/CLionProjects/ML/src/layers/ParamsLayer.h \
   /Users/borisosaulenko/CLionProjects/ML/src/matrix/3DTensor.h \
@@ -2842,10 +2847,6 @@ CMakeFiles/hello_test.dir/tests/lr_optimizer/AdamTest.cpp.o: /Users/borisosaulen
 
 /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/stl_pair.h:
 
-/opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/funcref_impl.h:
-
-/opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/stl_numeric.h:
-
 /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/stl_iterator.h:
 
 /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/ostream:
@@ -2938,6 +2939,8 @@ _deps/nlohmann_json-src/include/nlohmann/detail/string_utils.hpp:
 
 /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/intcmp.h:
 
+/Users/borisosaulenko/CLionProjects/ML/src/layers/LayerConcepts.h:
+
 /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/forward_list.tcc:
 
 /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/hashtable.h:
@@ -2949,6 +2952,10 @@ _deps/nlohmann_json-src/include/nlohmann/detail/string_utils.hpp:
 /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/stdint.h:
 
 /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/functional_hash.h:
+
+/opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/stl_numeric.h:
+
+/opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/funcref_impl.h:
 
 /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/thread:
 

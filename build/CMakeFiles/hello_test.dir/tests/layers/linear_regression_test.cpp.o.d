@@ -441,11 +441,13 @@ CMakeFiles/hello_test.dir/tests/layers/linear_regression_test.cpp.o: \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/NoParamsLayer.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/Algebraic.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/StaticArray.h \
+ /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/LayerConcepts.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/ParamsLayer.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../activation/ActivationFactory.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../activation/Identity.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../activation/ReLu.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../activation/Sigmoid.h \
+ /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/LayerConcepts.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/loss/Loss.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/loss/LossFactory.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/loss/../matrix/Algebraic.h \

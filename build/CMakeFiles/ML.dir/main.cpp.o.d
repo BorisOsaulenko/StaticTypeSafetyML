@@ -442,6 +442,7 @@ CMakeFiles/ML.dir/main.cpp.o: \
  /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/NoParamsLayer.h \
  /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/../matrix/Algebraic.h \
  /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/../matrix/StaticArray.h \
+ /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/LayerConcepts.h \
  /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/ParamsLayer.h \
  /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/../activation/ActivationFactory.h \
  /Users/borisosaulenko/CLionProjects/ML/include/mnist/../../src/matrix/../layers/../activation/Identity.h \
@@ -456,6 +457,7 @@ CMakeFiles/ML.dir/main.cpp.o: \
  /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/c++io.h \
  /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/fstream.tcc \
  /Users/borisosaulenko/CLionProjects/ML/src/Network.h \
+ /Users/borisosaulenko/CLionProjects/ML/src/layers/LayerConcepts.h \
  /Users/borisosaulenko/CLionProjects/ML/src/loss/Loss.h \
  /Users/borisosaulenko/CLionProjects/ML/src/loss/LossFactory.h \
  /Users/borisosaulenko/CLionProjects/ML/src/loss/../matrix/Algebraic.h \

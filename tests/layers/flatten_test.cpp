@@ -1,41 +1,48 @@
-// //
-// // Created by Boris Osaulenko on 16/07/2026.
-// //
 //
-// #include "../../src/layers/Flatten.h"
-// #include "../../src/matrix/3DTensor.h"
-// #include "../../src/matrix/Matrix.h"
-// #include "utils.h"
+// Created by Boris Osaulenko on 16/07/2026.
 //
-// #include <gtest/gtest.h>
-//
-// static constexpr double kTolerance = 0.05;
-//
-// class FlattenTest : public testing::Test {
-// public:
-//   static const inline Tensor3D<2, 2, 2> input = {Matrix<2, 2>{1, 2, 3, 4},
-//                                                  Matrix<2, 2>{5, 6, 7, 8}};
-//
-//   static const inline Vector<8> delta = {1, 2, 3, 4, -1, -2, -3, -4};
-//
-// protected:
-//   Flatten<2, 2, 2> flatten_layer;
-//
-//   void SetUp() override {}
-// };
-//
-// TEST_F(FlattenTest, ForwardPass) {
-//   const auto output = flatten_layer.forward(input);
-//   const Vector<8> expected = {1, 2, 3, 4, 5, 6, 7, 8};
-//
-//   expect_vector_close(output, expected, kTolerance);
-// }
-//
-// TEST_F(FlattenTest, BackwardPass) {
-//   flatten_layer.forward(input);
-//   const auto new_delta = flatten_layer.backward(delta);
-//   const Tensor3D<2, 2, 2> expected = {Matrix<2, 2>{1, 2, 3, 4},
-//                                       Matrix<2, 2>{-1, -2, -3, -4}};
-//
-//   expect_tensor_close(new_delta, expected, kTolerance);
-// }
+
+#include "../../src/layers/Flatten.h"
+#include "../../src/matrix/3DTensor.h"
+#include "../../src/matrix/Matrix.h"
+#include "utils.h"
+
+#include <gtest/gtest.h>
+
+static constexpr double kTolerance = 0.05;
+
+using Input = Tensor3D<2, 2, 2>;
+using Output = Vector<8>;
+
+class FlattenTest : public testing::Test {
+public:
+  static const inline Input input_elem = {Matrix<2, 2>{1, 2, 3, 4},
+                                          Matrix<2, 2>{5, 6, 7, 8}};
+  static const inline StaticArray<1, Input> input = {input_elem};
+
+  static const inline Output delta_elem = {1, 2, 3, 4, -1, -2, -3, -4};
+  static const inline StaticArray<1, Output> delta = {delta_elem};
+
+protected:
+  Flatten flatten_layer;
+
+  void SetUp() override {}
+};
+
+TEST_F(FlattenTest, ForwardPass) {
+  const Output output = flatten_layer.compute_z(input_elem);
+  const Output expected = {1, 2, 3, 4, 5, 6, 7, 8};
+
+  expect_vector_close(output, expected, kTolerance);
+}
+
+TEST_F(FlattenTest, BackwardPass) {
+  StaticArray<1, LayerCache<Flatten, Input>> cache;
+  flatten_layer.forward_vectorized(input, cache);
+  const StaticArray<1, Input> new_delta =
+      flatten_layer.backward_vectorized<1, Input>(delta, cache);
+  const Tensor3D<2, 2, 2> expected = {Matrix<2, 2>{1, 2, 3, 4},
+                                      Matrix<2, 2>{-1, -2, -3, -4}};
+
+  expect_tensor_close(new_delta[0], expected, kTolerance);
+}

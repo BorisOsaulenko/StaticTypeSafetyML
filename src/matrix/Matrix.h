@@ -10,7 +10,7 @@
 #include <ostream>
 #include <random>
 
-template <class Derived, int R, int C> class MatrixBase {
+template <class Derived, size_t R, size_t C> class MatrixBase {
 public:
   using value_type = double;
   using storage_type = std::vector<value_type>;
@@ -48,7 +48,7 @@ public:
     return data_[r * C + c];
   }
 
-  static void set_seed(const unsigned int &seed) { rng.seed(seed); }
+  static void set_seed(const size_t &seed) { rng.seed(seed); }
 
   [[nodiscard]] Derived sqrt() const {
     Derived result;
@@ -224,9 +224,10 @@ private:
   static inline std::uniform_real_distribution<> dist{-0.5, 0.5};
 };
 
-template <int R> class Vector;
+template <size_t R> class Vector;
 
-template <int R, int C> class Matrix : public MatrixBase<Matrix<R, C>, R, C> {
+template <size_t R, size_t C>
+class Matrix : public MatrixBase<Matrix<R, C>, R, C> {
 public:
   using Base = MatrixBase<Matrix, R, C>;
   using Base::Base; // inherit constructors
@@ -291,7 +292,7 @@ public:
     return vec;
   }
 
-  template <int KR, int KC>
+  template <size_t KR, size_t KC>
     requires(KR > 0 && KC > 0 && R >= KR && C >= KC)
   [[nodiscard]] constexpr Matrix<R - KR + 1, C - KC + 1>
   valid_cross_correlation(const Matrix<KR, KC> &kernel) const {
@@ -314,7 +315,7 @@ public:
     return result;
   }
 
-  template <int KR, int KC>
+  template <size_t KR, size_t KC>
     requires(KR > 0 && KC > 0)
   [[nodiscard]] constexpr Matrix<R + KR - 1, C + KC - 1>
   full_convolution(const Matrix<KR, KC> &kernel) const {
@@ -329,10 +330,13 @@ public:
 
         for (std::size_t kr = 0; kr < KR; ++kr) {
           for (std::size_t kc = 0; kc < KC; ++kc) {
-            const int in_row = static_cast<int>(out_row) - static_cast<int>(kr);
-            const int in_col = static_cast<int>(out_col) - static_cast<int>(kc);
+            const long in_row =
+                static_cast<size_t>(out_row) - static_cast<size_t>(kr);
+            const long in_col =
+                static_cast<size_t>(out_col) - static_cast<size_t>(kc);
 
-            if (in_row >= 0 && in_row < R && in_col >= 0 && in_col < C) {
+            if (in_row >= 0 && static_cast<size_t>(in_row) < R && in_col >= 0 &&
+                static_cast<size_t>(in_col) < C) {
               sum += (*this)[in_row, in_col] * kernel[kr, kc];
             }
           }
@@ -368,7 +372,7 @@ public:
   }
 };
 
-template <int R> class Vector : public MatrixBase<Vector<R>, R, 1> {
+template <size_t R> class Vector : public MatrixBase<Vector<R>, R, 1> {
 public:
   using Base = MatrixBase<Vector, R, 1>;
   using Base::Base; // inherit constructors
@@ -406,7 +410,7 @@ public:
   }
 };
 
-template <int R, int C, int OtherC>
+template <size_t R, size_t C, size_t OtherC>
 [[nodiscard]]
 Matrix<R, OtherC> operator*(const Matrix<R, C> &lhs,
                             const Matrix<C, OtherC> &rhs) {
@@ -426,7 +430,7 @@ Matrix<R, OtherC> operator*(const Matrix<R, C> &lhs,
   return result;
 }
 
-template <int R, int C>
+template <size_t R, size_t C>
 [[nodiscard]]
 Vector<R> operator*(const Matrix<R, C> &lhs, const Vector<C> &rhs) {
   Vector<R> result;
@@ -443,7 +447,7 @@ Vector<R> operator*(const Matrix<R, C> &lhs, const Vector<C> &rhs) {
   return result;
 }
 
-template <int R, int C>
+template <size_t R, size_t C>
 Matrix<R, C> Matrix<R, C>::outer_product(const Vector<R> &lhs,
                                          const Vector<C> &rhs) {
   Matrix result;

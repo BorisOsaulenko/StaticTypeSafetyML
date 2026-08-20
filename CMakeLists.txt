@@ -31,24 +31,11 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 # ----------------------------
-# Nlohmann JSON (FetchContent)
+# Packages 
 # ----------------------------
 
-FetchContent_Declare(
-        nlohmann_json
-        URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz
-)
-
-FetchContent_MakeAvailable(nlohmann_json)
-
-# ----------------------------
-# OpenCV (FindOpenCV)
-# ----------------------------
-
-find_package(OpenCV REQUIRED)
 find_package(OpenMP REQUIRED)
-find_package(Arrow REQUIRED)
-find_package(Parquet REQUIRED)
+find_package(nlohmann_json 3.12.0 REQUIRED)
 
 # ----------------------------
 # Test target
@@ -130,8 +117,6 @@ target_link_libraries(ML PRIVATE
         nlohmann_json::nlohmann_json
         ${OpenCV_LIBS}
         OpenMP::OpenMP_CXX
-        Arrow::arrow_shared
-        Parquet::parquet_shared
 )
 
 target_include_directories(ML PRIVATE ${OpenCV_INCLUDE_DIRS})

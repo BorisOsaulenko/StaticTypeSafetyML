@@ -28,12 +28,12 @@ std::ostream &operator<<(std::ostream &os, const Tensor3D<Ch, R, C> &t) {
 }
 
 // JSON helpers: serialize as a vector of matrices
-template <int Ch, int R, int C>
+template <size_t Ch, size_t R, size_t C>
 void to_json(nlohmann::json &j, const Tensor3D<Ch, R, C> &t) {
   j = t.get_data();
 }
 
-template <int Ch, int R, int C>
+template <size_t Ch, size_t R, size_t C>
 void from_json(const nlohmann::json &j, Tensor3D<Ch, R, C> &t) {
   auto v = j.get<std::vector<Matrix<R, C>>>();
   t = Tensor3D<Ch, R, C>::from_vector(v);

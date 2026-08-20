@@ -5,17 +5,15 @@
 #ifndef ML_ALGEBRAICTUPLE_H
 #define ML_ALGEBRAICTUPLE_H
 
-#include "Algebraic.h"
-
 #include <cstddef>
+#include <nlohmann/json.hpp>
 #include <tuple>
-#include <type_traits>
 #include <utility>
 
 // AlgebraicTuple: heterogeneous tuple of Algebraic types. Elementwise
 // operations.
 template <typename... Types>
-  requires(sizeof...(Types) > 0 && (Algebraic<Types> && ...))
+  requires(sizeof...(Types) > 0)
 class AlgebraicTuple {
   std::tuple<Types...> data_;
   using json = nlohmann::json;
@@ -135,8 +133,14 @@ public:
   }
 
   [[nodiscard]] value_type dot(const AlgebraicTuple &rhs) const {
-    return binary_reduce(rhs,
-                         [](auto const &a, auto const &b) { return a.dot(b); });
+    return dot_impl(rhs, std::make_index_sequence<sizeof...(Types)>());
+  }
+
+  template <std::size_t... I>
+  value_type dot_impl(const AlgebraicTuple &rhs,
+                      std::index_sequence<I...>) const {
+    return (value_type{0} + ... +
+            std::get<I>(data_).dot(std::get<I>(rhs.data_)));
   }
 
   [[nodiscard]] AlgebraicTuple hadamard(const AlgebraicTuple &rhs) const {
@@ -202,9 +206,9 @@ private:
                     std::make_index_sequence<sizeof...(Types)>());
   }
 
-  template <typename F, std::size_t... Is>
-  void scalar_unary_op_inplace_impl(F &&f, std::index_sequence<Is...>) {
-    (void)std::initializer_list<int>{((f(std::get<Is>(data_))), 0)...};
+  template <typename F, std::size_t... I>
+  void scalar_unary_op_inplace_impl(F &&f, std::index_sequence<I...>) {
+    (f(std::get<I>(data_)), ...);
   }
 
   template <typename F> void scalar_unary_op_inplace(F &&f) {
@@ -219,11 +223,10 @@ private:
                      std::make_index_sequence<sizeof...(Types)>());
   }
 
-  template <typename F, std::size_t... Is>
+  template <typename F, std::size_t... I>
   void binary_op_inplace_impl(const AlgebraicTuple &rhs, F &&f,
-                              std::index_sequence<Is...>) {
-    (void)std::initializer_list<int>{
-        ((f(std::get<Is>(data_), std::get<Is>(rhs.data_))), 0)...};
+                              std::index_sequence<I...>) {
+    (f(std::get<I>(data_), std::get<I>(rhs.data_)), ...);
   }
 
   template <typename F>
@@ -238,35 +241,15 @@ private:
     return total;
   }
 
-  template <typename F>
-  value_type binary_reduce(const AlgebraicTuple &rhs, F &&f) const {
-    value_type total = 0;
-    apply_for_each_indexed([&](auto idx) {
-      total += f(std::get<idx>(data_), std::get<idx>(rhs.data_));
-    });
-    return total;
-  }
-
   // Apply helper: iterate over each element and call lambda(element)
-  template <typename F, std::size_t... Is>
-  void apply_for_each_impl(F &&f, std::index_sequence<Is...>) const {
-    (void)std::initializer_list<int>{((f(std::get<Is>(data_))), 0)...};
+  template <typename F, std::size_t... I>
+  void apply_for_each_impl(F &&f, std::index_sequence<I...>) const {
+    (f(std::get<I>(data_)), ...);
   }
 
   template <typename F> void apply_for_each(F &&f) const {
     apply_for_each_impl(std::forward<F>(f),
                         std::make_index_sequence<sizeof...(Types)>());
-  }
-
-  template <typename F, std::size_t... Is>
-  void apply_for_each_indexed_impl(F &&f, std::index_sequence<Is...>) const {
-    (void)std::initializer_list<int>{
-        ((f(std::integral_constant<std::size_t, Is>{})), 0)...};
-  }
-
-  template <typename F> void apply_for_each_indexed(F &&f) const {
-    apply_for_each_indexed_impl(std::forward<F>(f),
-                                std::make_index_sequence<sizeof...(Types)>());
   }
 };
 

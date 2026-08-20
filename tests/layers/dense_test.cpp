@@ -41,10 +41,10 @@ Layer make_layer() {
 
 TEST(DenseLayerTest, ForwardPassWithSigmoidActivation) {
   auto layer = make_layer();
-  StaticArray<2, Output> z_cache;
+  StaticArray<2, LayerCache<Layer, Input>> z_cache;
 
-  const auto output = layer.forward_vectorized<2>(
-      StaticSpan<2, const Input>(inputs), z_cache);
+  const StaticArray<2, Output> output =
+      layer.forward_vectorized<2>(StaticSpan<2, const Input>(inputs), z_cache);
 
   const StaticArray<2, Output> expected = {
       Output{0.1978161114, 0.9918374288},
@@ -57,11 +57,10 @@ TEST(DenseLayerTest, ForwardPassWithSigmoidActivation) {
 
 TEST(DenseLayerTest, BackwardPassCalculatesGradient) {
   auto layer = make_layer();
-  StaticArray<2, Output> z_cache;
-  layer.forward_vectorized<2>(StaticSpan<2, const Input>(inputs), z_cache);
+  StaticArray<2, LayerCache<Layer, Input>> cache;
+  layer.forward_vectorized<2>(inputs, cache);
 
-  layer.backward_vectorized<2>(StaticSpan<2, const Output>(delta),
-                               StaticSpan<2, const Input>(inputs), z_cache);
+  layer.backward_vectorized<2, Input>(delta, cache);
 
   const auto &weights = layer.get_weights_gradients();
   const Matrix<2, 3> expected_weights_gradient{
@@ -81,12 +80,10 @@ TEST(DenseLayerTest, BackwardPassCalculatesGradient) {
 
 TEST(DenseLayerTest, BackwardPassReturnsNewDelta) {
   auto layer = make_layer();
-  StaticArray<2, Output> z_cache;
-  layer.forward_vectorized<2>(StaticSpan<2, const Input>(inputs), z_cache);
+  StaticArray<2, LayerCache<Layer, Input>> cache;
+  layer.forward_vectorized<2>(inputs, cache);
 
-  const auto new_delta = layer.backward_vectorized<2>(
-      StaticSpan<2, const Output>(delta),
-      StaticSpan<2, const Input>(inputs), z_cache);
+  const auto new_delta = layer.backward_vectorized<2, Input>(delta, cache);
 
   const StaticArray<2, Input> expected_previous_delta{
       Input{0.3133218302, -0.3335616749, 0.1627328685},

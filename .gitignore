@@ -1,0 +1,8 @@
+build
+.junie/
+.idea/
+.claude/
+.cache/
+.vscode/
+.DS_Store
+CMakeCache.txt

@@ -8,7 +8,6 @@
 #include "../lr_optimizer/Adam.h"
 #include "../matrix/AlgebraicTuple.h"
 #include "../matrix/Matrix.h"
-#include "NoParamsLayer.h"
 #include "ParamsLayer.h"
 
 using value_type = double;
@@ -34,13 +33,13 @@ public:
   explicit DenseLayer(ActivationFunctionEnum activation_function_type,
                       const AdamFactory &optimizer_factory)
       : ParamsLayer<DenseLayer, Gradient>(activation_function_type,
-                                         optimizer_factory) {}
+                                          optimizer_factory) {}
 
   explicit DenseLayer(Gradient params,
                       ActivationFunctionEnum activation_function_type,
                       const AdamFactory &optimizer_factory)
       : ParamsLayer<DenseLayer, Gradient>(params, activation_function_type,
-                                         optimizer_factory) {}
+                                          optimizer_factory) {}
 
   Weights get_weights() const { return this->params.template get<0>(); }
   Bias get_bias() const { return this->params.template get<1>(); }

@@ -1,7 +1,7 @@
 #ifndef ML_MODEL_H
 #define ML_MODEL_H
+#include "NetworkConcepts.h"
 #include "layers/Dense.h"
-#include "layers/LayerConcepts.h"
 #include "loss/Loss.h"
 #include "loss/LossFactory.h"
 
@@ -36,8 +36,7 @@ template <std::size_t N, typename F> constexpr void constexpr_for(F &&f) {
 }
 
 template <typename... Layers> class Network {
-  static_assert(
-      CheckLayers<0, typename Layers...[0]::Input, Layers...>());
+  static_assert(CheckLayers<0, typename Layers...[0] ::Input, Layers...>());
 
   using json = nlohmann::json;
   using LayerTuple = std::tuple<Layers...>;

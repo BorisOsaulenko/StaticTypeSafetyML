@@ -1,9 +1,9 @@
 CMakeFiles/hello_test.dir/tests/layers/linear_regression_test.cpp.o: \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/linear_regression_test.cpp \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/Network.h \
- /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/Dense.h \
- /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../activation/ActivationFunction.h \
- /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../activation/../matrix/Algebraic.h \
+ /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/NetworkConcepts.h \
+ /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/LayerConcepts.h \
+ /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/Algebraic.h \
  /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/concepts \
  /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/version.h \
  /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/c++config.h \
@@ -425,6 +425,9 @@ CMakeFiles/hello_test.dir/tests/layers/linear_regression_test.cpp.o: \
  /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/any \
  /Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include/nlohmann/detail/macro_unscope.hpp \
  /Users/borisosaulenko/CLionProjects/ML/build/_deps/nlohmann_json-src/include/nlohmann/thirdparty/hedley/hedley_undef.hpp \
+ /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/Dense.h \
+ /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../activation/ActivationFunction.h \
+ /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../activation/../matrix/Algebraic.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../activation/../matrix/StaticArray.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../activation/../matrix/Algebraic.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../lr_optimizer/Adam.h \
@@ -439,7 +442,6 @@ CMakeFiles/hello_test.dir/tests/layers/linear_regression_test.cpp.o: \
  /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/aarch64-apple-darwin24/bits/opt_random.h \
  /opt/homebrew/Cellar/gcc/16.1.0/include/c++/16/bits/random.tcc \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/NoParamsLayer.h \
- /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/Algebraic.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../matrix/StaticArray.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/LayerConcepts.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/ParamsLayer.h \
@@ -447,7 +449,6 @@ CMakeFiles/hello_test.dir/tests/layers/linear_regression_test.cpp.o: \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../activation/Identity.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../activation/ReLu.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/../activation/Sigmoid.h \
- /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/layers/LayerConcepts.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/loss/Loss.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/loss/LossFactory.h \
  /Users/borisosaulenko/CLionProjects/ML/tests/layers/../../src/loss/../matrix/Algebraic.h \

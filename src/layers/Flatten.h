@@ -1,29 +1,26 @@
-//
-// Created by Boris Osaulenko on 13/07/2026.
-//
-
 #ifndef ML_FLATTEN_H
 #define ML_FLATTEN_H
 #include "../matrix/3DTensor.h"
 #include "NoParamsLayer.h"
 
-#include <nlohmann/json.hpp>
+#define DIM_TEMPLATED template <size_t Ch_in, size_t R_in, size_t C_in>
+#define INPUT Tensor3D<Ch_in, R_in, C_in>
+#define OUTPUT Vector<Ch_in * R_in * C_in>
+#define CACHE Cache<Ch_in, R_in, C_in>
 
-template <int Ch_in, int R_in, int C_in>
-class Flatten : public NoParamsLayer<Flatten<Ch_in, R_in, C_in>> {
-  using json = nlohmann::json;
+class Flatten : public NoParamsLayer<Flatten> {
+  DIM_TEMPLATED
+  struct Cache {};
 
 public:
-  using Input = Tensor3D<Ch_in, R_in, C_in>;
-  using Output = Vector<Ch_in * R_in * C_in>;
-
   Flatten() : NoParamsLayer<Flatten>() {}
 
-  Output compute_z(const Input &inp) const {
-    Output result;
-    for (std::size_t ch = 0; ch < Ch_in; ++ch) {
-      for (std::size_t r = 0; r < R_in; ++r) {
-        for (std::size_t c = 0; c < C_in; ++c) {
+  DIM_TEMPLATED
+  OUTPUT compute_z(const INPUT &inp) const {
+    OUTPUT result;
+    for (size_t ch = 0; ch < Ch_in; ++ch) {
+      for (size_t r = 0; r < R_in; ++r) {
+        for (size_t c = 0; c < C_in; ++c) {
           result[ch * R_in * C_in + r * C_in + c] = inp[ch][r, c];
         }
       }
@@ -31,13 +28,18 @@ public:
     return result;
   }
 
-  Input compute_delta(const Output &delta,
-                      [[maybe_unused]] const Input &a_previous,
-                      [[maybe_unused]] const Output &z_cache) const {
-    Input new_delta;
-    for (std::size_t ch = 0; ch < Ch_in; ++ch) {
-      for (std::size_t r = 0; r < R_in; ++r) {
-        for (std::size_t c = 0; c < C_in; ++c) {
+  DIM_TEMPLATED
+  ForwardCachedResult<OUTPUT, CACHE> compute_z_cached(const INPUT &inp) const {
+    OUTPUT z = compute_z(inp);
+    return {z, {}};
+  }
+
+  DIM_TEMPLATED INPUT compute_delta(
+      const OUTPUT &delta, [[maybe_unused]] const CACHE &z_cache) const {
+    INPUT new_delta;
+    for (size_t ch = 0; ch < Ch_in; ++ch) {
+      for (size_t r = 0; r < R_in; ++r) {
+        for (size_t c = 0; c < C_in; ++c) {
           new_delta[ch][r, c] = delta[ch * R_in * C_in + r * C_in + c];
         }
       }
@@ -45,5 +47,10 @@ public:
     return new_delta;
   }
 };
+
+#undef DIM_TEMPLATED
+#undef INPUT
+#undef OUTPUT
+#undef CACHE
 
 #endif // ML_FLATTEN_H

@@ -31,31 +31,25 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 # ----------------------------
-# Nlohmann JSON (FetchContent)
+# Packages 
 # ----------------------------
 
-FetchContent_Declare(
-        nlohmann_json
-        URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz
-)
-
-FetchContent_MakeAvailable(nlohmann_json)
-
-# ----------------------------
-# OpenCV (FindOpenCV)
-# ----------------------------
-
-find_package(OpenCV REQUIRED)
 find_package(OpenMP REQUIRED)
-find_package(Arrow REQUIRED)
-find_package(Parquet REQUIRED)
+find_package(nlohmann_json 3.12.0 REQUIRED)
 
 # ----------------------------
 # Test target
 # ----------------------------
-add_executable(hello_test
-        tests/layers/linear_regression_test.cpp
+add_executable(hello_test        
+        tests/layers/dense_test.cpp
         tests/layers/convolutional_layer_test.cpp
+        tests/layers/max_pool_2x2_test.cpp
+        tests/layers/flatten_test.cpp
+        tests/layers/matrix_test.cpp
+
+        tests/network/network_test.cpp
+        tests/lr_optimizer/adam_test.cpp
+        tests/linear_regression_test.cpp
 
         src/loss/Loss.h
         src/loss/MSE.h
@@ -66,14 +60,9 @@ add_executable(hello_test
 
         src/matrix/Algebraic.h
         src/layers/flatten.h
-        tests/layers/max_pool_2x2_test.cpp
         tests/layers/utils.h
-        tests/layers/flatten_test.cpp
-        tests/lr_optimizer/AdamTest.cpp
-        tests/layers/matrix_test.cpp
         src/matrix/StaticArray.h
         src/layers/ParamsLayer.h
-        tests/layers/dense_test.cpp
         src/preprocessing/tokenizer.h
         src/layers/Embedding.h
         src/layers/AttentionHead.h
@@ -130,8 +119,6 @@ target_link_libraries(ML PRIVATE
         nlohmann_json::nlohmann_json
         ${OpenCV_LIBS}
         OpenMP::OpenMP_CXX
-        Arrow::arrow_shared
-        Parquet::parquet_shared
 )
 
 target_include_directories(ML PRIVATE ${OpenCV_INCLUDE_DIRS})

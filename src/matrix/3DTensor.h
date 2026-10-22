@@ -1,11 +1,6 @@
-//
-// Created by Boris Osaulenko on 11/07/2026.
-//
-
 #ifndef ML_3DTENSOR_H
 #define ML_3DTENSOR_H
 
-#include "../layers/Dense.h"
 #include "Matrix.h"
 #include "StaticArray.h"
 
@@ -14,13 +9,13 @@
 #include <vector>
 
 // Thin wrapper: Tensor3D is an AlgebraicArray of matrices.
-template <std::size_t Ch, std::size_t R, std::size_t C>
+template <size_t Ch, size_t R, size_t C>
 using Tensor3D = StaticArray<Ch, Matrix<R, C>>;
 
 // Stream operator for Tensor3D (prints each channel using Matrix's stream)
-template <std::size_t Ch, std::size_t R, std::size_t C>
+template <size_t Ch, size_t R, size_t C>
 std::ostream &operator<<(std::ostream &os, const Tensor3D<Ch, R, C> &t) {
-  for (std::size_t ch = 0; ch < Ch; ++ch) {
+  for (size_t ch = 0; ch < Ch; ++ch) {
     os << "Channel " << ch << ":\n";
     os << t[ch];
   }
@@ -28,12 +23,12 @@ std::ostream &operator<<(std::ostream &os, const Tensor3D<Ch, R, C> &t) {
 }
 
 // JSON helpers: serialize as a vector of matrices
-template <int Ch, int R, int C>
+template <size_t Ch, size_t R, size_t C>
 void to_json(nlohmann::json &j, const Tensor3D<Ch, R, C> &t) {
   j = t.get_data();
 }
 
-template <int Ch, int R, int C>
+template <size_t Ch, size_t R, size_t C>
 void from_json(const nlohmann::json &j, Tensor3D<Ch, R, C> &t) {
   auto v = j.get<std::vector<Matrix<R, C>>>();
   t = Tensor3D<Ch, R, C>::from_vector(v);

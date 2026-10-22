@@ -1,7 +1,3 @@
-//
-// Created by Boris Osaulenko on 06/07/2026.
-//
-
 #ifndef ML_ADAM_H
 #define ML_ADAM_H
 #include "Optimizer.h"

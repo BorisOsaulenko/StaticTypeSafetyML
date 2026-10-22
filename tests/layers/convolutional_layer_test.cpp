@@ -1,9 +1,5 @@
-//
-// Created by Boris Osaulenko on 15/07/2026.
-//
-
 #include "../../src/layers/Convolutional.h"
-#include "utils.h"
+#include "../utils.h"
 #include <gtest/gtest.h>
 
 constexpr double kTolerance = 0.05;
@@ -14,13 +10,17 @@ public:
   using Output = Tensor3D<2, 2, 2>;
   using Kernel = Tensor3D<2, 2, 2>;
   using KernelArray = StaticArray<2, Kernel>;
-  using Conv = Convolutional<2, 3, 3, 2, 2, 2>;
+  using Conv = Convolutional<2, 2, 2, 2>;
 
-  static const inline Input input = {Matrix<3, 3>{1, 2, 3, 4, 5, 6, 7, 8, 9},
-                                     Matrix<3, 3>{9, 8, 7, 6, 5, 4, 3, 2, 1}};
+  static const inline Input input_elem = {
+      Matrix<3, 3>{1, 2, 3, 4, 5, 6, 7, 8, 9},
+      Matrix<3, 3>{9, 8, 7, 6, 5, 4, 3, 2, 1}};
 
-  static const inline Output delta = {Matrix<2, 2>{1, 2, 3, 4},
-                                      Matrix<2, 2>{-1, 0, 2, 1}};
+  static const inline Output delta_elem = {Matrix<2, 2>{1, 2, 3, 4},
+                                           Matrix<2, 2>{-1, 0, 2, 1}};
+
+  static inline StaticArray<1, Input> input{input_elem};
+  static inline StaticArray<1, Output> delta{delta_elem};
 
 protected:
   AdamFactory optimizer_factory;
@@ -38,29 +38,28 @@ protected:
 };
 
 TEST_F(ConvolutionalTest, ForwardPass) {
-  const StaticArray<1, Input> inputs{input};
-  StaticArray<1, Output> z_cache;
+  StaticArray<1, LayerCache<Conv, Input>> cache;
 
-  const auto output = convolutional_layer.forward_vectorized<1>(
-      StaticSpan<1, const Input>(inputs), z_cache);
+  const StaticArray<1, LayerOutput<Conv, Input>> output =
+      convolutional_layer.forward_vectorized(input, cache);
 
-  const Output expected = {Matrix<2, 2>{21, 21, 21, 21},
-                           Matrix<2, 2>{-17, -9, 7, 15}};
+  const LayerCache<Conv, Input> expectedCache = {
+      input_elem, {Matrix<2, 2>{21, 21, 21, 21}, Matrix<2, 2>{-17, -9, 7, 15}}};
+  const Output expectedOutput = {Matrix<2, 2>{21, 21, 21, 21},
+                                 Matrix<2, 2>{-17, -9, 7, 15}};
 
-  expect_tensor_close<2, 2, 2>(output[0], expected, kTolerance);
-  expect_tensor_close<2, 2, 2>(z_cache[0], expected, kTolerance);
+  expect_tensor_close<2, 2, 2>(output[0], expectedCache.z_cache, kTolerance);
+  expect_tensor_close<2, 2, 2>(cache[0].z_cache, expectedCache.z_cache,
+                               kTolerance);
 }
 
 TEST_F(ConvolutionalTest, BackwardPassCalculatesKernelGradients) {
-  const StaticArray<1, Input> inputs{input};
-  const StaticArray<1, Output> deltas{delta};
-  StaticArray<1, Output> z_cache;
 
-  convolutional_layer.forward_vectorized<1>(
-      StaticSpan<1, const Input>(inputs), z_cache);
-  convolutional_layer.backward_vectorized<1>(
-      StaticSpan<1, const Output>(deltas),
-      StaticSpan<1, const Input>(inputs), z_cache);
+  const StaticArray<1, Output> deltas{delta_elem};
+  StaticArray<1, LayerCache<Conv, Input>> z_cache;
+
+  convolutional_layer.forward_vectorized<1, Input>(input, z_cache);
+  convolutional_layer.backward_vectorized<1, Input>(deltas, z_cache);
 
   const Kernel expected_kernel_gradients1 = {Matrix<2, 2>{37, 47, 67, 77},
                                              Matrix<2, 2>{63, 53, 33, 23}};
@@ -79,15 +78,12 @@ TEST_F(ConvolutionalTest, BackwardPassCalculatesKernelGradients) {
 }
 
 TEST_F(ConvolutionalTest, BackwardPassCalculatesBiasGradients) {
-  const StaticArray<1, Input> inputs{input};
-  const StaticArray<1, Output> deltas{delta};
-  StaticArray<1, Output> z_cache;
+  const StaticArray<1, Input> inputs{input_elem};
+  const StaticArray<1, Output> deltas{delta_elem};
+  StaticArray<1, LayerCache<Conv, Input>> cache;
 
-  convolutional_layer.forward_vectorized<1>(
-      StaticSpan<1, const Input>(inputs), z_cache);
-  convolutional_layer.backward_vectorized<1>(
-      StaticSpan<1, const Output>(deltas),
-      StaticSpan<1, const Input>(inputs), z_cache);
+  convolutional_layer.forward_vectorized<1, Input>(inputs, cache);
+  convolutional_layer.backward_vectorized<1, Input>(deltas, cache);
 
   const Vector<2> expected_bias_gradients = {10, 2};
   expect_vector_close<2>(convolutional_layer.get_bias_gradients(),
@@ -95,15 +91,13 @@ TEST_F(ConvolutionalTest, BackwardPassCalculatesBiasGradients) {
 }
 
 TEST_F(ConvolutionalTest, BackwardPassReturnsNewDelta) {
-  const StaticArray<1, Input> inputs{input};
-  const StaticArray<1, Output> deltas{delta};
-  StaticArray<1, Output> z_cache;
+  const StaticArray<1, Input> inputs{input_elem};
+  const StaticArray<1, Output> deltas{delta_elem};
+  StaticArray<1, LayerCache<Conv, Input>> cache;
 
-  convolutional_layer.forward_vectorized<1>(
-      StaticSpan<1, const Input>(inputs), z_cache);
-  const auto new_delta = convolutional_layer.backward_vectorized<1>(
-      StaticSpan<1, const Output>(deltas),
-      StaticSpan<1, const Input>(inputs), z_cache);
+  convolutional_layer.forward_vectorized<1, Input>(inputs, cache);
+  const auto new_delta =
+      convolutional_layer.backward_vectorized<1, Input>(deltas, cache);
 
   const Input expected = {Matrix<3, 3>{0, 1, 0, 4, 7, 3, 2, 6, 5},
                           Matrix<3, 3>{1, 2, 2, 0, 3, 3, 1, 1, -1}};

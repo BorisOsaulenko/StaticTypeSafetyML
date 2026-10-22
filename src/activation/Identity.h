@@ -1,7 +1,3 @@
-//
-// Created by Boris Osaulenko on 06/07/2026.
-//
-
 #ifndef ML_IDENTITY_H
 #define ML_IDENTITY_H
 #include "ActivationFunction.h"
@@ -10,7 +6,8 @@ class Identity : public ActivationFunction {
 public:
   explicit Identity() : ActivationFunction(ActivationFunctionEnum::Identity) {}
 
-  [[nodiscard]] value_type derivative(const value_type __unused) const override {
+  [[nodiscard]] value_type
+  derivative(const value_type __unused) const override {
     return 1;
   }
 

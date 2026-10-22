@@ -1,91 +1,86 @@
 #ifndef ML_MODEL_H
 #define ML_MODEL_H
 #include "NetworkConcepts.h"
-#include "layers/Dense.h"
+#include "layers/LayerConcepts.h"
 #include "loss/Loss.h"
 #include "loss/LossFactory.h"
+#include "matrix/AlgebraicTuple.h"
+#include "matrix/Matrix.h"
+#include "matrix/StaticArray.h"
 
 #include <algorithm>
+#include <cstddef>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <random>
 #include <tuple>
+#include <utility>
 
-template <int I, typename In, typename L1> consteval bool CheckLayers() {
-  static_assert(AcceptsInput<L1, In>,
-                "Layer does not accept the previous layer's output");
-  static_assert(BackwardConsistent<L1, In, ComputeZResult<L1, In>>,
-                "Layer's compute_delta is inconsistent with its compute_z");
-  return true;
-}
+#define REQUIRES_LAYER_CONSISTENCY requires(CheckLayers<0, Input, Layers...>())
+#define OUTPUT NetworkOutputT<Input, Layers...>
+#define ITH_LAYER_OUTPUT LayerOutputT<I, Input, Layers...>
+#define ITH_LAYER_INPUT LayerInputT<I, Input, Layers...>
 
-template <int I, typename In, typename L1, typename L2, typename... Rest>
-consteval bool CheckLayers() {
-  static_assert(AcceptsInput<L1, In>,
-                "Layer does not accept the previous layer's output");
-  static_assert(BackwardConsistent<L1, In, ComputeZResult<L1, In>>,
-                "Layer's compute_delta is inconsistent with its compute_z");
-
-  return CheckLayers<I + 1, ComputeZResult<L1, In>, L2, Rest...>();
-}
-
-template <std::size_t N, typename F> constexpr void constexpr_for(F &&f) {
-  [&]<std::size_t... Is>(std::index_sequence<Is...>) {
-    (f(std::integral_constant<std::size_t, Is>{}), ...);
+template <size_t N, typename F> constexpr void constexpr_for(F &&f) {
+  [&]<size_t... Is>(std::index_sequence<Is...>) {
+    (f(std::integral_constant<size_t, Is>{}), ...);
   }(std::make_index_sequence<N>{});
 }
 
 template <typename... Layers> class Network {
-  static_assert(CheckLayers<0, typename Layers...[0] ::Input, Layers...>());
-
   using json = nlohmann::json;
   using LayerTuple = std::tuple<Layers...>;
-  using Input = Layers...[0] ::Input;
-  using Output = Layers...[sizeof...(Layers) - 1] ::Output;
-  template <std::size_t SIZE, typename T>
-  using LayerCacheArray = StaticArray<SIZE, T>;
 
-  template <std::size_t SIZE>
-  using LayerInputCaches =
-      std::tuple<LayerCacheArray<SIZE, typename Layers::Input>...>;
+  template <size_t SIZE, typename Input, size_t... Is>
+  static auto make_layer_caches(std::index_sequence<Is...>)
+      -> AlgebraicTuple<StaticArray<
+          SIZE, LayerCache<Layers, LayerInputT<Is, Input, Layers...>>>...>;
 
-  template <std::size_t SIZE>
-  using LayerOutputCaches =
-      std::tuple<LayerCacheArray<SIZE, typename Layers::Output>...>;
+  template <size_t SIZE, typename Input>
+  using LayerCaches = decltype(make_layer_caches<SIZE, Input>(
+      std::index_sequence_for<Layers...>{}));
 
 public:
   explicit Network(const LossEnum loss_type, Layers &...layers)
-      : layers(layers...), loss_type(loss_type),
-        loss(LossFactory::create<Output>(loss_type)) {
+      : layers(layers...), loss_type(loss_type) {
     rng.seed(std::random_device{}());
   }
 
-  [[nodiscard]] Output predict(const Input &input) const {
+  template <typename Input>
+  [[nodiscard]] OUTPUT
+  predict(const Input &input) const REQUIRES_LAYER_CONSISTENCY {
     return forward_no_cache<0>(input);
   }
 
-  template <std::size_t SIZE>
-  [[nodiscard]] StaticArray<SIZE, Output>
-  predict_vectorized(const StaticSpan<SIZE, const Input> inputs) const {
-    return forward_no_cache_vectorized<0>(inputs);
+  template <size_t SIZE, typename Input>
+  [[nodiscard]] StaticArray<SIZE, OUTPUT> predict_vectorized(
+      const StaticArray<SIZE, Input> inputs) const REQUIRES_LAYER_CONSISTENCY {
+    return forward_no_cache_vectorized<0, SIZE, Input>(inputs);
+  };
+
+  template <size_t SIZE, typename Input>
+  [[nodiscard]] StaticArray<SIZE, OUTPUT>
+  predict_vectorized(const StaticSpan<SIZE, const Input> inputs) const
+      REQUIRES_LAYER_CONSISTENCY {
+    return forward_no_cache_vectorized<0, SIZE, Input>(inputs);
   }
 
-  template <std::size_t batch_size, std::size_t train_size,
-            std::size_t validation_size>
-  void
-  train(const StaticSpan<train_size, const Input> train_inputs,
-        const StaticSpan<train_size, const Output> train_expected,
-        const StaticSpan<validation_size, const Input> validation_inputs,
-        const StaticSpan<validation_size, const Output> validation_expected,
-        const int &epochs = 10, std::ostream *log_stream = nullptr)
-    requires(train_size % batch_size == 0)
+  template <size_t BATCH_SZ, size_t TRAIN_SZ, size_t VALIDATION_SZ,
+            typename Input>
+  void train(const StaticSpan<TRAIN_SZ, const Input> train_inputs,
+             const StaticSpan<TRAIN_SZ, const OUTPUT> train_expected,
+             const StaticSpan<VALIDATION_SZ, const Input> validation_inputs,
+             const StaticSpan<VALIDATION_SZ, const OUTPUT> validation_expected,
+             const int &epochs = 10, std::ostream *log_stream = nullptr)
+    requires(TRAIN_SZ % BATCH_SZ == 0)
   {
-    constexpr std::size_t batch_amount = train_size / batch_size;
+    constexpr size_t AmtBatch = TRAIN_SZ / BATCH_SZ;
 
     for (long long epoch = 0; epoch < epochs; ++epoch) {
-      constexpr_for<batch_amount>([&](auto i) {
-        train_batch<i, train_size, batch_size>(train_inputs, train_expected,
-                                               log_stream);
+      constexpr_for<AmtBatch>([&](auto i) {
+        train_batch<i, TRAIN_SZ, BATCH_SZ>(train_inputs, train_expected,
+                                           log_stream);
       });
       log_epoch(log_stream, epoch, train_inputs, train_expected,
                 validation_inputs, validation_expected);
@@ -114,11 +109,12 @@ public:
     from_json(j, *this);
   }
 
-  template <std::size_t SIZE>
+  template <size_t SIZE, typename Input>
   [[nodiscard]] double
   mean_loss(const StaticSpan<SIZE, const Input> &inputs,
-            const StaticSpan<SIZE, const Output> &expected) {
-    const StaticArray<SIZE, Output> predictions = predict_vectorized(inputs);
+            const StaticSpan<SIZE, const OUTPUT> &expected) {
+    std::unique_ptr<Loss<OUTPUT>> loss = LossFactory::create<OUTPUT>(loss_type);
+    const StaticArray<SIZE, OUTPUT> predictions = predict_vectorized(inputs);
     const Vector<SIZE> losses = loss->compute(predictions, expected);
 
     return losses.sum() / SIZE;
@@ -141,10 +137,16 @@ public:
     from_json_recursive<0>(layers_json, network.layers);
 
     j.at("loss_type").get_to(network.loss_type);
-    network.loss = LossFactory::create<Output>(network.loss_type);
   }
 
-  template <std::size_t I>
+private:
+  std::tuple<Layers &...> layers;
+  LossEnum loss_type;
+
+  std::mt19937 rng;
+  std::uniform_real_distribution<> dist;
+
+  template <size_t I>
   static void to_json_recursive(json &layers_array,
                                 const std::tuple<Layers &...> &layers) {
     if constexpr (I < sizeof...(Layers)) {
@@ -158,7 +160,7 @@ public:
     }
   }
 
-  template <std::size_t I, std::size_t A = 0>
+  template <size_t I, size_t A = 0>
   static void from_json_recursive(const json &layers_json,
                                   std::tuple<Layers &...> &layers) {
     if constexpr (I < sizeof...(Layers)) {
@@ -170,41 +172,32 @@ public:
     }
   }
 
-private:
-  std::tuple<Layers &...> layers;
-  LossEnum loss_type;
-  std::unique_ptr<Loss<Output>> loss;
-
-  std::mt19937 rng;
-  std::uniform_real_distribution<> dist;
-
-  template <std::size_t batch, std::size_t train_size, std::size_t batch_size>
-  void train_batch(const StaticSpan<train_size, const Input> train_inputs,
-                   const StaticSpan<train_size, const Output> train_expected,
+  template <size_t CURR_BATCH, size_t TRAIN_SZ, size_t BATCH_SZ, typename Input>
+  void train_batch(const StaticSpan<TRAIN_SZ, const Input> train_inputs,
+                   const StaticSpan<TRAIN_SZ, const OUTPUT> train_expected,
                    std::ostream *log_stream = nullptr) {
-    const StaticSpan<batch_size, const Input> batch_inputs =
-        train_inputs
-            .template subspan<batch * batch_size, (batch + 1) * batch_size>();
-    const StaticSpan<batch_size, const Output> batch_expected =
-        train_expected
-            .template subspan<batch * batch_size, (batch + 1) * batch_size>();
+    const StaticSpan<BATCH_SZ, const Input> batch_inputs =
+        train_inputs.template subspan<CURR_BATCH * BATCH_SZ,
+                                      (CURR_BATCH + 1) * BATCH_SZ>();
+    const StaticSpan<BATCH_SZ, const OUTPUT> batch_expected =
+        train_expected.template subspan<CURR_BATCH * BATCH_SZ,
+                                        (CURR_BATCH + 1) * BATCH_SZ>();
 
-    LayerInputCaches<batch_size> a_previous_cache;
-    LayerOutputCaches<batch_size> z_cache;
+    LayerCaches<BATCH_SZ, Input> caches;
+    std::unique_ptr<Loss<OUTPUT>> loss = LossFactory::create<OUTPUT>(loss_type);
 
-    const StaticArray<batch_size, Output> predicted =
-        forward_vectorized<0, Input>(a_previous_cache, z_cache, batch_inputs);
-    const StaticArray<batch_size, Output> delta =
+    const StaticArray<BATCH_SZ, OUTPUT> predicted =
+        forward_vectorized<0, Input, BATCH_SZ>(batch_inputs, caches);
+    const StaticArray<BATCH_SZ, OUTPUT> delta =
         loss->derivative((predicted), batch_expected);
-    backward_vectorized<sizeof...(Layers) - 1, Output>(delta, a_previous_cache,
-                                                       z_cache);
+    backward_vectorized<sizeof...(Layers) - 1, Input, BATCH_SZ>(delta, caches);
 
-    update_layers<0>(batch_size);
+    update_layers<0>(BATCH_SZ);
     if (log_stream)
-      *log_stream << "Batch " << batch << " finished." << std::endl;
+      *log_stream << "Batch " << CURR_BATCH << " finished." << std::endl;
   }
 
-  template <std::size_t I, typename T> auto forward_no_cache(T &&input) const {
+  template <size_t I, typename T> auto forward_no_cache(T &&input) const {
     if constexpr (I == sizeof...(Layers)) {
       return std::forward<T>(input);
     } else {
@@ -214,78 +207,68 @@ private:
     }
   }
 
-  template <std::size_t I, typename T, std::size_t SIZE>
-  auto
-  forward_no_cache_vectorized(const StaticSpan<SIZE, const T> inputs) const {
+  template <size_t I, size_t SIZE, typename Input>
+  StaticArray<SIZE, OUTPUT> forward_no_cache_vectorized(
+      const StaticSpan<SIZE, const LayerInputT<I, Input, Layers...>> &inputs)
+      const {
     auto &layer = std::get<I>(layers);
     const auto out = layer.forward_no_cache_vectorized(inputs);
 
     if constexpr (I == sizeof...(Layers) - 1)
       return out;
     else
-      return forward_no_cache_vectorized<I + 1>(StaticSpan(out));
+      return forward_no_cache_vectorized<I + 1, SIZE, Input>(StaticSpan(out));
   }
 
-  template <std::size_t I, typename Inp, std::size_t SIZE>
-  auto forward_vectorized(LayerInputCaches<SIZE> &a_previous_cache,
-                          LayerOutputCaches<SIZE> &z_cache,
-                          const StaticArray<SIZE, Inp> inputs) {
+  template <size_t I, typename Input, size_t SIZE>
+  StaticArray<SIZE, OUTPUT>
+  forward_vectorized(const StaticArray<SIZE, ITH_LAYER_INPUT> inputs,
+                     LayerCaches<SIZE, Input> &cache) {
+    return forward_vectorized<I, Input, SIZE>(
+        StaticSpan<SIZE, const ITH_LAYER_INPUT>(inputs), cache);
+  }
+
+  template <size_t I, typename Input, size_t SIZE>
+  StaticArray<SIZE, OUTPUT>
+  forward_vectorized(const StaticSpan<SIZE, const ITH_LAYER_INPUT> inputs,
+                     LayerCaches<SIZE, Input> &cache) {
     auto &layer = std::get<I>(layers);
-    std::get<I>(a_previous_cache) = inputs;
-    const auto out = layer.forward_vectorized(
-        StaticSpan<SIZE, const Inp>(inputs), std::get<I>(z_cache));
+
+    const StaticArray<SIZE, ITH_LAYER_OUTPUT> cachedOutput =
+        layer.forward_vectorized(
+            StaticSpan<SIZE, const ITH_LAYER_INPUT>(inputs),
+            cache.template get<I>());
 
     if constexpr (I == sizeof...(Layers) - 1) {
-      return out;
+      return cachedOutput;
     } else {
-      return forward_vectorized<I + 1>(a_previous_cache, z_cache, out);
+      return forward_vectorized<I + 1, Input, SIZE>(cachedOutput, cache);
     }
   }
 
-  template <std::size_t I, typename Inp, std::size_t SIZE>
-  auto forward_vectorized(LayerInputCaches<SIZE> &a_previous_cache,
-                          LayerOutputCaches<SIZE> &z_cache,
-                          const StaticSpan<SIZE, const Inp> inputs) {
-    auto &layer = std::get<I>(layers);
-    std::get<I>(a_previous_cache) = copy_span(inputs);
-    const auto out = layer.forward_vectorized(inputs, std::get<I>(z_cache));
-
-    if constexpr (I == sizeof...(Layers) - 1) {
-      return out;
-    } else {
-      return forward_vectorized<I + 1>(a_previous_cache, z_cache, out);
-    }
-  }
-
-  template <std::size_t SIZE, typename T>
+  template <size_t SIZE, typename T>
   StaticArray<SIZE, T> copy_span(const StaticSpan<SIZE, const T> &span) {
     StaticArray<SIZE, T> result;
-    for (std::size_t i = 0; i < SIZE; ++i) {
+    for (size_t i = 0; i < SIZE; ++i) {
       result[i] = span[i];
     }
     return result;
   }
 
-  template <std::size_t I, typename DeltaType, std::size_t SIZE>
-  void backward_vectorized(const StaticArray<SIZE, DeltaType> &delta,
-                           const LayerInputCaches<SIZE> &a_previous_cache,
-                           const LayerOutputCaches<SIZE> &z_cache) {
-    using Layer = Layers...[I];
+  template <size_t I, typename Input, size_t SIZE>
+  void backward_vectorized(const StaticArray<SIZE, ITH_LAYER_OUTPUT> &delta,
+                           const LayerCaches<SIZE, Input> &cache) {
     auto &layer = std::get<I>(layers);
-    using LayerInput = Layer::Input;
-    using LayerOutput = Layer::Output;
 
-    [[maybe_unused]] const auto new_delta = layer.backward_vectorized(
-        StaticSpan<SIZE, const LayerOutput>(delta),
-        StaticSpan<SIZE, const LayerInput>(std::get<I>(a_previous_cache)),
-        StaticSpan<SIZE, const LayerOutput>(std::get<I>(z_cache)));
+    [[maybe_unused]] const StaticArray<SIZE, ITH_LAYER_INPUT> new_delta =
+        layer.template backward_vectorized<SIZE, ITH_LAYER_INPUT>(
+            delta, cache.template get<I>());
 
     if constexpr (I != 0)
-      backward_vectorized<I - 1, LayerInput, SIZE>(new_delta, a_previous_cache,
-                                                   z_cache);
+      backward_vectorized<I - 1, Input, SIZE>(new_delta, cache);
   }
 
-  template <std::size_t I> auto update_layers(std::size_t batch_remainder) {
+  template <size_t I> auto update_layers(size_t batch_remainder) {
     if constexpr (I != sizeof...(Layers)) {
       if constexpr (auto &layer = std::get<I>(layers); layer.has_params) {
         layer.apply_change(batch_remainder);
@@ -294,13 +277,13 @@ private:
     }
   }
 
-  template <std::size_t train_size, std::size_t validation_size>
+  template <size_t train_size, size_t validation_size, typename Input>
   void log_epoch(
       std::ostream *log_stream, const int epoch,
       const StaticSpan<train_size, const Input> train_inputs,
-      const StaticSpan<train_size, const Output> train_expected,
+      const StaticSpan<train_size, const OUTPUT> train_expected,
       const StaticSpan<validation_size, const Input> validation_inputs,
-      const StaticSpan<validation_size, const Output> validation_expected) {
+      const StaticSpan<validation_size, const OUTPUT> validation_expected) {
     if (log_stream) {
       *log_stream << "Epoch: " << epoch << std::endl;
       *log_stream << "-------------------" << std::endl;
@@ -317,5 +300,10 @@ private:
     }
   }
 };
+
+#undef REQUIRES_LAYER_CONSISTENCY
+#undef OUTPUT
+#undef ITH_LAYER_OUTPUT
+#undef ITH_LAYER_INPUT
 
 #endif // ML_MODEL_H

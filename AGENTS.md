@@ -44,7 +44,7 @@ The build uses C++26 and treats warnings as errors (`-Wall -Wextra -Werror`).
 
 - Prefer the existing fixed-size algebra types and layer APIs over introducing dynamic containers.
 - Layer dimensions are template parameters, and parameters are generally supplied as weights/biases plus an `ActivationFunctionEnum` and `AdamFactory`.
-- Use the helper functions in `tests/layers/utils.h` for approximate matrix, tensor, and vector comparisons. Explicit template dimensions may be needed because the helpers use `std::size_t` while layer dimensions use `int`.
+- Use the helper functions in `tests/layers/utils.h` for approximate matrix, tensor, and vector comparisons. Explicit template dimensions may be needed because the helpers use `size_t` while layer dimensions use `int`.
 - Keep deterministic test parameters and inputs explicit; use tolerances appropriate to the numerical operation.
 - Add new tests to the executable in `CMakeLists.txt` when the source is not already listed.
 - Prefer focused test filters during development, then run the full `ctest` suite when practical.

@@ -1,7 +1,3 @@
-//
-// Created by Boris Osaulenko on 08/07/2026.
-//
-
 #ifndef ML_ALGEBRAIC_H
 #define ML_ALGEBRAIC_H
 
@@ -34,7 +30,7 @@ concept Algebraic = requires(T a, T b, double scalar, nlohmann::json j) {
   { a.hadamard(b) } -> std::same_as<T>;
 
   { a.sum() } -> std::same_as<double>;
-  { a.size() } -> std::same_as<std::size_t>;
+  { a.size() } -> std::same_as<size_t>;
 
   { to_json(j, a) } -> std::same_as<void>;
   { from_json(j, a) } -> std::same_as<void>;

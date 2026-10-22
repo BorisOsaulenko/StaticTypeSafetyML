@@ -10,6 +10,8 @@ public:
   virtual ~Optimizer() = default;
   virtual void adjust(const Shape &gradient) = 0;
 
+  double get_learning_rate() const { return learning_rate; }
+
 protected:
   Shape &params;
   double learning_rate;

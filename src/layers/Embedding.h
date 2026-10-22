@@ -1,24 +1,22 @@
-//
-// Created by Boris Osaulenko on 09/08/2026.
-//
-
 #ifndef ML_EMBEDDING_H
 #define ML_EMBEDDING_H
 #include "../matrix/Matrix.h"
+#include "LayerConcepts.h"
 #include "ParamsLayer.h"
 
 #include <cstddef>
 
-template <std::size_t TokenAmt, std::size_t EmbeddingDim,
-          std::size_t ContextLength>
-class Embedding
-    : public ParamsLayer<Embedding<TokenAmt, EmbeddingDim, ContextLength>,
-                         Matrix<TokenAmt, EmbeddingDim>> {
-  using InputArray = StaticSpan<ContextLength, std::size_t>;
-  using Input = StaticSpan<ContextLength, std::size_t>;
-  using Output = StaticArray<ContextLength, Vector<EmbeddingDim>>;
+#define LENGTH_TEMPLATED template <size_t InputLength>
+#define INPUT StaticSpan<InputLength, size_t>
+#define OUTPUT Matrix<InputLength, EmbeddingDim>
+
+template <size_t TokenAmt, size_t EmbeddingDim>
+class Embedding : public ParamsLayer<Embedding<TokenAmt, EmbeddingDim>,
+                                     Matrix<TokenAmt, EmbeddingDim>> {
+
+  LENGTH_TEMPLATED using Input = StaticSpan<InputLength, size_t>;
+  LENGTH_TEMPLATED using Output = Matrix<InputLength, EmbeddingDim>;
   using Grad = Matrix<TokenAmt, EmbeddingDim>;
-  using BackwardResult = LayerBackwardResult<Input, Grad>;
 
 public:
   Embedding(ActivationFunctionEnum activation_function_type,
@@ -30,28 +28,33 @@ public:
       : ParamsLayer<Embedding, Grad>(params, activation_function_type,
                                      optimizer_factory) {}
 
-  Output compute_z(const Input &inp) const {
-    StaticArray<ContextLength, Vector<EmbeddingDim>> result;
-    for (std::size_t tokenIdx = 0; tokenIdx < ContextLength; ++tokenIdx) {
-      Vector<EmbeddingDim> vec;
-      for (std::size_t colIdx = 0; colIdx < EmbeddingDim; ++colIdx) {
-        vec[colIdx] = this->params[inp[tokenIdx]][colIdx];
+  LENGTH_TEMPLATED
+  Matrix<EmbeddingDim, InputLength> compute_z(const INPUT &inp) const {
+    Matrix<EmbeddingDim, InputLength> result;
+    for (size_t embIdx = 0; embIdx < EmbeddingDim; ++embIdx) {
+      for (size_t tokenIdx = 0; tokenIdx < InputLength; ++tokenIdx) {
+        result[embIdx][tokenIdx] = this->params[inp[tokenIdx]][embIdx];
       }
-      result[tokenIdx] = vec;
     }
     return result;
   }
-  BackwardResult
-  compute_delta(const Output &delta, const Input &a_previous,
-                [[maybe_unused]] const Output &z_cache) const {
+
+  LENGTH_TEMPLATED
+  BackwardResult<INPUT, Grad>
+  compute_delta(const OUTPUT &delta, const INPUT &a_previous,
+                [[maybe_unused]] const OUTPUT &z_cache) const {
     Grad grad = Grad::zeros();
-    for (std::size_t tokenIdx = 0; tokenIdx < ContextLength; ++tokenIdx) {
-      for (std::size_t colIdx = 0; colIdx < EmbeddingDim; ++colIdx) {
+    for (size_t tokenIdx = 0; tokenIdx < InputLength; ++tokenIdx) {
+      for (size_t colIdx = 0; colIdx < EmbeddingDim; ++colIdx) {
         grad[a_previous[tokenIdx]][colIdx] += delta[tokenIdx][colIdx];
       }
     }
-    return BackwardResult{InputArray::zeros(), grad};
+    return ForwardCachedResult{INPUT::zeros(), grad};
   }
 };
+
+#undef LENGTH_TEMPLATED
+#undef INPUT
+#undef OUTPUT
 
 #endif // ML_EMBEDDING_H

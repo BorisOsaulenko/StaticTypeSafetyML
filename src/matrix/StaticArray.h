@@ -1,14 +1,10 @@
-//
-// Created by Boris Osaulenko on 19/07/2026.
-//
-
 #ifndef ML_ALGEBRAICARRAY_H
 #define ML_ALGEBRAICARRAY_H
 #include "Algebraic.h"
 
 #include <vector>
 
-template <std::size_t SIZE, typename Type> class StaticArray {
+template <size_t SIZE, typename Type> class StaticArray {
   std::vector<Type> data;
   using json = nlohmann::json;
   using RawType = std::remove_const_t<Type>;
@@ -28,7 +24,7 @@ public:
     requires(Algebraic<RawType>)
   {
     StaticArray result;
-    for (std::size_t i = 0; i < SIZE; ++i) {
+    for (size_t i = 0; i < SIZE; ++i) {
       result.data[i] = Type::random();
     }
     return result;
@@ -43,7 +39,7 @@ public:
 
   explicit StaticArray(const Type &default_val) {
     data.resize(SIZE);
-    for (std::size_t i = 0; i < SIZE; ++i) {
+    for (size_t i = 0; i < SIZE; ++i) {
       data[i] = default_val;
     }
   }
@@ -52,36 +48,36 @@ public:
     assert(lst.size() == SIZE);
     data.resize(SIZE);
 
-    std::size_t idx = 0;
+    size_t idx = 0;
     for (const auto &value : lst)
       data[idx++] = value;
   }
 
   StaticArray(const StaticArray &other) {
     data.resize(SIZE);
-    std::size_t idx = 0;
+    size_t idx = 0;
     for (const auto &value : other.data)
       data[idx++] = value;
   }
 
   StaticArray &operator=(const StaticArray &other) {
     data.resize(SIZE);
-    for (std::size_t idx = 0; idx < SIZE; ++idx)
+    for (size_t idx = 0; idx < SIZE; ++idx)
       data[idx] = other.data[idx];
     return *this;
   }
 
-  [[nodiscard]] const Type &operator[](std::size_t index) const {
+  [[nodiscard]] const Type &operator[](size_t index) const {
     assert(index < SIZE);
     return data[index];
   }
 
-  [[nodiscard]] Type &operator[](std::size_t index) {
+  [[nodiscard]] Type &operator[](size_t index) {
     assert(index < SIZE);
     return data[index];
   }
 
-  [[nodiscard]] static std::size_t size() { return SIZE; }
+  [[nodiscard]] static size_t size() { return SIZE; }
 
   [[nodiscard]] StaticArray operator+(const value_type &scalar) const
     requires(Algebraic<RawType>)
@@ -193,7 +189,7 @@ public:
     requires(Algebraic<RawType>)
   {
     value_type total = 0;
-    for (std::size_t i = 0; i < SIZE; ++i) {
+    for (size_t i = 0; i < SIZE; ++i) {
       total += data[i].dot(rhs.data[i]);
     }
     return total;
@@ -221,7 +217,7 @@ public:
     requires(Algebraic<RawType>)
   {
     StaticArray result;
-    for (std::size_t i = 0; i < SIZE; ++i) {
+    for (size_t i = 0; i < SIZE; ++i) {
       result.data[i] = data[i].elementwise(f);
     }
     return result;
@@ -236,7 +232,7 @@ public:
 
 private:
   template <typename F> StaticArray &unary_inplace(F &&func) {
-    for (std::size_t i = 0; i < SIZE; ++i)
+    for (size_t i = 0; i < SIZE; ++i)
       func(data[i]);
 
     return *this;
@@ -248,7 +244,7 @@ private:
     StaticArray result;
     result.data.resize(SIZE);
 
-    for (std::size_t i = 0; i < SIZE; ++i)
+    for (size_t i = 0; i < SIZE; ++i)
       result.data[i] = func(data[i]);
 
     return result;
@@ -256,7 +252,7 @@ private:
 
   template <typename F>
   StaticArray &binary_inplace(const StaticArray &rhs, F &&func) {
-    for (std::size_t i = 0; i < SIZE; ++i)
+    for (size_t i = 0; i < SIZE; ++i)
       func(data[i], rhs.data[i]);
 
     return *this;
@@ -268,19 +264,19 @@ private:
     StaticArray result;
     result.data.resize(SIZE);
 
-    for (std::size_t i = 0; i < SIZE; ++i)
+    for (size_t i = 0; i < SIZE; ++i)
       result.data[i] = func(data[i], rhs.data[i]);
 
     return result;
   }
 };
 
-template <std::size_t SIZE, typename T> class StaticSpan {
+template <size_t SIZE, typename T> class StaticSpan {
 public:
   using value_type = T;
   using pointer = T *;
   using reference = T &;
-  using size_type = std::size_t;
+  using size_type = size_t;
   using RawType = std::remove_const_t<T>;
 
   constexpr StaticSpan() = default;
@@ -307,7 +303,7 @@ public:
     return begin_[i];
   }
 
-  template <std::size_t FIRST, std::size_t LAST>
+  template <size_t FIRST, size_t LAST>
   [[nodiscard]] constexpr StaticSpan<LAST - FIRST, T> subspan() const {
     static_assert(FIRST <= LAST, "FIRST must be <= LAST");
     static_assert(LAST <= SIZE, "LAST must be <= SIZE");
@@ -320,7 +316,7 @@ public:
     requires(Algebraic<RawType>)
   {
     StaticArray<SIZE, RawType> result;
-    for (std::size_t i = 0; i < SIZE; ++i) {
+    for (size_t i = 0; i < SIZE; ++i) {
       result[i] = (*this)[i].hadamard(rhs[i]);
     }
     return result;
@@ -339,7 +335,7 @@ private:
   pointer end_;
 };
 
-template <std::size_t SIZE, typename RawT>
+template <size_t SIZE, typename RawT>
 StaticSpan(const StaticArray<SIZE, RawT> &) -> StaticSpan<SIZE, const RawT>;
 
 #endif // ML_ALGEBRAICSPAN_H

@@ -1,11 +1,7 @@
-//
-// Created by Boris Osaulenko on 16/07/2026.
-//
-
 #include "../../src/layers/MaxPool2x2.h"
 #include "../../src/matrix/3DTensor.h"
 #include "../../src/matrix/Matrix.h"
-#include "utils.h"
+#include "../utils.h"
 #include <gtest/gtest.h>
 
 constexpr double kTolerance = 0.05;
@@ -22,32 +18,34 @@ public:
       Output{Matrix<2, 2>{1, 2, 3, 4}, Matrix<2, 2>{-1, 0, 2, 1}};
   static const inline auto delta = StaticArray<1, Output>({delta_item});
 
-  static inline StaticArray<1, Output> z_cache{};
-
 protected:
-  MaxPool2x2<2, 4, 4> max_pool_layer{};
+  MaxPool2x2 max_pool_layer{};
 
   void SetUp() override {}
 };
 
 TEST_F(MaxPool2x2Test, ForwardPass) {
+  StaticArray<1, LayerCache<MaxPool2x2, Input>> cache;
   const Tensor3D<2, 2, 2> expected = {Matrix<2, 2>{6, 8, 14, 16},
                                       Matrix<2, 2>{16, 14, 8, 6}};
+  const LayerCache<MaxPool2x2, Input> expectedCache = {input[0]};
 
   const auto output = max_pool_layer.forward_vectorized(
-      StaticSpan<1, const Input>(input), z_cache);
+      StaticSpan<1, const Input>(input), cache);
   expect_tensor_close<2, 2, 2>(output[0], expected, kTolerance);
-  expect_tensor_close<2, 2, 2>(z_cache[0], expected, kTolerance);
+  expect_tensor_close<2, 4, 4>(cache[0].a_previous, expectedCache.a_previous,
+                               kTolerance);
 }
 
 TEST_F(MaxPool2x2Test, BackwardPass) {
-  max_pool_layer.forward_vectorized(StaticSpan<1, const Input>(input), z_cache);
+  StaticArray<1, LayerCache<MaxPool2x2, Input>> cache;
+  max_pool_layer.forward_vectorized(StaticSpan<1, const Input>(input), cache);
 
   const Tensor3D<2, 4, 4> expected = {
       Matrix<4, 4>{0, 0, 0, 0, 0, 1, 0, 2, 0, 0, 0, 0, 0, 3, 0, 4},
       Matrix<4, 4>{-1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 0, 0, 0}};
 
-  const auto new_delta = max_pool_layer.backward_vectorized<1>(
-      StaticSpan(delta), StaticSpan(input), z_cache);
+  const auto new_delta =
+      max_pool_layer.backward_vectorized<1, Input>(delta, cache);
   expect_tensor_close<2, 4, 4>(new_delta[0], expected, kTolerance);
 }

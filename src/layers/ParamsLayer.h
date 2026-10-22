@@ -1,16 +1,24 @@
-//
-// Created by Boris Osaulenko on 19/07/2026.
-//
-
 #ifndef ML_PARAMSLAYER_H
 #define ML_PARAMSLAYER_H
 #include "../activation/ActivationFactory.h"
 #include "../activation/ActivationFunction.h"
 #include "../lr_optimizer/Adam.h"
-#include "../matrix/Algebraic.h"
 #include "LayerConcepts.h"
-
 #include <concepts>
+#include <cstddef>
+#include <nlohmann/json.hpp>
+#include <string>
+
+#define OUTPUT LayerOutput<Derived, Input>
+#define CACHE LayerCache<Derived, Input>
+
+#define CACHE_ERROR                                                            \
+  std::string("Cache has invalid type for ") + LayerToString<Derived> +        \
+      ". Should be StaticArray<SIZE, LayerCache<Derived, Input> &"
+
+#define DELTA_ERROR                                                            \
+  std::string("Delta has invalid type for ") + LayerToString<Derived> +        \
+      ". Should be StaticSpan<SIZE, LayerOutput<Derived, Input>> &"
 
 template <typename Derived, Algebraic Grad> class ParamsLayer {
   using json = nlohmann::json;
@@ -36,50 +44,70 @@ public:
         optimizer(optimizer_factory.build(params)) {}
 
   template <typename Input>
-    requires ComputesZNotCached<Derived, Input>
-  Derived::template Output<Input> forward_no_cache(const Input &inp) const {
-    return activation_function->activate(derived().compute_z_not_cached(inp));
+  auto forward_no_cache(const Input &inp) const
+    requires ComputesZ<Derived, Input>
+  {
+    return activation_function->activate(derived().compute_z(inp));
   }
 
-  template <std::size_t SIZE, typename Input>
-    requires ComputesZCached<Derived, Input>
-  StaticArray<SIZE, typename Derived::template LayerForwardCachedResult<Input>>
-  forward_vectorized(const StaticSpan<SIZE, const Input> &inp) const {
-    StaticArray<SIZE,
-                typename Derived::template LayerForwardCachedResult<Input>>
-        result;
+  template <size_t SIZE, typename Input>
+  auto forward_vectorized(const StaticArray<SIZE, Input> &inp,
+                          auto &cache) const
+    requires ComputesZ<Derived, Input>
+  {
+    return forward_vectorized(StaticSpan<SIZE, const Input>(inp), cache);
+  }
 
+  template <size_t SIZE, typename Input>
+  auto forward_vectorized(const StaticSpan<SIZE, const Input> &inp,
+                          auto &cache) const
+    requires ComputesZ<Derived, Input>
+  {
+    static_assert(std::same_as<StaticArray<SIZE, LayerCache<Derived, Input>> &,
+                               decltype(cache)>,
+                  CACHE_ERROR);
+    StaticArray<SIZE, OUTPUT> result;
 #pragma omp parallel for
-    for (std::size_t i = 0; i < inp.size(); ++i) {
-      result[i] = derived().compute_z_cached(inp[i]);
+    for (size_t i = 0; i < inp.size(); ++i) {
+      LayerForwardCachedResult<Derived, Input> r =
+          derived().compute_z_cached(inp[i]);
+
+      result[i] = activation_function->activate(r.output);
+      cache[i] = r.cache;
     }
 
     return result;
   }
 
-  template <std::size_t SIZE, typename Input>
-    requires ComputesZNotCached<Derived, Input>
-  StaticArray<SIZE, typename Derived::template Output<Input>>
-  forward_no_cache_vectorized(const StaticSpan<SIZE, const Input> &inp) const {
-    StaticArray<SIZE, typename Derived::template Output<Input>> result;
+  template <size_t SIZE, typename Input>
+  auto
+  forward_no_cache_vectorized(const StaticSpan<SIZE, const Input> &inp) const
+    requires ComputesZ<Derived, Input>
+  {
+    StaticArray<SIZE, OUTPUT> result;
 
 #pragma omp parallel for
-    for (std::size_t i = 0; i < inp.size(); ++i) {
-      result[i] =
-          activation_function->activate(derived().compute_z_not_cached(inp[i]));
+    for (size_t i = 0; i < inp.size(); ++i) {
+      result[i] = activation_function->activate(derived().compute_z(inp[i]));
     }
 
     return result;
   }
 
-  template <std::size_t SIZE, typename Input>
-    requires ComputesDelta<Derived, Input>
-  StaticArray<SIZE, Input> backward_vectorized(
-      const StaticSpan<SIZE, const typename Derived::template Output<Input>>
-          &delta,
-      const StaticSpan<SIZE, const Input> &a_previous,
-      const StaticSpan<SIZE, const typename Derived::template Cache<Input>>
-          &cache) {
+  template <size_t SIZE, typename Input>
+  StaticArray<SIZE, Input> backward_vectorized(const auto &delta,
+                                               const auto &cache)
+    requires ComputesDeltaCached<Derived, Input, Grad>
+  {
+    // const StaticArray<2, Vector<2> >&;
+    // const StaticSpan<2, const Vector<2> >&
+    static_assert(
+        std::same_as<const StaticArray<SIZE, OUTPUT> &, decltype(delta)>,
+        DELTA_ERROR);
+    static_assert(
+        std::same_as<const StaticArray<SIZE, CACHE> &, decltype(cache)>,
+        CACHE_ERROR);
+
     StaticArray<SIZE, Input> result;
 
 #pragma omp parallel
@@ -87,9 +115,9 @@ public:
       Grad local_grad = Grad::zeros();
 
 #pragma omp for
-      for (std::size_t idx = 0; idx < SIZE; ++idx) {
+      for (size_t idx = 0; idx < SIZE; ++idx) {
         auto [new_delta, grad] =
-            derived().compute_delta(delta[idx], a_previous[idx], cache[idx]);
+            derived().compute_delta(delta[idx], cache[idx]);
 
         result[idx] = new_delta;
         local_grad += grad;
@@ -102,7 +130,7 @@ public:
     return result;
   }
 
-  void apply_change(const std::size_t &normalize_by) {
+  void apply_change(const size_t &normalize_by) {
     gradient /= static_cast<Grad::value_type>(normalize_by);
     optimizer.adjust(gradient);
     gradient = Grad::zeros();
@@ -130,5 +158,10 @@ protected:
 private:
   Adam<Grad> optimizer;
 };
+
+#undef OUTPUT
+#undef CACHE
+#undef CACHE_ERROR
+#undef DELTA_ERROR
 
 #endif // ML_PARAMSLAYER_H

@@ -1,6 +1,3 @@
-//
-// Created by Boris Osaulenko on 05/07/2026.
-//
 #pragma once
 
 #ifndef ML_ACTIVATIONFUNCTION_H
@@ -38,22 +35,22 @@ public:
         [this](const value_type val) { return derivative(val); });
   }
 
-  template <typename Shape, std::size_t SIZE>
+  template <typename Shape, size_t SIZE>
     requires Algebraic<std::remove_const_t<Shape>>
   [[nodiscard]] StaticArray<SIZE, std::remove_const_t<Shape>>
   activate(const StaticSpan<SIZE, const Shape> &x) {
     StaticArray<SIZE, std::remove_const_t<Shape>> result;
-    for (std::size_t i = 0; i < SIZE; ++i)
+    for (size_t i = 0; i < SIZE; ++i)
       result[i] = activate(x[i]);
     return result;
   }
 
-  template <typename Shape, std::size_t SIZE>
+  template <typename Shape, size_t SIZE>
     requires Algebraic<std::remove_const_t<Shape>>
   [[nodiscard]] StaticArray<SIZE, std::remove_const_t<Shape>>
   derivative(const StaticSpan<SIZE, const Shape> &x) {
     StaticArray<SIZE, std::remove_const_t<Shape>> result;
-    for (std::size_t i = 0; i < SIZE; ++i)
+    for (size_t i = 0; i < SIZE; ++i)
       result[i] = derivative(x[i]);
     return result;
   }

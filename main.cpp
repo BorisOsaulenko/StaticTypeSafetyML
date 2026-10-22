@@ -1,7 +1,3 @@
-//
-// Created by Boris Osaulenko on 13/07/2026.
-//
-
 #include "include/mnist/TensorMnistReader.hpp"
 #include "src/Network.h"
 #include "src/activation/ActivationFunction.h"
@@ -10,11 +6,11 @@
 #include "src/layers/Flatten.h"
 #include "src/layers/MaxPool2x2.h"
 
-template <size_t R> std::size_t argmax(const Vector<R> &vec) {
-  std::size_t max_index = 0;
+template <size_t R> size_t argmax(const Vector<R> &vec) {
+  size_t max_index = 0;
   double max_value = vec[0];
 
-  for (std::size_t i = 1; i < R; ++i) {
+  for (size_t i = 1; i < R; ++i) {
     if (vec[i] > max_value) {
       max_value = vec[i];
       max_index = static_cast<int>(i);

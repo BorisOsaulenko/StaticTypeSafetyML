@@ -1,15 +1,8 @@
-
-//
-// Created by Boris Osaulenko on 14/08/2026.
-//
-
 #ifndef ML_LAYERCONCEPTS_H
 #define ML_LAYERCONCEPTS_H
 #include "../matrix/Algebraic.h"
-#include "../matrix/StaticArray.h"
 
 #include <concepts>
-#include <string>
 #include <utility>
 
 template <typename NewDelta, typename Grad> struct BackwardResult {
@@ -78,8 +71,8 @@ concept NoParamsLayerImpl = ComputesZ<T, Input> && ComputesDelta<T, Input>;
 
 template <typename T> consteval std::string_view type_name() {
   std::string_view fn = __PRETTY_FUNCTION__;
-  const std::size_t begin = fn.find("T = ") + 4;
-  const std::size_t end = fn.find_first_of(";]", begin);
+  const size_t begin = fn.find("T = ") + 4;
+  const size_t end = fn.find_first_of(";]", begin);
   return fn.substr(begin, end - begin);
 }
 

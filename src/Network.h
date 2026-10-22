@@ -22,9 +22,9 @@
 #define ITH_LAYER_OUTPUT LayerOutputT<I, Input, Layers...>
 #define ITH_LAYER_INPUT LayerInputT<I, Input, Layers...>
 
-template <std::size_t N, typename F> constexpr void constexpr_for(F &&f) {
-  [&]<std::size_t... Is>(std::index_sequence<Is...>) {
-    (f(std::integral_constant<std::size_t, Is>{}), ...);
+template <size_t N, typename F> constexpr void constexpr_for(F &&f) {
+  [&]<size_t... Is>(std::index_sequence<Is...>) {
+    (f(std::integral_constant<size_t, Is>{}), ...);
   }(std::make_index_sequence<N>{});
 }
 
@@ -53,7 +53,13 @@ public:
     return forward_no_cache<0>(input);
   }
 
-  template <std::size_t SIZE, typename Input>
+  template <size_t SIZE, typename Input>
+  [[nodiscard]] StaticArray<SIZE, OUTPUT> predict_vectorized(
+      const StaticArray<SIZE, Input> inputs) const REQUIRES_LAYER_CONSISTENCY {
+    return forward_no_cache_vectorized<0, SIZE, Input>(inputs);
+  };
+
+  template <size_t SIZE, typename Input>
   [[nodiscard]] StaticArray<SIZE, OUTPUT>
   predict_vectorized(const StaticSpan<SIZE, const Input> inputs) const
       REQUIRES_LAYER_CONSISTENCY {
@@ -133,6 +139,13 @@ public:
     j.at("loss_type").get_to(network.loss_type);
   }
 
+private:
+  std::tuple<Layers &...> layers;
+  LossEnum loss_type;
+
+  std::mt19937 rng;
+  std::uniform_real_distribution<> dist;
+
   template <size_t I>
   static void to_json_recursive(json &layers_array,
                                 const std::tuple<Layers &...> &layers) {
@@ -158,13 +171,6 @@ public:
       from_json_recursive<I + 1, A>(layers_json, layers);
     }
   }
-
-private:
-  std::tuple<Layers &...> layers;
-  LossEnum loss_type;
-
-  std::mt19937 rng;
-  std::uniform_real_distribution<> dist;
 
   template <size_t CURR_BATCH, size_t TRAIN_SZ, size_t BATCH_SZ, typename Input>
   void train_batch(const StaticSpan<TRAIN_SZ, const Input> train_inputs,
@@ -262,7 +268,7 @@ private:
       backward_vectorized<I - 1, Input, SIZE>(new_delta, cache);
   }
 
-  template <std::size_t I> auto update_layers(std::size_t batch_remainder) {
+  template <size_t I> auto update_layers(size_t batch_remainder) {
     if constexpr (I != sizeof...(Layers)) {
       if constexpr (auto &layer = std::get<I>(layers); layer.has_params) {
         layer.apply_change(batch_remainder);

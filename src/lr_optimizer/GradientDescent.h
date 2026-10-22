@@ -1,7 +1,3 @@
-//
-// Created by Boris Osaulenko on 06/07/2026.
-//
-
 #ifndef ML_GRADIENT_DESCENT
 #define ML_GRADIENT_DESCENT
 #include "../matrix/Matrix.h"

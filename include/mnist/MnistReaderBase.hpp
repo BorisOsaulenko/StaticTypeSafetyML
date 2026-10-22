@@ -100,7 +100,7 @@ protected:
       throw std::runtime_error("Not enough labels.");
   }
 
-  template <std::size_t SIZE, typename T>
+  template <size_t SIZE, typename T>
   static void shuffle_data(StaticArray<SIZE, T> &X,
                            StaticArray<SIZE, Vector<10>> &y) {
     std::vector<int> indices(static_cast<int>(X.size()));
@@ -114,7 +114,7 @@ protected:
     StaticArray<SIZE, T> X_shuffled;
     StaticArray<SIZE, Vector<10>> y_shuffled;
 
-    std::size_t i = 0;
+    size_t i = 0;
     for (int idx : indices) {
       X_shuffled[i] = X[idx];
       y_shuffled[i] = y[idx];

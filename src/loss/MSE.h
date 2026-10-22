@@ -1,7 +1,3 @@
-//
-// Created by Boris Osaulenko on 08/07/2026.
-//
-
 #ifndef ML_MSE_H
 #define ML_MSE_H
 #include "../matrix/Algebraic.h"

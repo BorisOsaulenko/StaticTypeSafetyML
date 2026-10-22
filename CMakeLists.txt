@@ -40,9 +40,16 @@ find_package(nlohmann_json 3.12.0 REQUIRED)
 # ----------------------------
 # Test target
 # ----------------------------
-add_executable(hello_test
-        tests/layers/linear_regression_test.cpp
+add_executable(hello_test        
+        tests/layers/dense_test.cpp
         tests/layers/convolutional_layer_test.cpp
+        tests/layers/max_pool_2x2_test.cpp
+        tests/layers/flatten_test.cpp
+        tests/layers/matrix_test.cpp
+
+        tests/network/network_test.cpp
+        tests/lr_optimizer/adam_test.cpp
+        tests/linear_regression_test.cpp
 
         src/loss/Loss.h
         src/loss/MSE.h
@@ -53,14 +60,9 @@ add_executable(hello_test
 
         src/matrix/Algebraic.h
         src/layers/flatten.h
-        tests/layers/max_pool_2x2_test.cpp
         tests/layers/utils.h
-        tests/layers/flatten_test.cpp
-        tests/lr_optimizer/AdamTest.cpp
-        tests/layers/matrix_test.cpp
         src/matrix/StaticArray.h
         src/layers/ParamsLayer.h
-        tests/layers/dense_test.cpp
         src/preprocessing/tokenizer.h
         src/layers/Embedding.h
         src/layers/AttentionHead.h

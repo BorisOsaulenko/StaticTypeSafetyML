@@ -1,7 +1,3 @@
-//
-// Created by Boris Osaulenko on 05/07/2026.
-//
-
 #pragma once
 
 #include "../activation/ActivationFunction.h"
@@ -12,20 +8,18 @@
 #include "ParamsLayer.h"
 #include <cstddef>
 
-template <size_t i, size_t o>
-using GradientType = AlgebraicTuple<Matrix<o, i>, Vector<o>>;
-
 #define INPUT Vector<i>
 #define OUTPUT Vector<o>
 #define CACHE Cache<i, o>
 
 template <size_t i, size_t o>
 class DenseLayer final
-    : public ParamsLayer<DenseLayer<i, o>, GradientType<i, o>> {
+    : public ParamsLayer<DenseLayer<i, o>,
+                         AlgebraicTuple<Matrix<o, i>, Vector<o>>> {
 private:
   using Weights = Matrix<o, i>;
   using Bias = Vector<o>;
-  using Grad = GradientType<i, o>;
+  using Grad = AlgebraicTuple<Matrix<o, i>, Vector<o>>;
 
   template <size_t _i, size_t _o> struct Cache {
     Vector<_i> a_previous;

@@ -1,7 +1,3 @@
-//
-// Created by Boris Osaulenko on 07/07/2026.
-//
-
 #ifndef ML_ACTIVATIONFACTORY_H
 #define ML_ACTIVATIONFACTORY_H
 #include "Identity.h"

@@ -1,9 +1,5 @@
-//
-// Created by Boris Osaulenko on 15/07/2026.
-//
-
 #include "../../src/layers/Convolutional.h"
-#include "utils.h"
+#include "../utils.h"
 #include <gtest/gtest.h>
 
 constexpr double kTolerance = 0.05;

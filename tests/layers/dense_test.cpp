@@ -1,12 +1,8 @@
-//
-// Created by Boris Osaulenko on 22/07/2026.
-//
-
 #define protected public
 #include "../../src/layers/Dense.h"
 #undef protected
 
-#include "utils.h"
+#include "../utils.h"
 #include <gtest/gtest.h>
 
 namespace {
@@ -16,7 +12,7 @@ constexpr double kTolerance = 0.005;
 using Input = Vector<3>;
 using Output = Vector<2>;
 using Layer = DenseLayer<3, 2>;
-using Gradient = GradientType<3, 2>;
+using Gradient = DenseLayer<3, 2>::Params;
 
 const StaticArray<2, Input> inputs = {
     Input{1.0, 2.0, -1.0},

@@ -1,7 +1,3 @@
-//
-// Created by Boris Osaulenko on 06/07/2026.
-//
-
 #ifndef ML_RELU_H
 #define ML_RELU_H
 #include "ActivationFunction.h"

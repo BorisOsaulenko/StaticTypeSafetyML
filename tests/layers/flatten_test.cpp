@@ -1,11 +1,7 @@
-//
-// Created by Boris Osaulenko on 16/07/2026.
-//
-
 #include "../../src/layers/Flatten.h"
 #include "../../src/matrix/3DTensor.h"
 #include "../../src/matrix/Matrix.h"
-#include "utils.h"
+#include "../utils.h"
 
 #include <gtest/gtest.h>
 

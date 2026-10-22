@@ -1,7 +1,3 @@
-//
-// Created by Boris Osaulenko on 20/08/2026.
-//
-
 #ifndef ML_NETWORKCONCEPTS_H
 #define ML_NETWORKCONCEPTS_H
 #include "layers/LayerConcepts.h"
@@ -32,7 +28,7 @@ struct NetworkOutput<In, L, Rest...> {
 template <typename In, typename... Ls>
 using NetworkOutputT = typename NetworkOutput<In, Ls...>::type;
 
-constexpr std::string to_str(std::size_t n) {
+constexpr std::string to_str(size_t n) {
   std::string s;
   do {
     s.insert(s.begin(), char('0' + n % 10));

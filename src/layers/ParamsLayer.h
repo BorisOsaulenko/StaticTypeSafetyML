@@ -1,7 +1,3 @@
-//
-// Created by Boris Osaulenko on 19/07/2026.
-//
-
 #ifndef ML_PARAMSLAYER_H
 #define ML_PARAMSLAYER_H
 #include "../activation/ActivationFactory.h"
@@ -51,7 +47,7 @@ public:
   auto forward_no_cache(const Input &inp) const
     requires ComputesZ<Derived, Input>
   {
-    return activation_function->activate(derived().compute_z_not_cached(inp));
+    return activation_function->activate(derived().compute_z(inp));
   }
 
   template <size_t SIZE, typename Input>
@@ -119,7 +115,7 @@ public:
       Grad local_grad = Grad::zeros();
 
 #pragma omp for
-      for (std::size_t idx = 0; idx < SIZE; ++idx) {
+      for (size_t idx = 0; idx < SIZE; ++idx) {
         auto [new_delta, grad] =
             derived().compute_delta(delta[idx], cache[idx]);
 
@@ -134,7 +130,7 @@ public:
     return result;
   }
 
-  void apply_change(const std::size_t &normalize_by) {
+  void apply_change(const size_t &normalize_by) {
     gradient /= static_cast<Grad::value_type>(normalize_by);
     optimizer.adjust(gradient);
     gradient = Grad::zeros();

@@ -1,7 +1,3 @@
-//
-// Created by Boris Osaulenko on 13/07/2026.
-//
-
 #ifndef ML_FLATTEN_H
 #define ML_FLATTEN_H
 #include "../matrix/3DTensor.h"
@@ -22,9 +18,9 @@ public:
   DIM_TEMPLATED
   OUTPUT compute_z(const INPUT &inp) const {
     OUTPUT result;
-    for (std::size_t ch = 0; ch < Ch_in; ++ch) {
-      for (std::size_t r = 0; r < R_in; ++r) {
-        for (std::size_t c = 0; c < C_in; ++c) {
+    for (size_t ch = 0; ch < Ch_in; ++ch) {
+      for (size_t r = 0; r < R_in; ++r) {
+        for (size_t c = 0; c < C_in; ++c) {
           result[ch * R_in * C_in + r * C_in + c] = inp[ch][r, c];
         }
       }
@@ -41,9 +37,9 @@ public:
   DIM_TEMPLATED INPUT compute_delta(
       const OUTPUT &delta, [[maybe_unused]] const CACHE &z_cache) const {
     INPUT new_delta;
-    for (std::size_t ch = 0; ch < Ch_in; ++ch) {
-      for (std::size_t r = 0; r < R_in; ++r) {
-        for (std::size_t c = 0; c < C_in; ++c) {
+    for (size_t ch = 0; ch < Ch_in; ++ch) {
+      for (size_t r = 0; r < R_in; ++r) {
+        for (size_t c = 0; c < C_in; ++c) {
           new_delta[ch][r, c] = delta[ch * R_in * C_in + r * C_in + c];
         }
       }
@@ -55,5 +51,6 @@ public:
 #undef DIM_TEMPLATED
 #undef INPUT
 #undef OUTPUT
+#undef CACHE
 
 #endif // ML_FLATTEN_H

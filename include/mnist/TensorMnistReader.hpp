@@ -43,10 +43,10 @@ private:
     uint8_t pixel;
     uint8_t label;
 
-    for (std::size_t i = 0; i < amount; ++i) {
+    for (size_t i = 0; i < amount; ++i) {
       Tensor3D<1, 28, 28> xi;
-      for (std::size_t r = 0; r < 28; ++r) {
-        for (std::size_t c = 0; c < 28; ++c) {
+      for (size_t r = 0; r < 28; ++r) {
+        for (size_t c = 0; c < 28; ++c) {
           images_stream.read(reinterpret_cast<char *>(&pixel), 1);
           xi[0][r, c] = static_cast<double>(pixel) / 255.0;
         }

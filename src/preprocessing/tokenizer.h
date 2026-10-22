@@ -1,7 +1,3 @@
-//
-// Created by Boris Osaulenko on 31/07/2026.
-//
-
 #ifndef ML_TOKENIZER_H
 #define ML_TOKENIZER_H
 
@@ -37,14 +33,14 @@ public:
 
   [[nodiscard]] std::vector<id> tokenize(const std::string &text) const {
     std::vector<id> result;
-    std::size_t pos = 0;
+    size_t pos = 0;
 
     while (pos < text.size()) {
       // Find the earliest occurrence of any special token starting at/after pos
-      std::size_t best_pos = std::string::npos;
+      size_t best_pos = std::string::npos;
       std::string matched_token;
       for (const auto &tok : special_tokens | std::views::keys) {
-        if (const std::size_t found = text.find(tok, pos);
+        if (const size_t found = text.find(tok, pos);
             found != std::string::npos &&
             (best_pos == std::string::npos || found < best_pos)) {
           best_pos = found;
@@ -131,7 +127,7 @@ private:
   std::vector<std::vector<id>>
   initial_mapping_setup(const std::vector<std::string> &texts) {
     std::vector<std::vector<id>> result(texts.size());
-    for (std::size_t idx = 0; idx < texts.size(); ++idx) {
+    for (size_t idx = 0; idx < texts.size(); ++idx) {
       for (unsigned char c : texts[idx]) {
         if (!initial_mapping.contains(c))
           initial_mapping[c] = current_id++;
@@ -144,7 +140,7 @@ private:
   void bpe_iteration(std::vector<std::vector<id>> &tokens) {
     std::map<std::pair<id, id>, unsigned long long> pair_counts;
     for (const auto &token_list : tokens) {
-      for (std::size_t i = 0; i + 1 < token_list.size(); ++i) {
+      for (size_t i = 0; i + 1 < token_list.size(); ++i) {
         pair_counts[{token_list[i], token_list[i + 1]}]++;
       }
     }
@@ -162,7 +158,7 @@ private:
 
     for (auto &token_list : tokens) {
       std::vector<id> new_token_list;
-      for (std::size_t i = 0; i < token_list.size(); ++i) {
+      for (size_t i = 0; i < token_list.size(); ++i) {
         if (i < token_list.size() - 1 &&
             token_list[i] == most_frequent_pair->first.first &&
             token_list[i + 1] == most_frequent_pair->first.second) {
@@ -193,7 +189,7 @@ private:
     for (const auto &m : merged_mapping) {
       std::vector<id> merged;
       merged.reserve(tokens.size());
-      for (std::size_t i = 0; i < tokens.size();) {
+      for (size_t i = 0; i < tokens.size();) {
         if (i + 1 < tokens.size() && tokens[i] == m.original_ids.first &&
             tokens[i + 1] == m.original_ids.second) {
           merged.push_back(m.merged_id);

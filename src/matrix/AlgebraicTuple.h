@@ -1,7 +1,3 @@
-//
-// Created by Copilot on request
-//
-
 #ifndef ML_ALGEBRAICTUPLE_H
 #define ML_ALGEBRAICTUPLE_H
 
@@ -35,15 +31,13 @@ public:
     return AlgebraicTuple(std::make_tuple(Types::random()...));
   }
 
-  template <std::size_t I> [[nodiscard]] const auto &get() const {
+  template <size_t I> [[nodiscard]] const auto &get() const {
     return std::get<I>(data_);
   }
 
-  template <std::size_t I> [[nodiscard]] auto &get() {
-    return std::get<I>(data_);
-  }
+  template <size_t I> [[nodiscard]] auto &get() { return std::get<I>(data_); }
 
-  [[nodiscard]] static constexpr std::size_t size() { return sizeof...(Types); }
+  [[nodiscard]] static constexpr size_t size() { return sizeof...(Types); }
 
   // Elementwise operations with another tuple
   [[nodiscard]] AlgebraicTuple operator+(const AlgebraicTuple &rhs) const {
@@ -136,7 +130,7 @@ public:
     return dot_impl(rhs, std::make_index_sequence<sizeof...(Types)>());
   }
 
-  template <std::size_t... I>
+  template <size_t... I>
   value_type dot_impl(const AlgebraicTuple &rhs,
                       std::index_sequence<I...>) const {
     return (value_type{0} + ... +
@@ -156,7 +150,7 @@ public:
     return unary_op(std::forward<F>(f));
   }
 
-  template <std::size_t... Is>
+  template <size_t... Is>
   friend void to_json(json &j, const AlgebraicTuple &tuple,
                       std::index_sequence<Is...>) {
     j = json::array({std::get<Is>(tuple.data_)...});
@@ -166,7 +160,7 @@ public:
     to_json(j, tuple, std::make_index_sequence<sizeof...(Types)>{});
   }
 
-  template <std::size_t... Is>
+  template <size_t... Is>
   friend void from_json(const json &j, AlgebraicTuple &tuple,
                         std::index_sequence<Is...>) {
     tuple.data_ = std::make_tuple(j.at(Is).get<Types>()...);
@@ -181,13 +175,13 @@ public:
 
 private:
   // Helpers
-  template <typename F, std::size_t... Is>
+  template <typename F, size_t... Is>
   static AlgebraicTuple map_impl(const std::tuple<Types...> &t, F &&f,
                                  std::index_sequence<Is...>) {
     return AlgebraicTuple(std::make_tuple(f(std::get<Is>(t))...));
   }
 
-  template <typename F, std::size_t... Is>
+  template <typename F, size_t... Is>
   static AlgebraicTuple map2_impl(const std::tuple<Types...> &a,
                                   const std::tuple<Types...> &b, F &&f,
                                   std::index_sequence<Is...>) {
@@ -206,7 +200,7 @@ private:
                     std::make_index_sequence<sizeof...(Types)>());
   }
 
-  template <typename F, std::size_t... I>
+  template <typename F, size_t... I>
   void scalar_unary_op_inplace_impl(F &&f, std::index_sequence<I...>) {
     (f(std::get<I>(data_)), ...);
   }
@@ -223,7 +217,7 @@ private:
                      std::make_index_sequence<sizeof...(Types)>());
   }
 
-  template <typename F, std::size_t... I>
+  template <typename F, size_t... I>
   void binary_op_inplace_impl(const AlgebraicTuple &rhs, F &&f,
                               std::index_sequence<I...>) {
     (f(std::get<I>(data_), std::get<I>(rhs.data_)), ...);
@@ -242,7 +236,7 @@ private:
   }
 
   // Apply helper: iterate over each element and call lambda(element)
-  template <typename F, std::size_t... I>
+  template <typename F, size_t... I>
   void apply_for_each_impl(F &&f, std::index_sequence<I...>) const {
     (f(std::get<I>(data_)), ...);
   }

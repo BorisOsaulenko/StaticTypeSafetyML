@@ -1,7 +1,7 @@
-#include "../../src/Network.h"
-#include "../../src/layers/Dense.h"
-#include "../../src/loss/Loss.h"
-#include "../../src/lr_optimizer/Adam.h"
+#include "../src/Network.h"
+#include "../src/layers/Dense.h"
+#include "../src/loss/Loss.h"
+#include "../src/lr_optimizer/Adam.h"
 #include "utils.h"
 
 #include <gtest/gtest.h>

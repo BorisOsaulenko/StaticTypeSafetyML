@@ -1,7 +1,3 @@
-//
-// Created by Boris Osaulenko on 09/08/2026.
-//
-
 #ifndef ML_EMBEDDING_H
 #define ML_EMBEDDING_H
 #include "../matrix/Matrix.h"
@@ -14,7 +10,7 @@
 #define INPUT StaticSpan<InputLength, size_t>
 #define OUTPUT Matrix<InputLength, EmbeddingDim>
 
-template <std::size_t TokenAmt, std::size_t EmbeddingDim>
+template <size_t TokenAmt, size_t EmbeddingDim>
 class Embedding : public ParamsLayer<Embedding<TokenAmt, EmbeddingDim>,
                                      Matrix<TokenAmt, EmbeddingDim>> {
 
@@ -35,7 +31,7 @@ public:
   LENGTH_TEMPLATED
   Matrix<EmbeddingDim, InputLength> compute_z(const INPUT &inp) const {
     Matrix<EmbeddingDim, InputLength> result;
-    for (std::size_t embIdx = 0; embIdx < EmbeddingDim; ++embIdx) {
+    for (size_t embIdx = 0; embIdx < EmbeddingDim; ++embIdx) {
       for (size_t tokenIdx = 0; tokenIdx < InputLength; ++tokenIdx) {
         result[embIdx][tokenIdx] = this->params[inp[tokenIdx]][embIdx];
       }
@@ -48,8 +44,8 @@ public:
   compute_delta(const OUTPUT &delta, const INPUT &a_previous,
                 [[maybe_unused]] const OUTPUT &z_cache) const {
     Grad grad = Grad::zeros();
-    for (std::size_t tokenIdx = 0; tokenIdx < InputLength; ++tokenIdx) {
-      for (std::size_t colIdx = 0; colIdx < EmbeddingDim; ++colIdx) {
+    for (size_t tokenIdx = 0; tokenIdx < InputLength; ++tokenIdx) {
+      for (size_t colIdx = 0; colIdx < EmbeddingDim; ++colIdx) {
         grad[a_previous[tokenIdx]][colIdx] += delta[tokenIdx][colIdx];
       }
     }

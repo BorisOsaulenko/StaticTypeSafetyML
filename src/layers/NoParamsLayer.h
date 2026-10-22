@@ -1,14 +1,10 @@
-//
-// Created by Boris Osaulenko on 05/07/2026.
-//
-
 #ifndef ML_LAYER_H
 #define ML_LAYER_H
 #include "../matrix/StaticArray.h"
 #include "LayerConcepts.h"
 #include <concepts>
 
-#define SIZE_INP_TEMPLATE template <std::size_t SIZE, typename Input>
+#define SIZE_INP_TEMPLATE template <size_t SIZE, typename Input>
 #define REQUIRES_IMPL requires NoParamsLayerImpl<Derived, Input>
 #define OUTPUT LayerOutput<Derived, Input>
 #define CACHE LayerCache<Derived, Input>
@@ -49,7 +45,7 @@ public:
     StaticArray<SIZE, OUTPUT> result;
 
 #pragma omp parallel for
-    for (std::size_t i = 0; i < inp.size(); ++i) {
+    for (size_t i = 0; i < inp.size(); ++i) {
       LayerForwardCachedResult<Derived, Input> r =
           this->derived().compute_z_cached(inp[i]);
       result[i] = r.output;
@@ -65,7 +61,7 @@ public:
     StaticArray<SIZE, OUTPUT> result;
 
 #pragma omp parallel for
-    for (std::size_t i = 0; i < inp.size(); ++i) {
+    for (size_t i = 0; i < inp.size(); ++i) {
       result[i] = this->derived().compute_z(inp[i]);
     }
 
@@ -87,7 +83,7 @@ public:
     StaticArray<SIZE, Input> new_delta;
 
 #pragma omp parallel for
-    for (std::size_t i = 0; i < delta.size(); ++i) {
+    for (size_t i = 0; i < delta.size(); ++i) {
       new_delta[i] = this->derived().compute_delta(delta[i], cache[i]);
     }
     return new_delta;

@@ -1,7 +1,3 @@
-//
-// Created by Boris Osaulenko on 08/07/2026.
-//
-
 #ifndef ML_LOSSFACTORY_H
 #define ML_LOSSFACTORY_H
 #include "../matrix/Algebraic.h"

@@ -1,7 +1,3 @@
-//
-// Created by Boris Osaulenko on 11/08/2026.
-//
-
 #ifndef ML_ATTENTIONHEAD_H
 #define ML_ATTENTIONHEAD_H
 
@@ -10,9 +6,9 @@
 
 #include <cstddef>
 
-#define LENGTH_TEMPLATED template <std::size_t InputLength>
+#define LENGTH_TEMPLATED template <size_t InputLength>
 
-template <std::size_t EmbeddingDim, std::size_t HeadDim>
+template <size_t EmbeddingDim, size_t HeadDim>
 class AttentionHead
     : public ParamsLayer<
           AttentionHead<EmbeddingDim, HeadDim>,
@@ -66,14 +62,14 @@ public:
         keys.transpose() * queries / std::sqrt(HeadDim);
 
     // set later words influence to -inf
-    for (std::size_t row = 0; row < InputLength; ++row) {
-      for (std::size_t col = 0; col < row; ++col) {
+    for (size_t row = 0; row < InputLength; ++row) {
+      for (size_t col = 0; col < row; ++col) {
         attention_scores[row, col] = neg_inf;
       }
     }
 
     // col wise softmax
-    for (std::size_t col = 0; col < InputLength; ++col) {
+    for (size_t col = 0; col < InputLength; ++col) {
       attention_scores.set_col(col, softmax(attention_scores.get_col(col)));
     }
 
@@ -102,5 +98,7 @@ private:
     return vec.exp() / vec.exp().sum();
   }
 };
+
+#undef LENGTH_TEMPLATED
 
 #endif // ML_ATTENTIONHEAD_H

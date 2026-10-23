@@ -1,7 +1,8 @@
 #ifndef ML_GRADIENT_DESCENT
 #define ML_GRADIENT_DESCENT
-#include "../matrix/Matrix.h"
+
 #include "Optimizer.h"
+#include <memory>
 #include <nlohmann/json.hpp>
 
 template <Algebraic Shape> class SGD : public Optimizer<Shape> {
@@ -24,8 +25,9 @@ public:
   explicit SGDFactory(const double learning_rate = 1e-3)
       : learning_rate(learning_rate) {}
 
-  template <Algebraic Shape> SGD<Shape> build(Shape &initial_params) const {
-    return SGD<Shape>(initial_params, learning_rate);
+  template <Algebraic Shape>
+  std::unique_ptr<SGD<Shape>> build(Shape &initial_params) const {
+    return std::make_unique<SGD<Shape>>(SGD(initial_params, learning_rate));
   }
 
 private:

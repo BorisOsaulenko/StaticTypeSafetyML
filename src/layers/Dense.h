@@ -27,16 +27,12 @@ private:
   };
 
 public:
-  explicit DenseLayer(ActivationFunctionEnum activation_function_type,
-                      const AdamFactory &optimizer_factory)
-      : ParamsLayer<DenseLayer, Grad>(activation_function_type,
-                                      optimizer_factory) {}
+  explicit DenseLayer(ActivationFunctionEnum activation_function_type)
+      : ParamsLayer<DenseLayer, Grad>(activation_function_type) {}
 
   explicit DenseLayer(Grad params,
-                      ActivationFunctionEnum activation_function_type,
-                      const AdamFactory &optimizer_factory)
-      : ParamsLayer<DenseLayer, Grad>(params, activation_function_type,
-                                      optimizer_factory) {}
+                      ActivationFunctionEnum activation_function_type)
+      : ParamsLayer<DenseLayer, Grad>(params, activation_function_type) {}
 
   Weights get_weights() const { return this->params.template get<0>(); }
   Bias get_bias() const { return this->params.template get<1>(); }

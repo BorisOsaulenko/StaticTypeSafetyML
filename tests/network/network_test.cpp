@@ -1,5 +1,6 @@
 #include "../../src/Network.h"
 #include "../../src/layers/Dense.h"
+#include "../../src/lr_optimizer/GradientDescent.h"
 #include <gtest/gtest.h>
 
 class NetworkTestFixture : public testing::Test {
@@ -31,13 +32,14 @@ public:
       Vector<2>{-5, 1},
   };
 
-  AdamFactory optimizer_factory;
-  DenseLayer<10, 5> dense1 = DenseLayer<10, 5>(
-      params1, ActivationFunctionEnum::Identity, optimizer_factory);
-  DenseLayer<5, 2> dense2 = DenseLayer<5, 2>(
-      params2, ActivationFunctionEnum::Identity, optimizer_factory);
-  Network<DenseLayer<10, 5>, DenseLayer<5, 2>> network =
-      Network(LossEnum::MSE, dense1, dense2);
+  AdamFactory adam_factory;
+  SGDFactory sgd_factory;
+  DenseLayer<10, 5> dense1 =
+      DenseLayer<10, 5>(params1, ActivationFunctionEnum::Identity);
+  DenseLayer<5, 2> dense2 =
+      DenseLayer<5, 2>(params2, ActivationFunctionEnum::Identity);
+  Network<DenseLayer<10, 5>, DenseLayer<5, 2>> adam_network =
+      Network(adam_factory, LossEnum::MSE, dense1, dense2);
 
   Vector<10> input_elem = {0.5, 0.5, 1, 1, 1.5, 1.5, 2, 2, 2.5, 2.5};
   StaticArray<1, Vector<10>> input_batch = {input_elem};
@@ -47,34 +49,44 @@ public:
 };
 
 TEST_F(NetworkTestFixture, LossTypeDefined) {
-  LossEnum lossType = network.get_loss_type();
+  LossEnum lossType = adam_network.get_loss_type();
   EXPECT_EQ(lossType, LossEnum::MSE);
 }
 
 TEST_F(NetworkTestFixture, NetworkJson) {
   AdamFactory other_factory;
 
-  DenseLayer<10, 5> dense1_other(ActivationFunctionEnum::Sigmoid,
-                                 other_factory);
-  DenseLayer<5, 2> dense2_other(ActivationFunctionEnum::ReLu, other_factory);
+  DenseLayer<10, 5> dense1_other(ActivationFunctionEnum::Sigmoid);
+  DenseLayer<5, 2> dense2_other(ActivationFunctionEnum::ReLu);
   Network<DenseLayer<10, 5>, DenseLayer<5, 2>> other_network(
-      LossEnum::CrossEntropy, dense1_other, dense2_other);
+      other_factory, LossEnum::CrossEntropy, dense1_other, dense2_other);
   std::string filename = "network_json_test.json";
-  network.save(filename);
+  adam_network.save(filename);
   other_network.load(filename);
 
-  EXPECT_EQ(other_network.get_loss_type(), network.get_loss_type());
+  EXPECT_EQ(other_network.get_loss_type(), adam_network.get_loss_type());
   // Smoke test as of now: compiles and gets the correct loss type
 }
 
+TEST_F(NetworkTestFixture, LoadingSgdJsonIntoAdamNetworkThrows) {
+  DenseLayer<10, 5> dense1_copy = DenseLayer(dense1);
+  DenseLayer<5, 2> dense2_copy = DenseLayer(dense2);
+  Network<DenseLayer<10, 5>, DenseLayer<5, 2>> sgd_network =
+      Network(sgd_factory, LossEnum::MSE, dense1_copy, dense2_copy);
+  const std::string filename = "network_json_test.json";
+  sgd_network.save(filename);
+
+  EXPECT_ANY_THROW(adam_network.load(filename));
+}
+
 TEST_F(NetworkTestFixture, PredictsSingleInput) {
-  const Vector<2> actual = network.predict(input_elem);
+  const Vector<2> actual = adam_network.predict(input_elem);
   EXPECT_EQ(actual, output_elem);
 }
 
 TEST_F(NetworkTestFixture, PredictBatchInput) {
   const StaticArray<1, Vector<2>> actual_batched =
-      network.predict_vectorized(input_batch);
+      adam_network.predict_vectorized(input_batch);
   EXPECT_EQ(actual_batched[0], output_batch[0]);
   EXPECT_EQ(actual_batched.size(), 1);
 }

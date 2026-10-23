@@ -2,13 +2,12 @@
 #define ML_PARAMSLAYER_H
 #include "../activation/ActivationFactory.h"
 #include "../activation/ActivationFunction.h"
-#include "../lr_optimizer/Adam.h"
+#include "../lr_optimizer/Optimizer.h"
 #include "LayerConcepts.h"
 #include <concepts>
 #include <cstddef>
+#include <memory>
 #include <nlohmann/json.hpp>
-#include <string>
-#include <utility>
 
 #define OUTPUT LayerOutput<Derived, Input>
 #define CACHE LayerCache<Derived, Input>
@@ -29,22 +28,30 @@ public:
   static constexpr bool has_params = true;
   using Params = Grad;
 
-  explicit ParamsLayer(const ActivationFunctionEnum activation_function_type,
-                       const AdamFactory &optimizer_factory)
-      : activation_function(
+  explicit ParamsLayer(const ActivationFunctionEnum activation_function_type)
+      : activation_function_type(activation_function_type),
+        activation_function(
             ActivationFactory::create(activation_function_type)),
-        params(Grad::random()), gradient(Grad::zeros()),
-        optimizer_factory(optimizer_factory),
-        optimizer(optimizer_factory.build(params)) {}
+        params(Grad::random()), gradient(Grad::zeros()) {}
 
   explicit ParamsLayer(Grad &params,
-                       const ActivationFunctionEnum activation_function_type,
-                       const AdamFactory &optimizer_factory)
-      : activation_function(
+                       const ActivationFunctionEnum activation_function_type)
+      : activation_function_type(activation_function_type),
+        activation_function(
             ActivationFactory::create(activation_function_type)),
-        params(params), gradient(Grad::zeros()),
-        optimizer_factory(optimizer_factory),
-        optimizer(optimizer_factory.build(params)) {}
+        params(params), gradient(Grad::zeros()) {}
+
+  explicit ParamsLayer(const ParamsLayer &other) {
+    params = other.params;
+    activation_function_type = other.activation_function_type;
+    activation_function =
+        ActivationFactory::create(other.activation_function_type);
+  }
+
+  void
+  set_optimizer(const OptimizerFactoryFor<Params> auto &optimizer_factory) {
+    this->optimizer = optimizer_factory.build(params);
+  }
 
   template <typename Input>
   auto forward_no_cache(const Input &inp) const
@@ -102,8 +109,6 @@ public:
                                                const auto &cache)
     requires ComputesDeltaCached<Derived, Input, Grad>
   {
-    // const StaticArray<2, Vector<2> >&;
-    // const StaticSpan<2, const Vector<2> >&
     static_assert(
         std::same_as<const StaticArray<SIZE, OUTPUT> &, decltype(delta)>,
         DELTA_ERROR);
@@ -135,14 +140,14 @@ public:
 
   void apply_change(const size_t &normalize_by) {
     gradient /= static_cast<Grad::value_type>(normalize_by);
-    optimizer.adjust(gradient);
+    optimizer->adjust(gradient);
     gradient = Grad::zeros();
   }
 
   friend void to_json(json &j, const ParamsLayer &layer) {
     j = json{{"params", layer.params},
              {"activation_function", layer.activation_function->get_type()},
-             {"optimizer", layer.optimizer}};
+             {"optimizer", *layer.optimizer}};
   }
 
   friend void from_json(const json &j, ParamsLayer &layer) {
@@ -150,10 +155,11 @@ public:
     const auto activation_type =
         j.at("activation_function").get<ActivationFunctionEnum>();
     layer.activation_function = ActivationFactory::create(activation_type);
-    j.at("optimizer").get_to(layer.optimizer);
+    j.at("optimizer").get_to(*layer.optimizer);
   }
 
 protected:
+  ActivationFunctionEnum activation_function_type;
   std::unique_ptr<ActivationFunction> activation_function;
   Grad params;
   Grad gradient;
@@ -161,8 +167,7 @@ protected:
   using value_type = double;
 
 private:
-  AdamFactory optimizer_factory;
-  Adam<Grad> optimizer;
+  std::unique_ptr<Optimizer<Grad>> optimizer;
 };
 
 #undef OUTPUT

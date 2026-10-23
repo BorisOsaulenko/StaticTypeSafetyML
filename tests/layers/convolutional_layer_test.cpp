@@ -33,8 +33,7 @@ protected:
   static const inline Vector<2> bias = {1, -1};
 
   Conv::Params params{kernels, bias};
-  Conv convolutional_layer{params, ActivationFunctionEnum::Identity,
-                           optimizer_factory};
+  Conv convolutional_layer{params, ActivationFunctionEnum::Identity};
 };
 
 TEST_F(ConvolutionalTest, ForwardPass) {

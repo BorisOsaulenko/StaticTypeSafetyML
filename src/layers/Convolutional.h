@@ -34,16 +34,13 @@ private:
       AlgebraicTuple<StaticArray<num_ker, KERNEL>, Vector<num_ker>>;
 
 public:
-  Convolutional(ActivationFunctionEnum activation_function_type,
-                const AdamFactory &optimizer_factory)
-      : ParamsLayer<Convolutional, Gradient>(activation_function_type,
-                                             optimizer_factory) {}
+  Convolutional(ActivationFunctionEnum activation_function_type)
+      : ParamsLayer<Convolutional, Gradient>(activation_function_type) {}
 
   Convolutional(Gradient params,
-                ActivationFunctionEnum activation_function_type,
-                const AdamFactory &optimizer_factory)
-      : ParamsLayer<Convolutional, Gradient>(params, activation_function_type,
-                                             optimizer_factory) {}
+                ActivationFunctionEnum activation_function_type)
+      : ParamsLayer<Convolutional, Gradient>(params, activation_function_type) {
+  }
 
   StaticArray<num_ker, Kernel> get_kernels() const {
     return this->params.template get<0>();

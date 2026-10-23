@@ -2,6 +2,8 @@
 #define ML_OPTIMIZER_H
 
 #include "../matrix/Algebraic.h"
+#include <concepts>
+#include <memory>
 #include <nlohmann/json.hpp>
 
 template <Algebraic Shape> class Optimizer {
@@ -32,5 +34,21 @@ protected:
   Shape &params;
   double learning_rate;
 };
+
+template <typename F, typename Shape>
+concept OptimizerFactoryFor =
+    Algebraic<Shape> && requires(const F &f, Shape &params) {
+      {
+        f.build(params)
+      } -> std::convertible_to<std::unique_ptr<Optimizer<Shape>>>;
+    };
+
+// template <typename F>
+// concept OptimizerFactory =
+//     requires(const F &f, Algebraic &params) {
+//       {
+//         f.build(params)
+//       } -> std::convertible_to<std::unique_ptr<Optimizer<Shape>>>;
+//     };
 
 #endif // ML_OPTIMIZER_H

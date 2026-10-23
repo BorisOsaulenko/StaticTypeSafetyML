@@ -1,6 +1,7 @@
 #ifndef ML_ADAM_H
 #define ML_ADAM_H
 #include "Optimizer.h"
+#include <memory>
 #include <nlohmann/json.hpp>
 
 template <Algebraic Shape> class Adam : public Optimizer<Shape> {
@@ -70,8 +71,10 @@ public:
       : learning_rate(learning_rate), beta1(beta1), beta2(beta2),
         epsilon(epsilon) {}
 
-  template <Algebraic T> Adam<T> build(T &initial_params) const {
-    return Adam<T>(initial_params, learning_rate, beta1, beta2, epsilon);
+  template <Algebraic T>
+  std::unique_ptr<Optimizer<T>> build(T &initial_params) const {
+    return std::make_unique<Adam<T>>(initial_params, learning_rate, beta1,
+                                     beta2, epsilon);
   }
 
 private:

@@ -1,6 +1,7 @@
 #include "../../src/lr_optimizer/Adam.h"
 #include "../../src/matrix/Matrix.h"
 #include <gtest/gtest.h>
+#include <memory>
 #include <nlohmann/json.hpp>
 
 constexpr double kTolerance = 1e-6;
@@ -19,9 +20,9 @@ protected:
 TEST_F(AdamTest, FactoryDefaultParameters) {
   const AdamFactory factory;
   Vector<3> params = {1.0, 2.0, 3.0};
-  const Adam<Vector<3>> adam = factory.build(params);
+  const auto adam = factory.build(params);
 
-  EXPECT_EQ(adam.get_learning_rate(), default_lr);
+  EXPECT_EQ(adam->get_learning_rate(), default_lr);
 }
 
 TEST_F(AdamTest, FactoryCustomParameters) {
@@ -33,9 +34,9 @@ TEST_F(AdamTest, FactoryCustomParameters) {
   const AdamFactory factory(custom_lr, custom_beta1, custom_beta2,
                             custom_epsilon);
   Vector<3> params = {1.0, 2.0, 3.0};
-  const Adam<Vector<3>> adam = factory.build(params);
+  const auto adam = factory.build(params);
 
-  EXPECT_EQ(adam.get_learning_rate(), custom_lr);
+  EXPECT_EQ(adam->get_learning_rate(), custom_lr);
 }
 
 TEST_F(AdamTest, AdjustVector_SingleStep) {
@@ -43,10 +44,10 @@ TEST_F(AdamTest, AdjustVector_SingleStep) {
   Vector<3> gradient = {0.1, 0.2, 0.3};
 
   AdamFactory factory(0.001, 0.9, 0.999, 1e-8);
-  Adam<Vector<3>> adam = factory.build(params);
+  auto adam = factory.build(params);
 
   const Vector<3> initial_params = params;
-  adam.adjust(gradient);
+  adam->adjust(gradient);
 
   EXPECT_NE(params[0], initial_params[0]);
   EXPECT_NE(params[1], initial_params[1]);
@@ -61,12 +62,12 @@ TEST_F(AdamTest, AdjustVector_MultipleSteps) {
   Vector<3> gradient = {0.1, 0.2, 0.3};
 
   AdamFactory factory(0.001, 0.9, 0.999, 1e-8);
-  Adam<Vector<3>> adam = factory.build(params);
+  auto adam = factory.build(params);
 
   Vector<3> prev_params = params;
 
   for (int i = 0; i < 5; ++i) {
-    adam.adjust(gradient);
+    adam->adjust(gradient);
     EXPECT_NE(params, prev_params) << "Parameters should change at step " << i;
     prev_params = params;
   }
@@ -77,10 +78,10 @@ TEST_F(AdamTest, AdjustMatrix_SingleStep) {
   Matrix<2, 2> gradient = {0.1, 0.2, 0.3, 0.4};
 
   AdamFactory factory(0.001, 0.9, 0.999, 1e-8);
-  Adam<Matrix<2, 2>> adam = factory.build(params);
+  auto adam = factory.build(params);
 
   const Matrix<2, 2> initial_params = params;
-  adam.adjust(gradient);
+  adam->adjust(gradient);
 
   for (int i = 0; i < 2; ++i) {
     for (int j = 0; j < 2; ++j) {
@@ -98,10 +99,10 @@ TEST_F(AdamTest, ZeroGradient_NoParameterUpdate) {
   Vector<3> gradient = {0.0, 0.0, 0.0};
 
   AdamFactory factory(0.001, 0.9, 0.999, 1e-8);
-  Adam<Vector<3>> adam = factory.build(params);
+  auto adam = factory.build(params);
 
   const Vector<3> initial_params = params;
-  adam.adjust(gradient);
+  adam->adjust(gradient);
 
   for (int i = 0; i < 3; ++i) {
     EXPECT_NEAR(params[i], initial_params[i], kTolerance);
@@ -113,10 +114,10 @@ TEST_F(AdamTest, PositiveAndNegativeGradients) {
   Vector<3> gradient = {-0.1, 0.2, -0.3};
 
   AdamFactory factory(0.001, 0.9, 0.999, 1e-8);
-  Adam<Vector<3>> adam = factory.build(params);
+  auto adam = factory.build(params);
 
   const Vector<3> initial_params = params;
-  adam.adjust(gradient);
+  adam->adjust(gradient);
 
   EXPECT_GT(params[0], initial_params[0]);
   EXPECT_LT(params[1], initial_params[1]);
@@ -131,11 +132,11 @@ TEST_F(AdamTest, LargerLearningRateHasLargerEffect) {
   AdamFactory factory1(0.001, 0.9, 0.999, 1e-8);
   AdamFactory factory2(0.01, 0.9, 0.999, 1e-8);
 
-  Adam<Vector<3>> adam1 = factory1.build(params1);
-  Adam<Vector<3>> adam2 = factory2.build(params2);
+  auto adam1 = factory1.build(params1);
+  auto adam2 = factory2.build(params2);
 
-  adam1.adjust(gradient);
-  adam2.adjust(gradient);
+  adam1->adjust(gradient);
+  adam2->adjust(gradient);
 
   for (int i = 0; i < 3; ++i) {
     EXPECT_LT(params2[i], params1[i]);
@@ -147,10 +148,10 @@ TEST_F(AdamTest, ConsistentConvergence) {
   Vector<2> gradient = {1.0, 1.0};
 
   AdamFactory factory(0.1, 0.9, 0.999, 1e-8);
-  Adam<Vector<2>> adam = factory.build(params);
+  auto adam = factory.build(params);
 
   for (int i = 0; i < 100; ++i) {
-    adam.adjust(gradient);
+    adam->adjust(gradient);
   }
 
   EXPECT_LT(params[0], 10.0);
@@ -162,19 +163,19 @@ TEST_F(AdamTest, SerializationDeserialization_Vector) {
   Vector<3> gradient = {0.1, 0.2, 0.3};
 
   AdamFactory factory(0.001, 0.9, 0.999, 1e-8);
-  Adam<Vector<3>> adam = factory.build(params);
+  auto adam = factory.build(params);
 
-  adam.adjust(gradient);
-  adam.adjust(gradient);
+  adam->adjust(gradient);
+  adam->adjust(gradient);
 
   json j;
-  to_json(j, adam);
+  to_json(j, *adam);
 
   Vector<3> params_restored = {1.0, 2.0, 3.0};
-  Adam<Vector<3>> adam_restored = factory.build(params_restored);
-  from_json(j, adam_restored);
+  auto adam_restored = factory.build(params_restored);
+  from_json(j, *adam_restored);
 
-  EXPECT_NEAR(adam.get_learning_rate(), adam_restored.get_learning_rate(),
+  EXPECT_NEAR(adam->get_learning_rate(), adam_restored->get_learning_rate(),
               kTolerance);
 }
 
@@ -183,18 +184,18 @@ TEST_F(AdamTest, SerializationDeserialization_Matrix) {
   Matrix<2, 2> gradient = {0.1, 0.2, 0.3, 0.4};
 
   AdamFactory factory(0.001, 0.9, 0.999, 1e-8);
-  Adam<Matrix<2, 2>> adam = factory.build(params);
+  auto adam = factory.build(params);
 
-  adam.adjust(gradient);
-  adam.adjust(gradient);
+  adam->adjust(gradient);
+  adam->adjust(gradient);
 
   json j;
-  to_json(j, adam);
+  to_json(j, *adam);
 
   Matrix<2, 2> params_restored = {1.0, 2.0, 3.0, 4.0};
-  Adam<Matrix<2, 2>> adam_restored = factory.build(params_restored);
-  from_json(j, adam_restored);
+  auto adam_restored = factory.build(params_restored);
+  from_json(j, *adam_restored);
 
-  EXPECT_NEAR(adam.get_learning_rate(), adam_restored.get_learning_rate(),
+  EXPECT_NEAR(adam->get_learning_rate(), adam_restored->get_learning_rate(),
               kTolerance);
 }

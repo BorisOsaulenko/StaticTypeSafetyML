@@ -43,9 +43,16 @@ template <typename... Layers> class Network {
       std::index_sequence_for<Layers...>{}));
 
 public:
-  explicit Network(const LossEnum loss_type, Layers &...layers)
+  Network(const auto &optimizer_factory, const LossEnum loss_type,
+          Layers &...layers)
       : layers(layers...), loss_type(loss_type) {
     rng.seed(std::random_device{}());
+    constexpr_for<sizeof...(Layers)>([&](auto I) {
+      if constexpr (isParamsLayer<Layers...[I]>()) {
+        Layers...[I] &layer = std::get<I>(this->layers);
+        layer.set_optimizer(optimizer_factory);
+      }
+    });
   }
 
   template <typename Input>
@@ -126,7 +133,7 @@ public:
   friend void to_json(json &j, const Network &network) {
     json layers_array = json::array();
     to_json_recursive<0>(layers_array, network.layers);
-    j = json{{"layers", layers_array}, {"loss_type", network.loss_type}};
+    j = json{{"loss_type", network.loss_type}, {"layers", layers_array}};
   }
 
   friend void from_json(const json &j, Network &network) {
@@ -165,7 +172,8 @@ private:
   static void from_json_recursive(const json &layers_json,
                                   std::tuple<Layers &...> &layers) {
     if constexpr (I < sizeof...(Layers)) {
-      if constexpr (auto &layer = std::get<I>(layers); layer.has_params) {
+      if constexpr (isParamsLayer<Layers...[I]>()) {
+        Layers...[I] &layer = std::get<I>(layers);
         layers_json.at(A).get_to(layer);
         return from_json_recursive<I + 1, A + 1>(layers_json, layers);
       }

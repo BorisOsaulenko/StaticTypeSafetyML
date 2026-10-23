@@ -25,6 +25,7 @@ template <typename Derived> class NoParamsLayer {
 public:
   static constexpr bool has_params = false;
   explicit NoParamsLayer() = default;
+  NoParamsLayer(const NoParamsLayer &other) = default;
 
   template <typename Input>
   auto forward_no_cache(const Input &inp) const REQUIRES_IMPL {

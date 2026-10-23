@@ -30,7 +30,7 @@ Layer make_layer() {
       Vector<2>{0.1, -0.2},
   };
   const AdamFactory optimizer_factory;
-  return Layer{params, ActivationFunctionEnum::Sigmoid, optimizer_factory};
+  return Layer{params, ActivationFunctionEnum::Sigmoid};
 }
 
 } // namespace

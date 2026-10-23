@@ -13,8 +13,7 @@ TEST(LinearRegression, LearnsExpectedWeightsAndBias) {
   Vector<1>::set_seed(42);
 
   const AdamFactory optimizer_factory(0.04);
-  auto layer =
-      DenseLayer<3, 1>(ActivationFunctionEnum::Identity, optimizer_factory);
+  auto layer = DenseLayer<3, 1>(ActivationFunctionEnum::Identity);
 
   const StaticArray<4, Vector<3>> inputs = {
       Vector<3>({1.0, 0.0, 0.0}),
@@ -33,10 +32,9 @@ TEST(LinearRegression, LearnsExpectedWeightsAndBias) {
   const StaticSpan<4, const Vector<3>> inputs_span(inputs);
   const StaticSpan<4, const Vector<1>> targets_span(targets);
 
-  Network network(LossEnum::MSE, layer);
+  Network network(optimizer_factory, LossEnum::MSE, layer);
 
-  network.train<4>(inputs_span, targets_span, inputs_span, targets_span, 1000,
-                   &std::cout);
+  network.train<4>(inputs_span, targets_span, inputs_span, targets_span, 1000);
   const auto expected_weights = Matrix<1, 3>({2.0, 1.0, 0.5});
   const auto expected_bias_vector = Vector<1>({5.0});
 

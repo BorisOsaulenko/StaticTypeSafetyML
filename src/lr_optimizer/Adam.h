@@ -1,6 +1,7 @@
 #ifndef ML_ADAM_H
 #define ML_ADAM_H
 #include "Optimizer.h"
+#include <nlohmann/json.hpp>
 
 template <Algebraic Shape> class Adam : public Optimizer<Shape> {
   using json = nlohmann::json;
@@ -28,26 +29,26 @@ public:
     this->params -= m_hat / (v_hat.sqrt() + epsilon) * this->learning_rate;
   }
 
-  friend void to_json(nlohmann::json &j, const Adam &adam) {
-    j = json{{"beta1", adam.beta1},
-             {"currBeta1", adam.currBeta1},
-             {"beta2", adam.beta2},
-             {"currBeta2", adam.currBeta2},
-             {"epsilon", adam.epsilon},
-             {"t", adam.t},
-             {"m", adam.m},
-             {"v", adam.v}};
+  json convert_to_json() const {
+    return {{"beta1", beta1},
+            {"currBeta1", currBeta1},
+            {"beta2", beta2},
+            {"currBeta2", currBeta2},
+            {"epsilon", epsilon},
+            {"t", t},
+            {"m", m},
+            {"v", v}};
   }
 
-  friend void from_json(const nlohmann::json &j, Adam &adam) {
-    j.at("beta1").get_to(adam.beta1);
-    j.at("currBeta1").get_to(adam.currBeta1);
-    j.at("beta2").get_to(adam.beta2);
-    j.at("currBeta2").get_to(adam.currBeta2);
-    j.at("epsilon").get_to(adam.epsilon);
-    j.at("t").get_to(adam.t);
-    j.at("m").get_to(adam.m);
-    j.at("v").get_to(adam.v);
+  void convert_from_json(const nlohmann::json &j) {
+    j.at("beta1").get_to(beta1);
+    j.at("currBeta1").get_to(currBeta1);
+    j.at("beta2").get_to(beta2);
+    j.at("currBeta2").get_to(currBeta2);
+    j.at("epsilon").get_to(epsilon);
+    j.at("t").get_to(t);
+    j.at("m").get_to(m);
+    j.at("v").get_to(v);
   }
 
 private:

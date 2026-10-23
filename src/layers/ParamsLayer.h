@@ -8,6 +8,7 @@
 #include <cstddef>
 #include <nlohmann/json.hpp>
 #include <string>
+#include <utility>
 
 #define OUTPUT LayerOutput<Derived, Input>
 #define CACHE LayerCache<Derived, Input>
@@ -33,6 +34,7 @@ public:
       : activation_function(
             ActivationFactory::create(activation_function_type)),
         params(Grad::random()), gradient(Grad::zeros()),
+        optimizer_factory(optimizer_factory),
         optimizer(optimizer_factory.build(params)) {}
 
   explicit ParamsLayer(Grad &params,
@@ -41,6 +43,7 @@ public:
       : activation_function(
             ActivationFactory::create(activation_function_type)),
         params(params), gradient(Grad::zeros()),
+        optimizer_factory(optimizer_factory),
         optimizer(optimizer_factory.build(params)) {}
 
   template <typename Input>
@@ -138,7 +141,8 @@ public:
 
   friend void to_json(json &j, const ParamsLayer &layer) {
     j = json{{"params", layer.params},
-             {"activation_function", layer.activation_function->get_type()}};
+             {"activation_function", layer.activation_function->get_type()},
+             {"optimizer", layer.optimizer}};
   }
 
   friend void from_json(const json &j, ParamsLayer &layer) {
@@ -146,6 +150,7 @@ public:
     const auto activation_type =
         j.at("activation_function").get<ActivationFunctionEnum>();
     layer.activation_function = ActivationFactory::create(activation_type);
+    j.at("optimizer").get_to(layer.optimizer);
   }
 
 protected:
@@ -156,6 +161,7 @@ protected:
   using value_type = double;
 
 private:
+  AdamFactory optimizer_factory;
   Adam<Grad> optimizer;
 };
 

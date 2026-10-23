@@ -2,8 +2,10 @@
 #define ML_GRADIENT_DESCENT
 #include "../matrix/Matrix.h"
 #include "Optimizer.h"
+#include <nlohmann/json.hpp>
 
 template <Algebraic Shape> class SGD : public Optimizer<Shape> {
+  using json = nlohmann::json;
 
 public:
   SGD(Shape &params, double learning_rate)
@@ -12,6 +14,9 @@ public:
   void adjust(const Shape &gradient) override {
     this->params -= gradient * this->learning_rate;
   }
+
+  json convert_to_json() const { return {}; }
+  void convert_from_json(const json &) {}
 };
 
 class SGDFactory {

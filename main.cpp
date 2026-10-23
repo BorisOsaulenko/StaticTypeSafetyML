@@ -21,7 +21,7 @@ template <size_t R> size_t argmax(const Vector<R> &vec) {
 }
 
 int main() {
-  AdamFactory a(0.001);
+  AdamFactory a(0.01);
   constexpr int train = 30000;
   constexpr int test = 5000;
 
@@ -52,7 +52,7 @@ int main() {
   network.load(filename);
   std::cout << "Starting the training\n";
   network.train<400>(train_input, train_expected, validation_input,
-                     validation_expected, 1, &std::cout);
+                     validation_expected, 4, &std::cout);
   network.save(filename);
 
   const auto &train_predicted = network.predict_vectorized(train_input);

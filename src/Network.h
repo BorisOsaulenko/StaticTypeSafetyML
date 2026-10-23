@@ -9,6 +9,7 @@
 #include "matrix/StaticArray.h"
 
 #include <algorithm>
+#include <chrono>
 #include <cstddef>
 #include <fstream>
 #include <iostream>
@@ -176,6 +177,7 @@ private:
   void train_batch(const StaticSpan<TRAIN_SZ, const Input> train_inputs,
                    const StaticSpan<TRAIN_SZ, const OUTPUT> train_expected,
                    std::ostream *log_stream = nullptr) {
+    auto start = std::chrono::steady_clock::now();
     const StaticSpan<BATCH_SZ, const Input> batch_inputs =
         train_inputs.template subspan<CURR_BATCH * BATCH_SZ,
                                       (CURR_BATCH + 1) * BATCH_SZ>();
@@ -193,8 +195,12 @@ private:
     backward_vectorized<sizeof...(Layers) - 1, Input, BATCH_SZ>(delta, caches);
 
     update_layers<0>(BATCH_SZ);
+
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> duration = end - start;
     if (log_stream)
-      *log_stream << "Batch " << CURR_BATCH << " finished." << std::endl;
+      *log_stream << "Batch " << CURR_BATCH
+                  << " finished. Duration: " << duration << std::endl;
   }
 
   template <size_t I, typename T> auto forward_no_cache(T &&input) const {

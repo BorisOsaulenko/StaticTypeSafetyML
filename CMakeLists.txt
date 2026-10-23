@@ -51,6 +51,11 @@ add_executable(hello_test
         tests/lr_optimizer/adam_test.cpp
         tests/linear_regression_test.cpp
 
+        src/layers/Embedding.h
+        src/layers/ParamsLayer.h
+        src/layers/Flatten.h
+        src/layers/AttentionHead.h
+
         src/loss/Loss.h
         src/loss/MSE.h
         src/loss/LossFactory.h
@@ -59,13 +64,10 @@ add_executable(hello_test
         src/lr_optimizer/Optimizer.h
 
         src/matrix/Algebraic.h
-        src/layers/flatten.h
-        tests/layers/utils.h
         src/matrix/StaticArray.h
-        src/layers/ParamsLayer.h
         src/preprocessing/tokenizer.h
-        src/layers/Embedding.h
-        src/layers/AttentionHead.h
+
+        tests/utils.h
 )
 
 target_link_libraries(hello_test

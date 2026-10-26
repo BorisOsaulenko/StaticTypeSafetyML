@@ -2,6 +2,7 @@
 #include "../../src/layers/Dense.hpp"
 #include "../../src/lr_optimizer/Adam.hpp"
 #include "../../src/lr_optimizer/GradientDescent.hpp"
+
 #include <gtest/gtest.h>
 
 class NetworkTestFixture : public testing::Test {

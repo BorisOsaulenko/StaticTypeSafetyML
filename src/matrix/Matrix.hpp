@@ -5,6 +5,7 @@
 
 #include <cassert>
 #include <cstddef>
+#include <initializer_list>
 #include <nlohmann/json.hpp>
 #include <ostream>
 #include <random>
@@ -248,6 +249,21 @@ public:
     size_t i = 0;
     for (const auto &elem : init_list) {
       this->data_[i++] = elem;
+    }
+  }
+
+  Matrix(std::initializer_list<std::initializer_list<value_type>> init_list) {
+    const size_t size = init_list.size();
+    assert(size > 0);
+    const size_t firstSize = init_list[0].size();
+    assert(size * firstSize == R * C);
+    for (size_t i = 1; i < size; i++)
+      assert(init_list[i].size() == firstSize);
+
+    for (size_t r = 0; r < size; r++) {
+      for (size_t c = 0; c < firstSize; c++) {
+        this->data_[r * size + c] = init_list[r][c];
+      }
     }
   }
 

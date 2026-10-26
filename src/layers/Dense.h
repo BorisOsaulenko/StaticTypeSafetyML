@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../activation/ActivationFunction.h"
-#include "../lr_optimizer/Adam.h"
 #include "../matrix/AlgebraicTuple.h"
 #include "../matrix/Matrix.h"
 #include "LayerConcepts.h"

@@ -35,6 +35,7 @@ public:
     OUTPUT result;
     for (size_t embIdx = 0; embIdx < EmbeddingDim; ++embIdx) {
       for (size_t tokenIdx = 0; tokenIdx < InputLength; ++tokenIdx) {
+        assert(inp[tokenIdx] < TokenAmt);
         result[tokenIdx, embIdx] = this->params[inp[tokenIdx], embIdx];
       }
     }
@@ -53,10 +54,10 @@ public:
     Grad grad = Grad::zeros();
     for (size_t tokenIdx = 0; tokenIdx < InputLength; ++tokenIdx) {
       for (size_t colIdx = 0; colIdx < EmbeddingDim; ++colIdx) {
-        grad[cache.a_prev[tokenIdx]][colIdx] += delta[tokenIdx][colIdx];
+        grad[cache.a_prev[tokenIdx], colIdx] += delta[tokenIdx, colIdx];
       }
     }
-    return {INPUT::zeros(), grad};
+    return {INPUT{}, grad};
   }
 };
 

@@ -33,8 +33,8 @@ public:
                       ActivationFunctionEnum activation_function_type)
       : ParamsLayer<DenseLayer, Grad>(params, activation_function_type) {}
 
-  Weights get_weights() const { return this->params.template get<0>(); }
-  Bias get_bias() const { return this->params.template get<1>(); }
+  const Weights &get_weights() const { return this->params.template get<0>(); }
+  const Bias &get_bias() const { return this->params.template get<1>(); }
 
   Weights get_weights_gradients() const {
     return this->gradient.template get<0>();

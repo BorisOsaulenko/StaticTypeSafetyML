@@ -7,7 +7,7 @@
 #include <cstddef>
 
 #define LENGTH_TEMPLATED template <size_t InputLength>
-#define INPUT StaticSpan<InputLength, size_t>
+#define INPUT StaticArray<InputLength, size_t>
 #define OUTPUT Matrix<InputLength, EmbeddingDim>
 #define CACHE Cache<InputLength>
 
@@ -15,8 +15,6 @@ template <size_t TokenAmt, size_t EmbeddingDim>
 class Embedding : public ParamsLayer<Embedding<TokenAmt, EmbeddingDim>,
                                      Matrix<TokenAmt, EmbeddingDim>> {
 
-  LENGTH_TEMPLATED using Input = StaticSpan<InputLength, size_t>;
-  LENGTH_TEMPLATED using Output = Matrix<InputLength, EmbeddingDim>;
   using Grad = Matrix<TokenAmt, EmbeddingDim>;
 
   LENGTH_TEMPLATED struct Cache {
@@ -35,6 +33,7 @@ public:
     OUTPUT result;
     for (size_t embIdx = 0; embIdx < EmbeddingDim; ++embIdx) {
       for (size_t tokenIdx = 0; tokenIdx < InputLength; ++tokenIdx) {
+        assert(inp[tokenIdx] < TokenAmt);
         result[tokenIdx, embIdx] = this->params[inp[tokenIdx], embIdx];
       }
     }
@@ -53,10 +52,10 @@ public:
     Grad grad = Grad::zeros();
     for (size_t tokenIdx = 0; tokenIdx < InputLength; ++tokenIdx) {
       for (size_t colIdx = 0; colIdx < EmbeddingDim; ++colIdx) {
-        grad[cache.a_prev[tokenIdx]][colIdx] += delta[tokenIdx][colIdx];
+        grad[cache.a_prev[tokenIdx], colIdx] += delta[tokenIdx, colIdx];
       }
     }
-    return {INPUT::zeros(), grad};
+    return {INPUT{}, grad};
   }
 };
 

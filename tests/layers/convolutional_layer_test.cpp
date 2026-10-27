@@ -1,4 +1,5 @@
 #include "../../src/layers/Convolutional.h"
+#include "../../src/lr_optimizer/Adam.h"
 #include "../utils.h"
 #include <gtest/gtest.h>
 

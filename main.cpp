@@ -5,6 +5,7 @@
 #include "src/layers/Dense.h"
 #include "src/layers/Flatten.h"
 #include "src/layers/MaxPool2x2.h"
+#include "src/lr_optimizer/Adam.h"
 
 template <size_t R> size_t argmax(const Vector<R> &vec) {
   size_t max_index = 0;

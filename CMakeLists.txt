@@ -46,6 +46,8 @@ add_executable(hello_test
         tests/layers/max_pool_2x2_test.cpp
         tests/layers/flatten_test.cpp
         tests/layers/matrix_test.cpp
+        tests/layers/embedding_test.cpp
+        tests/layers/attention_head_test.cpp
 
         tests/network/network_test.cpp
         tests/lr_optimizer/adam_test.cpp

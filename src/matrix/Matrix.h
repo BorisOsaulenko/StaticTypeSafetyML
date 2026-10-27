@@ -252,18 +252,15 @@ public:
     }
   }
 
-  Matrix(std::initializer_list<std::initializer_list<value_type>> init_list) {
-    const size_t size = init_list.size();
-    assert(size > 0);
-    const size_t firstSize = init_list[0].size();
-    assert(size * firstSize == R * C);
-    for (size_t i = 1; i < size; i++)
-      assert(init_list[i].size() == firstSize);
-
-    for (size_t r = 0; r < size; r++) {
-      for (size_t c = 0; c < firstSize; c++) {
-        this->data_[r * size + c] = init_list[r][c];
-      }
+  Matrix(std::initializer_list<std::initializer_list<value_type>> rows) {
+    assert(rows.size() == R);
+    size_t r = 0;
+    for (const auto &row : rows) {
+      assert(row.size() == C);
+      size_t c = 0;
+      for (const auto &elem : row)
+        this->data_[r * C + c++] = elem;
+      ++r;
     }
   }
 
@@ -431,6 +428,18 @@ public:
   }
 };
 
+template <size_t R, size_t C>
+[[nodiscard]]
+Matrix<R, C> operator*(const double scalar, const Matrix<R, C> &rhs) {
+  Matrix<R, C> result;
+  for (size_t row = 0; row < R; ++row) {
+    for (size_t col = 0; col < C; ++col) {
+      result[row, col] = scalar * rhs[row, col];
+    }
+  }
+  return result;
+}
+
 template <size_t R, size_t C, size_t OtherC>
 [[nodiscard]]
 Matrix<R, OtherC> operator*(const Matrix<R, C> &lhs,
@@ -442,9 +451,9 @@ Matrix<R, OtherC> operator*(const Matrix<R, C> &lhs,
       typename Matrix<R, C>::value_type sum = 0;
 
       for (size_t k = 0; k < C; ++k)
-        sum += lhs(row, k) * rhs(k, col);
+        sum += lhs[row, k] * rhs[k, col];
 
-      result(row, col) = sum;
+      result[row, col] = sum;
     }
   }
 

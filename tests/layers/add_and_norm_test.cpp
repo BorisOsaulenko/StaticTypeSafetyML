@@ -2,7 +2,7 @@
 #include "../../src/layers/AddAndNorm.h"
 #undef protected
 
-#include "../utils.h"
+#include "../utils.hpp"
 #include <gtest/gtest.h>
 
 constexpr double kTolerance = 0.005;

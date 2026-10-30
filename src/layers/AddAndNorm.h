@@ -1,12 +1,12 @@
-#include "../../src/matrix/Matrix.h"
-#include "LayerConcepts.h"
+#include "../../src/matrix/Matrix.hpp"
+#include "LayerConcepts.hpp"
+#include "ParamsLayer.hpp"
 #include <cmath>
 #include <cstddef>
 
 #define PARAMS Matrix<2, Emb> // row 0 for gamma, row 1 for beta
 #define INPUT_LENGTH_TEMPLATED template <size_t R>
 
-#include "ParamsLayer.h"
 template <size_t Emb>
 class AddAndNorm : public ParamsLayer<AddAndNorm<Emb>, PARAMS> {
   INPUT_LENGTH_TEMPLATED struct Cache {

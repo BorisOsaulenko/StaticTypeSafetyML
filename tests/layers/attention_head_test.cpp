@@ -1,8 +1,8 @@
 #define protected public
-#include "../../src/layers/AttentionHead.h"
+#include "../../src/layers/AttentionHead.hpp"
 #undef protected
 
-#include "../utils.h"
+#include "../utils.hpp"
 #include <gtest/gtest.h>
 
 constexpr double kTolerance = 0.005;

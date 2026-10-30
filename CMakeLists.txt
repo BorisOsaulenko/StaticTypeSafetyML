@@ -48,6 +48,7 @@ add_executable(hello_test
         tests/layers/matrix_test.cpp
         tests/layers/embedding_test.cpp
         tests/layers/attention_head_test.cpp
+        tests/layers/add_and_norm_test.cpp
 
         tests/network/network_test.cpp
         tests/lr_optimizer/adam_test.cpp

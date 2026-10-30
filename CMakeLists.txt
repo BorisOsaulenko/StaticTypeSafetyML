@@ -134,19 +134,19 @@ target_include_directories(ML PRIVATE include)
 add_executable(example_mnist
         examples/mnist.cpp
 
-        src/layers/Dense.h
-        src/layers/Convolutional.h
-        src/layers/Flatten.h
-        src/layers/MaxPool2x2.h
+        src/layers/Dense.hpp
+        src/layers/Convolutional.hpp
+        src/layers/Flatten.hpp
+        src/layers/MaxPool2x2.hpp
 
-        src/activation/Sigmoid.h
-        src/lr_optimizer/Adam.h
+        src/activation/Sigmoid.hpp
+        src/lr_optimizer/Adam.hpp
 
-        src/matrix/Matrix.h
-        src/Network.h
-        src/matrix/Algebraic.h
-        src/activation/ActivationFactory.h
-        src/matrix/3DTensor.h
+        src/matrix/Matrix.hpp
+        src/Network.hpp
+        src/matrix/Algebraic.hpp
+        src/activation/ActivationFactory.hpp
+        src/matrix/3DTensor.hpp
 )
 target_link_libraries(example_mnist PRIVATE
         nlohmann_json::nlohmann_json

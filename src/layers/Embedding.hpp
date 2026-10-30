@@ -24,11 +24,14 @@ class Embedding : public ParamsLayer<Embedding<TokenAmt, EmbeddingDim>,
   };
 
 public:
-  Embedding()
-      : ParamsLayer<Embedding, Grad>(ActivationFunctionEnum::Identity) {}
-  Embedding(Grad &params)
-      : ParamsLayer<Embedding, Grad>(params, ActivationFunctionEnum::Identity) {
-  }
+  Embedding(ActivationFunctionEnum activation_function_type,
+            const OptimizerFactoryFor<Grad> auto &optimizer_factory)
+      : ParamsLayer<Embedding, Grad>(activation_function_type,
+                                     optimizer_factory) {}
+  Embedding(Grad &params, ActivationFunctionEnum activation_function_type,
+            const OptimizerFactoryFor<Grad> auto &optimizer_factory)
+      : ParamsLayer<Embedding, Grad>(params, activation_function_type,
+                                     optimizer_factory) {}
 
   LENGTH_TEMPLATED
   OUTPUT compute_z(const INPUT &inp) const {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../activation/ActivationFunction.hpp"
+#include "../lr_optimizer/Adam.hpp"
 #include "../matrix/AlgebraicTuple.hpp"
 #include "../matrix/Matrix.hpp"
 #include "LayerConcepts.hpp"

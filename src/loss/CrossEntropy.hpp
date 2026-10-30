@@ -1,7 +1,7 @@
 #ifndef ML_CROSSENTROPY_H
 #define ML_CROSSENTROPY_H
-#include "../matrix/Algebraic.h"
-#include "Loss.h"
+#include "../matrix/Algebraic.hpp"
+#include "Loss.hpp"
 
 template <Algebraic T> class CrossEntropy : public Loss<T> {
   using Loss<T>::Loss;

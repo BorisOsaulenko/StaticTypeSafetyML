@@ -1,7 +1,7 @@
-#include "../../src/layers/Flatten.h"
-#include "../../src/matrix/3DTensor.h"
-#include "../../src/matrix/Matrix.h"
-#include "../utils.h"
+#include "../../src/layers/Flatten.hpp"
+#include "../../src/matrix/3DTensor.hpp"
+#include "../../src/matrix/Matrix.hpp"
+#include "../utils.hpp"
 
 #include <gtest/gtest.h>
 

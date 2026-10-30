@@ -1,10 +1,10 @@
 #ifndef ML_CONVOLUTIONAL_H
 #define ML_CONVOLUTIONAL_H
-#include "../lr_optimizer/Adam.h"
-#include "../matrix/3DTensor.h"
-#include "../matrix/AlgebraicTuple.h"
-#include "LayerConcepts.h"
-#include "ParamsLayer.h"
+#include "../lr_optimizer/Adam.hpp"
+#include "../matrix/3DTensor.hpp"
+#include "../matrix/AlgebraicTuple.hpp"
+#include "LayerConcepts.hpp"
+#include "ParamsLayer.hpp"
 
 #include <cstddef>
 

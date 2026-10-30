@@ -1,6 +1,6 @@
 #ifndef ML_ADAM_H
 #define ML_ADAM_H
-#include "Optimizer.h"
+#include "Optimizer.hpp"
 #include <memory>
 #include <nlohmann/json.hpp>
 

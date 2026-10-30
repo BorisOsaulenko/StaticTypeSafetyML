@@ -1,6 +1,6 @@
 #ifndef ML_ALGEBRAICARRAY_H
 #define ML_ALGEBRAICARRAY_H
-#include "Algebraic.h"
+#include "Algebraic.hpp"
 
 #include <vector>
 

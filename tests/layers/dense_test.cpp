@@ -1,8 +1,8 @@
 #define protected public
-#include "../../src/layers/Dense.h"
+#include "../../src/layers/Dense.hpp"
 #undef protected
 
-#include "../utils.h"
+#include "../utils.hpp"
 #include <gtest/gtest.h>
 
 namespace {

@@ -1,11 +1,11 @@
 #pragma once
 
-#include "../activation/ActivationFunction.h"
-#include "../lr_optimizer/Adam.h"
-#include "../matrix/AlgebraicTuple.h"
-#include "../matrix/Matrix.h"
-#include "LayerConcepts.h"
-#include "ParamsLayer.h"
+#include "../activation/ActivationFunction.hpp"
+#include "../lr_optimizer/Adam.hpp"
+#include "../matrix/AlgebraicTuple.hpp"
+#include "../matrix/Matrix.hpp"
+#include "LayerConcepts.hpp"
+#include "ParamsLayer.hpp"
 #include <cstddef>
 
 #define INPUT Vector<i>

@@ -1,7 +1,7 @@
-#include "../../src/layers/MaxPool2x2.h"
-#include "../../src/matrix/3DTensor.h"
-#include "../../src/matrix/Matrix.h"
-#include "../utils.h"
+#include "../../src/layers/MaxPool2x2.hpp"
+#include "../../src/matrix/3DTensor.hpp"
+#include "../../src/matrix/Matrix.hpp"
+#include "../utils.hpp"
 #include <gtest/gtest.h>
 
 constexpr double kTolerance = 0.05;

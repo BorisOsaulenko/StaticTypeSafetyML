@@ -1,7 +1,7 @@
 #ifndef ML_OPTIMIZER_H
 #define ML_OPTIMIZER_H
 
-#include "../matrix/Algebraic.h"
+#include "../matrix/Algebraic.hpp"
 #include <concepts>
 #include <memory>
 #include <nlohmann/json.hpp>

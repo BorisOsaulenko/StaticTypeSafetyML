@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../src/matrix/Matrix.h"
+#include "../../src/matrix/Matrix.hpp"
 
 #include <fstream>
 #include <random>

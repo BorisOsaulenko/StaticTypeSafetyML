@@ -1,7 +1,7 @@
 #define protected public
 #include "../../src/layers/Dense.hpp"
 #undef protected
-#include "../../src/lr_optimizer/Adam.h"
+#include "../../src/lr_optimizer/Adam.hpp"
 
 #include "../utils.hpp"
 #include <gtest/gtest.h>

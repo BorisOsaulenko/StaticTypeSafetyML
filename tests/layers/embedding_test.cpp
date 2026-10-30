@@ -1,8 +1,8 @@
 #define protected public
-#include "../../src/layers/Embedding.h"
+#include "../../src/layers/Embedding.hpp"
 #undef protected
 
-#include "../utils.h"
+#include "../utils.hpp"
 #include <gtest/gtest.h>
 
 constexpr double kTolerance = 0.005;
@@ -40,12 +40,12 @@ protected:
 };
 
 TEST_F(EmbeddingLayerTest, ComputesZ) {
-  const auto out = layer.compute_z(input);
+  const auto out = layer.compute_z<4>(input);
   expect_matrix_close(out, output, kTolerance);
 }
 
 TEST_F(EmbeddingLayerTest, ComputesZCached) {
-  const auto cached = layer.compute_z_cached(input);
+  const auto cached = layer.compute_z_cached<4>(input);
   expect_matrix_close(cached.output, output, kTolerance);
 
   for (size_t i = 0; i < 3; i++) {
@@ -54,7 +54,7 @@ TEST_F(EmbeddingLayerTest, ComputesZCached) {
 }
 
 TEST_F(EmbeddingLayerTest, ComputesDelta) {
-  const auto cache = layer.compute_z_cached(input);
+  const auto cache = layer.compute_z_cached<4>(input);
   const auto new_delta = layer.compute_delta(delta, cache.cache);
   const Params expected_gradient = {{0, 0, 0, 0, 0, 0},
                                     {-0.1, -0.1, -0.1, -0.1, -0.1, -0.1},

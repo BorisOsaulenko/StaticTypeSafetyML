@@ -1,5 +1,5 @@
-#include "../../src/lr_optimizer/Adam.h"
-#include "../../src/matrix/Matrix.h"
+#include "../../src/lr_optimizer/Adam.hpp"
+#include "../../src/matrix/Matrix.hpp"
 #include <gtest/gtest.h>
 #include <memory>
 #include <nlohmann/json.hpp>

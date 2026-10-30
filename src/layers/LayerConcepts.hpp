@@ -1,6 +1,6 @@
 #ifndef ML_LAYERCONCEPTS_H
 #define ML_LAYERCONCEPTS_H
-#include "../matrix/Algebraic.h"
+#include "../matrix/Algebraic.hpp"
 
 #include <concepts>
 #include <utility>

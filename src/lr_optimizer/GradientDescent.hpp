@@ -1,7 +1,7 @@
 #ifndef ML_GRADIENT_DESCENT
 #define ML_GRADIENT_DESCENT
 
-#include "Optimizer.h"
+#include "Optimizer.hpp"
 #include <memory>
 #include <nlohmann/json.hpp>
 

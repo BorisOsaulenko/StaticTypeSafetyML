@@ -1,5 +1,5 @@
-#include "../../src/layers/Convolutional.h"
-#include "../utils.h"
+#include "../../src/layers/Convolutional.hpp"
+#include "../utils.hpp"
 #include <gtest/gtest.h>
 
 constexpr double kTolerance = 0.05;

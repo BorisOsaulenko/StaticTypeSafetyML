@@ -1,6 +1,6 @@
 #ifndef ML_IDENTITY_H
 #define ML_IDENTITY_H
-#include "ActivationFunction.h"
+#include "ActivationFunction.hpp"
 
 class Identity : public ActivationFunction {
 public:

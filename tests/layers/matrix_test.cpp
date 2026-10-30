@@ -1,6 +1,6 @@
-#include "../../src/matrix/AlgebraicTuple.h"
-#include "../../src/matrix/Matrix.h"
-#include "../utils.h"
+#include "../../src/matrix/AlgebraicTuple.hpp"
+#include "../../src/matrix/Matrix.hpp"
+#include "../utils.hpp"
 
 #include <cmath>
 #include <gtest/gtest.h>

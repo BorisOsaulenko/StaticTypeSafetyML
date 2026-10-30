@@ -1,8 +1,8 @@
 #ifndef ML_NETWORKCONCEPTS_H
 #define ML_NETWORKCONCEPTS_H
-#include "layers/LayerConcepts.h"
-#include "layers/NoParamsLayer.h"
-#include "layers/ParamsLayer.h"
+#include "layers/LayerConcepts.hpp"
+#include "layers/NoParamsLayer.hpp"
+#include "layers/ParamsLayer.hpp"
 #include <string.h>
 
 template <typename L> constexpr bool isParamsLayer() {

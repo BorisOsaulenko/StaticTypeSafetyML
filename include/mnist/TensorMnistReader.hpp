@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../src/matrix/3DTensor.h"
+#include "../../src/matrix/3DTensor.hpp"
 #include "MnistReaderBase.hpp"
 
 #include <vector>

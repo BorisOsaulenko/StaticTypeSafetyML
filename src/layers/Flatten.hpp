@@ -1,7 +1,7 @@
 #ifndef ML_FLATTEN_H
 #define ML_FLATTEN_H
-#include "../matrix/3DTensor.h"
-#include "NoParamsLayer.h"
+#include "../matrix/3DTensor.hpp"
+#include "NoParamsLayer.hpp"
 
 #define DIM_TEMPLATED template <size_t Ch_in, size_t R_in, size_t C_in>
 #define INPUT Tensor3D<Ch_in, R_in, C_in>

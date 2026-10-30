@@ -1,7 +1,7 @@
 #ifndef ML_MATRIX_H
 #define ML_MATRIX_H
 
-#include "Algebraic.h"
+#include "Algebraic.hpp"
 
 #include <cassert>
 #include <cstddef>

@@ -1,8 +1,8 @@
 #ifndef ML_MAXPOOL2X2_H
 #define ML_MAXPOOL2X2_H
-#include "../matrix/3DTensor.h"
-#include "LayerConcepts.h"
-#include "NoParamsLayer.h"
+#include "../matrix/3DTensor.hpp"
+#include "LayerConcepts.hpp"
+#include "NoParamsLayer.hpp"
 
 #define DIM_TEMPLATED template <size_t Ch_in, size_t R_in, size_t C_in>
 #define REQUIRES_EVEN_DIM requires(R_in % 2 == 0 && C_in % 2 == 0)

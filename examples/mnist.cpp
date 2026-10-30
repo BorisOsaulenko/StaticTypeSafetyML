@@ -1,7 +1,7 @@
 #include "../include/mnist/VectorMnistReader.hpp"
-#include "../src/Network.h"
-#include "../src/layers/Dense.h"
-#include "../src/lr_optimizer/Adam.h"
+#include "../src/Network.hpp"
+#include "../src/layers/Dense.hpp"
+#include "../src/lr_optimizer/Adam.hpp"
 #include <opencv2/opencv.hpp>
 #include <random>
 

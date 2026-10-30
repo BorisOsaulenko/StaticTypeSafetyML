@@ -1,6 +1,6 @@
 #ifndef ML_RELU_H
 #define ML_RELU_H
-#include "ActivationFunction.h"
+#include "ActivationFunction.hpp"
 
 class ReLu : public ActivationFunction {
 public:

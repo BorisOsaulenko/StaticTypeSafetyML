@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../src/matrix/Matrix.h"
-#include "../../src/matrix/StaticArray.h"
+#include "../../src/matrix/Matrix.hpp"
+#include "../../src/matrix/StaticArray.hpp"
 #include "MnistReaderBase.hpp"
 
 #include <vector>
@@ -23,15 +23,13 @@ public:
 
   VectorMnistReader() = default;
 
-  std::pair<StaticArray<train_count, Image>,
-            StaticArray<train_count, Label>>
+  std::pair<StaticArray<train_count, Image>, StaticArray<train_count, Label>>
   read_train_images() {
     return read_images<train_count>(this->train_images_stream,
                                     this->train_labels_stream);
   }
 
-  std::pair<StaticArray<test_count, Image>,
-            StaticArray<test_count, Label>>
+  std::pair<StaticArray<test_count, Image>, StaticArray<test_count, Label>>
   read_test_images() {
     return read_images<test_count>(this->test_images_stream,
                                    this->test_labels_stream);

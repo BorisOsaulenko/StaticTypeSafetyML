@@ -15,6 +15,7 @@
 #include <iostream>
 #include <memory>
 #include <random>
+#include <span>
 #include <tuple>
 #include <utility>
 
@@ -69,17 +70,17 @@ public:
 
   template <size_t SIZE, typename Input>
   [[nodiscard]] StaticArray<SIZE, OUTPUT>
-  predict_vectorized(const StaticSpan<SIZE, const Input> inputs) const
+  predict_vectorized(const std::span<const Input, SIZE> inputs) const
       REQUIRES_LAYER_CONSISTENCY {
     return forward_no_cache_vectorized<0, SIZE, Input>(inputs);
   }
 
   template <size_t BATCH_SZ, size_t TRAIN_SZ, size_t VALIDATION_SZ,
             typename Input>
-  void train(const StaticSpan<TRAIN_SZ, const Input> train_inputs,
-             const StaticSpan<TRAIN_SZ, const OUTPUT> train_expected,
-             const StaticSpan<VALIDATION_SZ, const Input> validation_inputs,
-             const StaticSpan<VALIDATION_SZ, const OUTPUT> validation_expected,
+  void train(const std::span<const Input, TRAIN_SZ> train_inputs,
+             const std::span<const OUTPUT, TRAIN_SZ> train_expected,
+             const std::span<const Input, VALIDATION_SZ> validation_inputs,
+             const std::span<const OUTPUT, VALIDATION_SZ> validation_expected,
              const int &epochs = 10, std::ostream *log_stream = nullptr)
     requires(TRAIN_SZ % BATCH_SZ == 0)
   {
@@ -119,8 +120,8 @@ public:
 
   template <size_t SIZE, typename Input>
   [[nodiscard]] double
-  mean_loss(const StaticSpan<SIZE, const Input> &inputs,
-            const StaticSpan<SIZE, const OUTPUT> &expected) {
+  mean_loss(const std::span<const Input, SIZE> &inputs,
+            const std::span<const OUTPUT, SIZE> &expected) {
     std::unique_ptr<Loss<OUTPUT>> loss = LossFactory::create<OUTPUT>(loss_type);
     const StaticArray<SIZE, OUTPUT> predictions = predict_vectorized(inputs);
     const Vector<SIZE> losses = loss->compute(predictions, expected);
@@ -182,16 +183,14 @@ private:
   }
 
   template <size_t CURR_BATCH, size_t TRAIN_SZ, size_t BATCH_SZ, typename Input>
-  void train_batch(const StaticSpan<TRAIN_SZ, const Input> train_inputs,
-                   const StaticSpan<TRAIN_SZ, const OUTPUT> train_expected,
+  void train_batch(const std::span<const Input, TRAIN_SZ> train_inputs,
+                   const std::span<const OUTPUT, TRAIN_SZ> train_expected,
                    std::ostream *log_stream = nullptr) {
     auto start = std::chrono::steady_clock::now();
-    const StaticSpan<BATCH_SZ, const Input> batch_inputs =
-        train_inputs.template subspan<CURR_BATCH * BATCH_SZ,
-                                      (CURR_BATCH + 1) * BATCH_SZ>();
-    const StaticSpan<BATCH_SZ, const OUTPUT> batch_expected =
-        train_expected.template subspan<CURR_BATCH * BATCH_SZ,
-                                        (CURR_BATCH + 1) * BATCH_SZ>();
+    const std::span<const Input, BATCH_SZ> batch_inputs =
+        train_inputs.template subspan<CURR_BATCH * BATCH_SZ, BATCH_SZ>();
+    const std::span<const OUTPUT, BATCH_SZ> batch_expected =
+        train_expected.template subspan<CURR_BATCH * BATCH_SZ, BATCH_SZ>();
 
     LayerCaches<BATCH_SZ, Input> caches;
     std::unique_ptr<Loss<OUTPUT>> loss = LossFactory::create<OUTPUT>(loss_type);
@@ -223,7 +222,7 @@ private:
 
   template <size_t I, size_t SIZE, typename Input>
   StaticArray<SIZE, OUTPUT> forward_no_cache_vectorized(
-      const StaticSpan<SIZE, const LayerInputT<I, Input, Layers...>> &inputs)
+      const std::span<const LayerInputT<I, Input, Layers...>, SIZE> &inputs)
       const {
     auto &layer = std::get<I>(layers);
     const auto out = layer.forward_no_cache_vectorized(inputs);
@@ -231,7 +230,7 @@ private:
     if constexpr (I == sizeof...(Layers) - 1)
       return out;
     else
-      return forward_no_cache_vectorized<I + 1, SIZE, Input>(StaticSpan(out));
+      return forward_no_cache_vectorized<I + 1, SIZE, Input>(out);
   }
 
   template <size_t I, typename Input, size_t SIZE>
@@ -239,19 +238,17 @@ private:
   forward_vectorized(const StaticArray<SIZE, ITH_LAYER_INPUT> inputs,
                      LayerCaches<SIZE, Input> &cache) {
     return forward_vectorized<I, Input, SIZE>(
-        StaticSpan<SIZE, const ITH_LAYER_INPUT>(inputs), cache);
+        std::span<const ITH_LAYER_INPUT, SIZE>(inputs), cache);
   }
 
   template <size_t I, typename Input, size_t SIZE>
   StaticArray<SIZE, OUTPUT>
-  forward_vectorized(const StaticSpan<SIZE, const ITH_LAYER_INPUT> inputs,
+  forward_vectorized(const std::span<const ITH_LAYER_INPUT, SIZE> inputs,
                      LayerCaches<SIZE, Input> &cache) {
     auto &layer = std::get<I>(layers);
 
     const StaticArray<SIZE, ITH_LAYER_OUTPUT> cachedOutput =
-        layer.forward_vectorized(
-            StaticSpan<SIZE, const ITH_LAYER_INPUT>(inputs),
-            cache.template get<I>());
+        layer.forward_vectorized(inputs, cache.template get<I>());
 
     if constexpr (I == sizeof...(Layers) - 1) {
       return cachedOutput;
@@ -261,7 +258,7 @@ private:
   }
 
   template <size_t SIZE, typename T>
-  StaticArray<SIZE, T> copy_span(const StaticSpan<SIZE, const T> &span) {
+  StaticArray<SIZE, T> copy_span(const std::span<const T, SIZE> &span) {
     StaticArray<SIZE, T> result;
     for (size_t i = 0; i < SIZE; ++i) {
       result[i] = span[i];
@@ -294,10 +291,10 @@ private:
   template <size_t train_size, size_t validation_size, typename Input>
   void log_epoch(
       std::ostream *log_stream, const int epoch,
-      const StaticSpan<train_size, const Input> train_inputs,
-      const StaticSpan<train_size, const OUTPUT> train_expected,
-      const StaticSpan<validation_size, const Input> validation_inputs,
-      const StaticSpan<validation_size, const OUTPUT> validation_expected) {
+      const std::span<const Input, train_size> train_inputs,
+      const std::span<const OUTPUT, train_size> train_expected,
+      const std::span<const Input, validation_size> validation_inputs,
+      const std::span<const OUTPUT, validation_size> validation_expected) {
     if (log_stream) {
       *log_stream << "Epoch: " << epoch << std::endl;
       *log_stream << "-------------------" << std::endl;

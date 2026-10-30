@@ -7,24 +7,24 @@
 #include <cstddef>
 
 #define LENGTH_TEMPLATED template <size_t InputLength>
-#define INPUT StaticSpan<InputLength, size_t>
+#define INPUT std::span<size_t, InputLength>
 #define OUTPUT Matrix<InputLength, EmbeddingDim>
 
 template <size_t TokenAmt, size_t EmbeddingDim>
 class Embedding : public ParamsLayer<Embedding<TokenAmt, EmbeddingDim>,
                                      Matrix<TokenAmt, EmbeddingDim>> {
 
-  LENGTH_TEMPLATED using Input = StaticSpan<InputLength, size_t>;
+  LENGTH_TEMPLATED using Input = std::span<size_t, InputLength>;
   LENGTH_TEMPLATED using Output = Matrix<InputLength, EmbeddingDim>;
   using Grad = Matrix<TokenAmt, EmbeddingDim>;
 
 public:
   Embedding(ActivationFunctionEnum activation_function_type,
-            const AdamFactory &optimizer_factory)
+            const OptimizerFactoryFor<Grad> auto &optimizer_factory)
       : ParamsLayer<Embedding, Grad>(activation_function_type,
                                      optimizer_factory) {}
   Embedding(Grad &params, ActivationFunctionEnum activation_function_type,
-            const AdamFactory &optimizer_factory)
+            const OptimizerFactoryFor<Grad> auto &optimizer_factory)
       : ParamsLayer<Embedding, Grad>(params, activation_function_type,
                                      optimizer_factory) {}
 

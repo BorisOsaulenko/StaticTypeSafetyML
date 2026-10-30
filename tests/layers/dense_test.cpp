@@ -40,7 +40,7 @@ TEST(DenseLayerTest, ForwardPassWithSigmoidActivation) {
   StaticArray<2, LayerCache<Layer, Input>> z_cache;
 
   const StaticArray<2, Output> output =
-      layer.forward_vectorized<2>(StaticSpan<2, const Input>(inputs), z_cache);
+      layer.forward_vectorized<2>(inputs, z_cache);
 
   const StaticArray<2, Output> expected = {
       Output{0.1978161114, 0.9918374288},

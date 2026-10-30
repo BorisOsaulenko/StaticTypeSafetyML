@@ -38,7 +38,7 @@ public:
   template <typename Shape, size_t SIZE>
     requires Algebraic<std::remove_const_t<Shape>>
   [[nodiscard]] StaticArray<SIZE, std::remove_const_t<Shape>>
-  activate(const StaticSpan<SIZE, const Shape> &x) {
+  activate(const std::span<const Shape, SIZE> &x) {
     StaticArray<SIZE, std::remove_const_t<Shape>> result;
     for (size_t i = 0; i < SIZE; ++i)
       result[i] = activate(x[i]);
@@ -48,7 +48,7 @@ public:
   template <typename Shape, size_t SIZE>
     requires Algebraic<std::remove_const_t<Shape>>
   [[nodiscard]] StaticArray<SIZE, std::remove_const_t<Shape>>
-  derivative(const StaticSpan<SIZE, const Shape> &x) {
+  derivative(const std::span<const Shape, SIZE> &x) {
     StaticArray<SIZE, std::remove_const_t<Shape>> result;
     for (size_t i = 0; i < SIZE; ++i)
       result[i] = derivative(x[i]);

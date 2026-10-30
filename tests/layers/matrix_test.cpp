@@ -270,32 +270,3 @@ TEST_F(TupleTest, JsonRoundTrip) {
   expect_matrix_close<2, 2>(restored.get<0>(), left.get<0>(), kTolerance);
   expect_matrix_close<2, 2>(restored.get<1>(), left.get<1>(), kTolerance);
 }
-
-class SpanTest : public testing::Test {
-public:
-  Tensor tensor{{Matrix2x2{1, 2, 3, 4}, Matrix2x2{5, 6, 7, 8}}};
-};
-
-TEST_F(SpanTest, ConstructionAndIndexing) {
-  StaticSpan<2, Matrix2x2> span(tensor);
-
-  EXPECT_EQ(span.size(), 2U);
-  expect_matrix_close<2, 2>(span[0], Matrix2x2{1, 2, 3, 4}, kTolerance);
-  expect_matrix_close<2, 2>(span[1], Matrix2x2{5, 6, 7, 8}, kTolerance);
-  EXPECT_EQ(span.begin(), tensor.get_data());
-  EXPECT_EQ(span.end(), tensor.get_data() + 2);
-
-  span[1][0, 0] = 42;
-  EXPECT_DOUBLE_EQ((tensor[1][0, 0]), 42);
-}
-
-TEST_F(SpanTest, SubspanAndPointerConstruction) {
-  StaticSpan<2, Matrix2x2> span(tensor);
-  const auto subspan = span.template subspan<1, 2>();
-  StaticSpan<1, Matrix2x2> pointer_span(tensor.get_data() + 1);
-
-  EXPECT_EQ(subspan.size(), 1U);
-  expect_matrix_close<2, 2>(subspan[0], Matrix2x2{5, 6, 7, 8}, kTolerance);
-  expect_matrix_close<2, 2>(pointer_span[0], Matrix2x2{5, 6, 7, 8}, kTolerance);
-  EXPECT_EQ(subspan.data(), tensor.get_data() + 1);
-}

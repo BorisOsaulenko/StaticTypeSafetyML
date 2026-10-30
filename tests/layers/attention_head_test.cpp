@@ -9,7 +9,7 @@ constexpr double kTolerance = 0.005;
 #define EMB_DIM 6
 #define TOKENS 5
 
-class AttentionHeadTest : public testing::Test {
+class AddAndNormTest : public testing::Test {
 protected:
   using Param = Matrix<4, 2>;
   using Input = Matrix<3, 4>;
@@ -67,12 +67,12 @@ protected:
                                         {-0.191, 0.6, -0.781, 0.962}};
 };
 
-TEST_F(AttentionHeadTest, ComputesZ) {
+TEST_F(AddAndNormTest, ComputesZ) {
   const Output z = attention_head.compute_z(input);
   expect_matrix_close(z, output, kTolerance);
 }
 
-TEST_F(AttentionHeadTest, ComputesZCached) {
+TEST_F(AddAndNormTest, ComputesZCached) {
   const auto [z, cache] = attention_head.compute_z_cached(input);
 
   expect_matrix_close(z, output, kTolerance);
@@ -84,7 +84,7 @@ TEST_F(AttentionHeadTest, ComputesZCached) {
   expect_matrix_close(cache.values_matrix, expected_values, kTolerance);
 }
 
-TEST_F(AttentionHeadTest, ComputeDelta) {
+TEST_F(AddAndNormTest, ComputeDelta) {
   const auto [z, cache] = attention_head.compute_z_cached(input);
   const auto [actual_delta, gradient] =
       attention_head.compute_delta(delta, cache);

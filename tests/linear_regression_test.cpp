@@ -29,8 +29,8 @@ TEST(LinearRegression, LearnsExpectedWeightsAndBias) {
       Vector<1>({8.5}),
   };
 
-  const StaticSpan<4, const Vector<3>> inputs_span(inputs);
-  const StaticSpan<4, const Vector<1>> targets_span(targets);
+  const std::span<const Vector<3>, 4> inputs_span(inputs);
+  const std::span<const Vector<1>, 4> targets_span(targets);
 
   Network network(optimizer_factory, LossEnum::MSE, layer);
 

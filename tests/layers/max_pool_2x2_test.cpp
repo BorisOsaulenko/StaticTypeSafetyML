@@ -30,8 +30,7 @@ TEST_F(MaxPool2x2Test, ForwardPass) {
                                       Matrix<2, 2>{16, 14, 8, 6}};
   const LayerCache<MaxPool2x2, Input> expectedCache = {input[0]};
 
-  const auto output = max_pool_layer.forward_vectorized(
-      StaticSpan<1, const Input>(input), cache);
+  const auto output = max_pool_layer.forward_vectorized(input, cache);
   expect_tensor_close<2, 2, 2>(output[0], expected, kTolerance);
   expect_tensor_close<2, 4, 4>(cache[0].a_previous, expectedCache.a_previous,
                                kTolerance);
@@ -39,7 +38,7 @@ TEST_F(MaxPool2x2Test, ForwardPass) {
 
 TEST_F(MaxPool2x2Test, BackwardPass) {
   StaticArray<1, LayerCache<MaxPool2x2, Input>> cache;
-  max_pool_layer.forward_vectorized(StaticSpan<1, const Input>(input), cache);
+  max_pool_layer.forward_vectorized(input, cache);
 
   const Tensor3D<2, 4, 4> expected = {
       Matrix<4, 4>{0, 0, 0, 0, 0, 1, 0, 2, 0, 0, 0, 0, 0, 3, 0, 4},

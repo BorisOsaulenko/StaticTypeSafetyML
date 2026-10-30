@@ -15,7 +15,7 @@
 
 #define DELTA_ERROR                                                            \
   std::string("Delta has invalid type for ") + LayerToString<Derived> +        \
-      ". Should be StaticSpan<SIZE, LayerOutput<Derived, Input>> &"
+      ". Should be std::span<LayerOutput<Derived, Input>, SIZE> &"
 
 template <typename Derived> class NoParamsLayer {
   const Derived &derived() const { return static_cast<const Derived &>(*this); }
@@ -35,11 +35,11 @@ public:
   SIZE_INP_TEMPLATE
   auto forward_vectorized(const StaticArray<SIZE, Input> &inp,
                           auto &cache) const REQUIRES_IMPL {
-    return forward_vectorized(StaticSpan<SIZE, const Input>(inp), cache);
+    return forward_vectorized(std::span<const Input, SIZE>(inp), cache);
   }
 
   SIZE_INP_TEMPLATE
-  auto forward_vectorized(const StaticSpan<SIZE, const Input> &inp,
+  auto forward_vectorized(const std::span<const Input, SIZE> &inp,
                           auto &cache) const REQUIRES_IMPL {
     static_assert(std::same_as<StaticArray<SIZE, CACHE> &, decltype(cache)>,
                   CACHE_ERROR);
@@ -58,7 +58,7 @@ public:
 
   SIZE_INP_TEMPLATE
   auto forward_no_cache_vectorized(
-      const StaticSpan<SIZE, const Input> &inp) const REQUIRES_IMPL {
+      const std::span<const Input, SIZE> &inp) const REQUIRES_IMPL {
     StaticArray<SIZE, OUTPUT> result;
 
 #pragma omp parallel for
@@ -73,8 +73,6 @@ public:
   StaticArray<SIZE, Input>
   backward_vectorized(const auto &delta,
                       const auto &cache) const REQUIRES_IMPL {
-    // const StaticArray<100, StaticArray<8, Matrix<12, 12> > >&
-    // const StaticSpan<100, const StaticArray<8, Matrix<12, 12> > &
     static_assert(
         std::same_as<const StaticArray<SIZE, OUTPUT> &, decltype(delta)>,
         DELTA_ERROR);

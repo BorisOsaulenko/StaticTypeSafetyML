@@ -223,6 +223,13 @@ public:
     return result;
   }
 
+  operator std::span<RawType, SIZE>() noexcept {
+    return std::span<RawType, SIZE>(data.data(), SIZE);
+  }
+  operator std::span<const RawType, SIZE>() const noexcept {
+    return std::span<const RawType, SIZE>(data.data(), SIZE);
+  }
+
   Type *get_data() noexcept { return data.data(); }
   const Type *get_data() const noexcept { return data.data(); }
 
@@ -271,71 +278,4 @@ private:
   }
 };
 
-template <size_t SIZE, typename T> class StaticSpan {
-public:
-  using value_type = T;
-  using pointer = T *;
-  using reference = T &;
-  using size_type = size_t;
-  using RawType = std::remove_const_t<T>;
-
-  constexpr StaticSpan() = default;
-
-  constexpr StaticSpan(const pointer begin, const pointer end)
-      : begin_(begin), end_(end) {
-    assert(static_cast<size_type>(end - begin) == SIZE);
-  }
-
-  constexpr explicit StaticSpan(const pointer begin)
-      : begin_(begin), end_(begin + SIZE) {}
-
-  StaticSpan(StaticArray<SIZE, RawType> &arr)
-      : begin_(arr.get_data()), end_(arr.get_data() + SIZE) {}
-  StaticSpan(const StaticArray<SIZE, RawType> &arr)
-      : begin_(arr.get_data()), end_(arr.get_data() + SIZE) {}
-  StaticSpan(StaticSpan<SIZE, RawType> &other)
-      : begin_(other.begin_), end_(other.end_) {}
-  StaticSpan(const StaticSpan<SIZE, RawType> &other)
-      : begin_(other.begin_), end_(other.end_) {}
-
-  [[nodiscard]] constexpr reference operator[](size_type i) const {
-    assert(i < SIZE);
-    return begin_[i];
-  }
-
-  template <size_t FIRST, size_t LAST>
-  [[nodiscard]] constexpr StaticSpan<LAST - FIRST, T> subspan() const {
-    static_assert(FIRST <= LAST, "FIRST must be <= LAST");
-    static_assert(LAST <= SIZE, "LAST must be <= SIZE");
-
-    return StaticSpan<LAST - FIRST, T>(begin_ + FIRST);
-  }
-
-  [[nodiscard]] StaticArray<SIZE, RawType>
-  hadamard(const StaticSpan<SIZE, const RawType> &rhs) const
-    requires(Algebraic<RawType>)
-  {
-    StaticArray<SIZE, RawType> result;
-    for (size_t i = 0; i < SIZE; ++i) {
-      result[i] = (*this)[i].hadamard(rhs[i]);
-    }
-    return result;
-  }
-
-  [[nodiscard]] constexpr pointer data() const noexcept { return begin_; }
-
-  [[nodiscard]] constexpr pointer begin() const noexcept { return begin_; }
-
-  [[nodiscard]] constexpr pointer end() const noexcept { return end_; }
-
-  [[nodiscard]] static constexpr size_type size() noexcept { return SIZE; }
-
-private:
-  pointer begin_;
-  pointer end_;
-};
-
-template <size_t SIZE, typename RawT>
-StaticSpan(const StaticArray<SIZE, RawT> &) -> StaticSpan<SIZE, const RawT>;
-
-#endif // ML_ALGEBRAICSPAN_H
+#endif // ML_ALGEBRAICARRAY_H

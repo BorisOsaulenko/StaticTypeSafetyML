@@ -1,5 +1,6 @@
 #include "../../src/Network.hpp"
 #include "../../src/layers/Dense.hpp"
+#include "../../src/lr_optimizer/Adam.hpp"
 #include "../../src/lr_optimizer/GradientDescent.hpp"
 #include <gtest/gtest.h>
 

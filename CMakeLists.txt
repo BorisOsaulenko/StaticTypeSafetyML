@@ -31,6 +31,15 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 # ----------------------------
+# stb (FetchContent)
+# ----------------------------
+
+FetchContent_Declare(stb
+        GIT_REPOSITORY https://github.com/nothings/stb.git
+        GIT_TAG master)   # better: pin a commit hash
+FetchContent_MakeAvailable(stb)
+
+# ----------------------------
 # Packages 
 # ----------------------------
 
@@ -111,19 +120,40 @@ add_executable(ML
         src/layers/Embedding.hpp
 )
 
-# ----------------------------
-# Link libraries
-# ----------------------------
-
-target_include_directories(ML PRIVATE include)
-
 target_link_libraries(ML PRIVATE
         nlohmann_json::nlohmann_json
         ${OpenCV_LIBS}
         OpenMP::OpenMP_CXX
 )
+target_include_directories(ML PRIVATE include)
 
-target_include_directories(ML PRIVATE ${OpenCV_INCLUDE_DIRS})
+# ----------------------------
+# Examples
+# ----------------------------
+
+add_executable(example_mnist
+        examples/mnist.cpp
+
+        src/layers/Dense.hpp
+        src/layers/Convolutional.hpp
+        src/layers/Flatten.hpp
+        src/layers/MaxPool2x2.hpp
+
+        src/activation/Sigmoid.hpp
+        src/lr_optimizer/Adam.hpp
+
+        src/matrix/Matrix.hpp
+        src/Network.hpp
+        src/matrix/Algebraic.hpp
+        src/activation/ActivationFactory.hpp
+        src/matrix/3DTensor.hpp
+)
+target_link_libraries(example_mnist PRIVATE
+        nlohmann_json::nlohmann_json
+        OpenMP::OpenMP_CXX
+)
+target_include_directories(example_mnist SYSTEM PRIVATE ${stb_SOURCE_DIR})
+
 
 # ----------------------------
 # Copy Datasets to build directory

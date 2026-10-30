@@ -1,6 +1,5 @@
 #ifndef ML_CONVOLUTIONAL_H
 #define ML_CONVOLUTIONAL_H
-#include "../lr_optimizer/Adam.hpp"
 #include "../matrix/3DTensor.hpp"
 #include "../matrix/AlgebraicTuple.hpp"
 #include "LayerConcepts.hpp"

@@ -1,8 +1,8 @@
 #ifndef ML_3DTENSOR_H
 #define ML_3DTENSOR_H
 
-#include "Matrix.h"
-#include "StaticArray.h"
+#include "Matrix.hpp"
+#include "StaticArray.hpp"
 
 #include <nlohmann/json.hpp>
 #include <ostream>

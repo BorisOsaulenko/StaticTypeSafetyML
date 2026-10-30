@@ -1,10 +1,8 @@
 #ifndef ML_ATTENTIONHEAD_H
 #define ML_ATTENTIONHEAD_H
 
-#include "../matrix/Matrix.h"
-
-#include "LayerConcepts.h"
-#include "ParamsLayer.h"
+#include "../matrix/Matrix.hpp"
+#include "ParamsLayer.hpp"
 
 #include <cmath>
 #include <cstddef>

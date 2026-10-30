@@ -1,9 +1,9 @@
 #define protected public
-#include "../../src/layers/Dense.h"
+#include "../../src/layers/Dense.hpp"
 #undef protected
 #include "../../src/lr_optimizer/Adam.h"
 
-#include "../utils.h"
+#include "../utils.hpp"
 #include <gtest/gtest.h>
 
 namespace {

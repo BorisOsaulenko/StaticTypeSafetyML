@@ -2,8 +2,8 @@
 
 #ifndef ML_ACTIVATIONFUNCTION_H
 #define ML_ACTIVATIONFUNCTION_H
-#include "../matrix/Algebraic.h"
-#include "../matrix/StaticArray.h"
+#include "../matrix/Algebraic.hpp"
+#include "../matrix/StaticArray.hpp"
 
 enum class ActivationFunctionEnum {
   Identity,

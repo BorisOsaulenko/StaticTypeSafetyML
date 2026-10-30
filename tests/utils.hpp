@@ -1,7 +1,7 @@
 #ifndef ML_UTILS_H
 #define ML_UTILS_H
-#include "../src/matrix/3DTensor.h"
-#include "../src/matrix/Matrix.h"
+#include "../src/matrix/3DTensor.hpp"
+#include "../src/matrix/Matrix.hpp"
 
 #include "gtest/gtest.h"
 

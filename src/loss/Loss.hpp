@@ -1,8 +1,8 @@
 #ifndef ML_LOSS_H
 #define ML_LOSS_H
 
-#include "../matrix/Matrix.h"
-#include "../matrix/StaticArray.h"
+#include "../matrix/Matrix.hpp"
+#include "../matrix/StaticArray.hpp"
 
 enum class LossEnum { MSE, CrossEntropy };
 

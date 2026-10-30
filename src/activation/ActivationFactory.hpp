@@ -1,8 +1,8 @@
 #ifndef ML_ACTIVATIONFACTORY_H
 #define ML_ACTIVATIONFACTORY_H
-#include "Identity.h"
-#include "ReLu.h"
-#include "Sigmoid.h"
+#include "Identity.hpp"
+#include "ReLu.hpp"
+#include "Sigmoid.hpp"
 
 #include <memory>
 #include <stdexcept>

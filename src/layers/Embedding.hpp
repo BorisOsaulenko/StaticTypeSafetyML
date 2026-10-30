@@ -1,8 +1,8 @@
 #ifndef ML_EMBEDDING_H
 #define ML_EMBEDDING_H
-#include "../matrix/Matrix.h"
-#include "LayerConcepts.h"
-#include "ParamsLayer.h"
+#include "../matrix/Matrix.hpp"
+#include "LayerConcepts.hpp"
+#include "ParamsLayer.hpp"
 
 #include <cstddef>
 

@@ -1,7 +1,7 @@
 #ifndef ML_LAYER_H
 #define ML_LAYER_H
-#include "../matrix/StaticArray.h"
-#include "LayerConcepts.h"
+#include "../matrix/StaticArray.hpp"
+#include "LayerConcepts.hpp"
 #include <concepts>
 
 #define SIZE_INP_TEMPLATE template <size_t SIZE, typename Input>

@@ -1,6 +1,6 @@
 #ifndef ML_SIGMOID_H
 #define ML_SIGMOID_H
-#include "ActivationFunction.h"
+#include "ActivationFunction.hpp"
 #include <cmath>
 
 class Sigmoid : public ActivationFunction {

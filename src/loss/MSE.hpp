@@ -1,7 +1,7 @@
 #ifndef ML_MSE_H
 #define ML_MSE_H
-#include "../matrix/Algebraic.h"
-#include "Loss.h"
+#include "../matrix/Algebraic.hpp"
+#include "Loss.hpp"
 
 template <Algebraic T> class MSE : public Loss<T> {
   using Loss<T>::Loss;

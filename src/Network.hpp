@@ -1,12 +1,12 @@
 #ifndef ML_MODEL_H
 #define ML_MODEL_H
-#include "NetworkConcepts.h"
-#include "layers/LayerConcepts.h"
-#include "loss/Loss.h"
-#include "loss/LossFactory.h"
-#include "matrix/AlgebraicTuple.h"
-#include "matrix/Matrix.h"
-#include "matrix/StaticArray.h"
+#include "NetworkConcepts.hpp"
+#include "layers/LayerConcepts.hpp"
+#include "loss/Loss.hpp"
+#include "loss/LossFactory.hpp"
+#include "matrix/AlgebraicTuple.hpp"
+#include "matrix/Matrix.hpp"
+#include "matrix/StaticArray.hpp"
 
 #include <algorithm>
 #include <chrono>

@@ -1,8 +1,6 @@
-#include "../../src/Network.h"
-#include "../../src/layers/Dense.h"
-#include "../../src/lr_optimizer/Adam.h"
-#include "../../src/lr_optimizer/GradientDescent.h"
-
+#include "../../src/Network.hpp"
+#include "../../src/layers/Dense.hpp"
+#include "../../src/lr_optimizer/GradientDescent.hpp"
 #include <gtest/gtest.h>
 
 class NetworkTestFixture : public testing::Test {

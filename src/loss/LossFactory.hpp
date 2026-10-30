@@ -1,9 +1,9 @@
 #ifndef ML_LOSSFACTORY_H
 #define ML_LOSSFACTORY_H
-#include "../matrix/Algebraic.h"
-#include "CrossEntropy.h"
-#include "Loss.h"
-#include "MSE.h"
+#include "../matrix/Algebraic.hpp"
+#include "CrossEntropy.hpp"
+#include "Loss.hpp"
+#include "MSE.hpp"
 
 #include <stdexcept>
 

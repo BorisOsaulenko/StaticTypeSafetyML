@@ -54,23 +54,23 @@ add_executable(hello_test
         tests/lr_optimizer/adam_test.cpp
         tests/linear_regression_test.cpp
 
-        src/layers/Embedding.h
-        src/layers/ParamsLayer.h
-        src/layers/Flatten.h
-        src/layers/AttentionHead.h
+        src/layers/Embedding.hpp
+        src/layers/ParamsLayer.hpp
+        src/layers/Flatten.hpp
+        src/layers/AttentionHead.hpp
 
-        src/loss/Loss.h
-        src/loss/MSE.h
-        src/loss/LossFactory.h
+        src/loss/Loss.hpp
+        src/loss/MSE.hpp
+        src/loss/LossFactory.hpp
 
-        src/lr_optimizer/Adam.h
-        src/lr_optimizer/Optimizer.h
+        src/lr_optimizer/Adam.hpp
+        src/lr_optimizer/Optimizer.hpp
 
-        src/matrix/Algebraic.h
-        src/matrix/StaticArray.h
-        src/preprocessing/tokenizer.h
+        src/matrix/Algebraic.hpp
+        src/matrix/StaticArray.hpp
+        src/preprocessing/tokenizer.hpp
 
-        tests/utils.h
+        tests/utils.hpp
 )
 
 target_link_libraries(hello_test
@@ -90,28 +90,28 @@ add_executable(ML
 
         main.cpp
 
-        src/layers/NoParamsLayer.h
-        src/layers/Dense.h
-        src/layers/Convolutional.h
-        src/layers/Flatten.h
-        src/layers/MaxPool2x2.h
+        src/layers/NoParamsLayer.hpp
+        src/layers/Dense.hpp
+        src/layers/Convolutional.hpp
+        src/layers/Flatten.hpp
+        src/layers/MaxPool2x2.hpp
 
-        src/activation/ActivationFunction.h
+        src/activation/ActivationFunction.hpp
 
-        src/activation/Sigmoid.h
-        src/activation/ReLu.h
-        src/activation/Identity.h
+        src/activation/Sigmoid.hpp
+        src/activation/ReLu.hpp
+        src/activation/Identity.hpp
 
-        src/lr_optimizer/Optimizer.h
-        src/lr_optimizer/Adam.h
-        src/lr_optimizer/GradientDescent.h
+        src/lr_optimizer/Optimizer.hpp
+        src/lr_optimizer/Adam.hpp
+        src/lr_optimizer/GradientDescent.hpp
 
-        src/matrix/Matrix.h
-        src/Network.h
-        src/matrix/Algebraic.h
-        src/activation/ActivationFactory.h
-        src/matrix/3DTensor.h
-        src/layers/Embedding.h
+        src/matrix/Matrix.hpp
+        src/Network.hpp
+        src/matrix/Algebraic.hpp
+        src/activation/ActivationFactory.hpp
+        src/matrix/3DTensor.hpp
+        src/layers/Embedding.hpp
 )
 
 # ----------------------------

@@ -1,9 +1,9 @@
 #ifndef ML_PARAMSLAYER_H
 #define ML_PARAMSLAYER_H
-#include "../activation/ActivationFactory.h"
-#include "../activation/ActivationFunction.h"
-#include "../lr_optimizer/Optimizer.h"
-#include "LayerConcepts.h"
+#include "../activation/ActivationFactory.hpp"
+#include "../activation/ActivationFunction.hpp"
+#include "../lr_optimizer/Optimizer.hpp"
+#include "LayerConcepts.hpp"
 #include <concepts>
 #include <cstddef>
 #include <memory>

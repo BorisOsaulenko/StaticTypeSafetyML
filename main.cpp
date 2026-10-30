@@ -33,10 +33,10 @@ int main() {
   using Input = Tensor3D<1, 28, 28>;
   using Output = Vector<10>;
 
-  const StaticSpan<train, const Input> train_input(train_set.first);
-  const StaticSpan<train, const Output> train_expected(train_set.second);
-  const StaticSpan<test, const Input> validation_input(validation_set.first);
-  const StaticSpan<test, const Output> validation_expected(
+  const std::span<const Input, train> train_input(train_set.first);
+  const std::span<const Output, train> train_expected(train_set.second);
+  const std::span<const Input, test> validation_input(validation_set.first);
+  const std::span<const Output, test> validation_expected(
       validation_set.second);
 
   auto conv1 = Convolutional<1, 5, 5, 8>(ActivationFunctionEnum::Sigmoid);
@@ -53,7 +53,7 @@ int main() {
   // network.load(filename);
   std::cout << "Starting the training\n";
   network.train<400>(train_input, train_expected, validation_input,
-                     validation_expected, 4, &std::cout);
+                     validation_expected, 2, &std::cout);
   network.save(filename);
 
   const auto &train_predicted = network.predict_vectorized(train_input);

@@ -65,11 +65,11 @@ public:
                           auto &cache) const
     requires ComputesZ<Derived, Input>
   {
-    return forward_vectorized(StaticSpan<SIZE, const Input>(inp), cache);
+    return forward_vectorized(std::span<const Input, SIZE>(inp), cache);
   }
 
   template <size_t SIZE, typename Input>
-  auto forward_vectorized(const StaticSpan<SIZE, const Input> &inp,
+  auto forward_vectorized(const std::span<const Input, SIZE> &inp,
                           auto &cache) const
     requires ComputesZ<Derived, Input>
   {
@@ -91,7 +91,7 @@ public:
 
   template <size_t SIZE, typename Input>
   auto
-  forward_no_cache_vectorized(const StaticSpan<SIZE, const Input> &inp) const
+  forward_no_cache_vectorized(const std::span<const Input, SIZE> &inp) const
     requires ComputesZ<Derived, Input>
   {
     StaticArray<SIZE, OUTPUT> result;

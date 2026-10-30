@@ -7,7 +7,7 @@
 #include <cstddef>
 
 #define LENGTH_TEMPLATED template <size_t InputLength>
-#define INPUT StaticArray<InputLength, size_t>
+#define INPUT std::span<size_t, InputLength>
 #define OUTPUT Matrix<InputLength, EmbeddingDim>
 #define CACHE Cache<InputLength>
 
@@ -15,6 +15,8 @@ template <size_t TokenAmt, size_t EmbeddingDim>
 class Embedding : public ParamsLayer<Embedding<TokenAmt, EmbeddingDim>,
                                      Matrix<TokenAmt, EmbeddingDim>> {
 
+  LENGTH_TEMPLATED using Input = std::span<size_t, InputLength>;
+  LENGTH_TEMPLATED using Output = Matrix<InputLength, EmbeddingDim>;
   using Grad = Matrix<TokenAmt, EmbeddingDim>;
 
   LENGTH_TEMPLATED struct Cache {
@@ -22,11 +24,14 @@ class Embedding : public ParamsLayer<Embedding<TokenAmt, EmbeddingDim>,
   };
 
 public:
-  Embedding()
-      : ParamsLayer<Embedding, Grad>(ActivationFunctionEnum::Identity) {}
-  Embedding(Grad &params)
-      : ParamsLayer<Embedding, Grad>(params, ActivationFunctionEnum::Identity) {
-  }
+  Embedding(ActivationFunctionEnum activation_function_type,
+            const OptimizerFactoryFor<Grad> auto &optimizer_factory)
+      : ParamsLayer<Embedding, Grad>(activation_function_type,
+                                     optimizer_factory) {}
+  Embedding(Grad &params, ActivationFunctionEnum activation_function_type,
+            const OptimizerFactoryFor<Grad> auto &optimizer_factory)
+      : ParamsLayer<Embedding, Grad>(params, activation_function_type,
+                                     optimizer_factory) {}
 
   LENGTH_TEMPLATED
   OUTPUT compute_z(const INPUT &inp) const {

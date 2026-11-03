@@ -50,10 +50,10 @@ int main() {
 
   auto network = Network(optimizer_factory, LossEnum::CrossEntropy, conv1,
                          pool1, conv2, pool2, flatten, dense1, dense2);
-  // network.load(filename);
+  network.load(filename);
   std::cout << "Starting the training\n";
-  network.train<400>(train_input, train_expected, validation_input,
-                     validation_expected, 2, &std::cout);
+  network.train<1>(train_input, train_expected, validation_input,
+                   validation_expected, 2, &std::cout);
   network.save(filename);
 
   const auto &train_predicted = network.predict_vectorized(train_input);

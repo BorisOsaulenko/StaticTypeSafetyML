@@ -81,16 +81,24 @@ public:
              const std::span<const OUTPUT, TRAIN_SZ> train_expected,
              const std::span<const Input, VALIDATION_SZ> validation_inputs,
              const std::span<const OUTPUT, VALIDATION_SZ> validation_expected,
-             const int &epochs = 10, std::ostream *log_stream = nullptr)
+             const size_t &epochs = 10, std::ostream *log_stream = nullptr)
     requires(TRAIN_SZ % BATCH_SZ == 0)
   {
     constexpr size_t AmtBatch = TRAIN_SZ / BATCH_SZ;
 
-    for (long long epoch = 0; epoch < epochs; ++epoch) {
-      constexpr_for<AmtBatch>([&](auto i) {
-        train_batch<i, TRAIN_SZ, BATCH_SZ>(train_inputs, train_expected,
-                                           log_stream);
-      });
+    for (size_t epoch = 0; epoch < epochs; ++epoch) {
+      for (size_t batch = 0; batch < AmtBatch; batch++) {
+        const std::span<const Input, BATCH_SZ> batch_inputs =
+            train_inputs.subspan(batch * BATCH_SZ).template first<BATCH_SZ>();
+        const std::span<const OUTPUT, BATCH_SZ> batch_expected =
+            train_expected.subspan(batch * BATCH_SZ).template first<BATCH_SZ>();
+
+        const auto duration =
+            train_batch<BATCH_SZ>(batch_inputs, batch_expected);
+        if (log_stream)
+          *log_stream << "Batch " << batch
+                      << " finished. Duration: " << duration << std::endl;
+      }
       log_epoch(log_stream, epoch, train_inputs, train_expected,
                 validation_inputs, validation_expected);
     }
@@ -182,15 +190,11 @@ private:
     }
   }
 
-  template <size_t CURR_BATCH, size_t TRAIN_SZ, size_t BATCH_SZ, typename Input>
-  void train_batch(const std::span<const Input, TRAIN_SZ> train_inputs,
-                   const std::span<const OUTPUT, TRAIN_SZ> train_expected,
-                   std::ostream *log_stream = nullptr) {
+  template <size_t BATCH_SZ, typename Input>
+  std::chrono::duration<double>
+  train_batch(const std::span<const Input, BATCH_SZ> batch_inputs,
+              const std::span<const OUTPUT, BATCH_SZ> batch_expected) {
     auto start = std::chrono::steady_clock::now();
-    const std::span<const Input, BATCH_SZ> batch_inputs =
-        train_inputs.template subspan<CURR_BATCH * BATCH_SZ, BATCH_SZ>();
-    const std::span<const OUTPUT, BATCH_SZ> batch_expected =
-        train_expected.template subspan<CURR_BATCH * BATCH_SZ, BATCH_SZ>();
 
     LayerCaches<BATCH_SZ, Input> caches;
     std::unique_ptr<Loss<OUTPUT>> loss = LossFactory::create<OUTPUT>(loss_type);
@@ -205,9 +209,7 @@ private:
 
     auto end = std::chrono::steady_clock::now();
     std::chrono::duration<double> duration = end - start;
-    if (log_stream)
-      *log_stream << "Batch " << CURR_BATCH
-                  << " finished. Duration: " << duration << std::endl;
+    return duration;
   }
 
   template <size_t I, typename T> auto forward_no_cache(T &&input) const {

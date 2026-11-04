@@ -12,7 +12,7 @@ public:
   static constexpr size_t Emb = 4;
   using Input = Matrix<3, Emb>;
   using Output = Input;
-  using Param = Matrix<2, Emb>;
+  using Param = StaticArray<2, Vector<Emb>>;
 
   // row 0: gamma (per embedding dim), row 1: beta (per embedding dim)
   Param params = {{1.5, 0.8, -1.2, 2.0}, {-0.2, 0.1, 0.3, 0.0}};
@@ -71,5 +71,6 @@ TEST_F(AddAndNormTest, ComputeDelta) {
   const auto [actual_delta, gradient] = layer.compute_delta(delta, cache);
 
   expect_matrix_close(actual_delta, expected_new_delta, kTolerance);
-  expect_matrix_close(gradient, expected_gradient, kTolerance);
+  expect_vector_close(gradient[0], expected_gradient[0], kTolerance);
+  expect_vector_close(gradient[1], expected_gradient[1], kTolerance);
 }
